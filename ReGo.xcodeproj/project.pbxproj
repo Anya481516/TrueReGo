@@ -14,6 +14,10 @@
 		5DC3DBFB2431CD05000B3AF3 /* ReGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DBF92431CD05000B3AF3 /* ReGo.xcdatamodeld */; };
 		5DC3DBFD2431CD0B000B3AF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5DC3DBFC2431CD0B000B3AF3 /* Assets.xcassets */; };
 		5DC3DC002431CD0B000B3AF3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5DC3DBFE2431CD0B000B3AF3 /* LaunchScreen.storyboard */; };
+		5DC3DC0B2431D132000B3AF3 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DC0A2431D132000B3AF3 /* MapViewController.swift */; };
+		5DC3DC102431ED5C000B3AF3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC3DC0E2431ED57000B3AF3 /* MapKit.framework */; };
+		5DC3DC1424322108000B3AF3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DC1324322108000B3AF3 /* HomeViewController.swift */; };
+		5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,10 @@
 		5DC3DBFC2431CD0B000B3AF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5DC3DBFF2431CD0B000B3AF3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5DC3DC012431CD0B000B3AF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5DC3DC0A2431D132000B3AF3 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		5DC3DC0E2431ED57000B3AF3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		5DC3DC1324322108000B3AF3 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DC3DC102431ED5C000B3AF3 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +53,7 @@
 			children = (
 				5DC3DBEF2431CD05000B3AF3 /* ReGo */,
 				5DC3DBEE2431CD05000B3AF3 /* Products */,
+				5DC3DC0D2431ED56000B3AF3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,16 +68,51 @@
 		5DC3DBEF2431CD05000B3AF3 /* ReGo */ = {
 			isa = PBXGroup;
 			children = (
-				5DC3DBF02431CD05000B3AF3 /* AppDelegate.swift */,
-				5DC3DBF22431CD05000B3AF3 /* SceneDelegate.swift */,
-				5DC3DBF42431CD05000B3AF3 /* ViewController.swift */,
-				5DC3DBF62431CD05000B3AF3 /* Main.storyboard */,
-				5DC3DBFC2431CD0B000B3AF3 /* Assets.xcassets */,
-				5DC3DBFE2431CD0B000B3AF3 /* LaunchScreen.storyboard */,
+				5DC3DC092431CD3C000B3AF3 /* Controller */,
+				5DC3DC082431CD36000B3AF3 /* Model */,
+				5DC3DC072431CD2E000B3AF3 /* View */,
 				5DC3DC012431CD0B000B3AF3 /* Info.plist */,
 				5DC3DBF92431CD05000B3AF3 /* ReGo.xcdatamodeld */,
 			);
 			path = ReGo;
+			sourceTree = "<group>";
+		};
+		5DC3DC072431CD2E000B3AF3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5DC3DBFE2431CD0B000B3AF3 /* LaunchScreen.storyboard */,
+				5DC3DBFC2431CD0B000B3AF3 /* Assets.xcassets */,
+				5DC3DBF62431CD05000B3AF3 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5DC3DC082431CD36000B3AF3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5DC3DC092431CD3C000B3AF3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5DC3DBF42431CD05000B3AF3 /* ViewController.swift */,
+				5DC3DBF02431CD05000B3AF3 /* AppDelegate.swift */,
+				5DC3DBF22431CD05000B3AF3 /* SceneDelegate.swift */,
+				5DC3DC0A2431D132000B3AF3 /* MapViewController.swift */,
+				5DC3DC1324322108000B3AF3 /* HomeViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		5DC3DC0D2431ED56000B3AF3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5DC3DC0E2431ED57000B3AF3 /* MapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,9 +187,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DC3DBF52431CD05000B3AF3 /* ViewController.swift in Sources */,
+				5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */,
 				5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */,
 				5DC3DBFB2431CD05000B3AF3 /* ReGo.xcdatamodeld in Sources */,
+				5DC3DC0B2431D132000B3AF3 /* MapViewController.swift in Sources */,
 				5DC3DBF32431CD05000B3AF3 /* SceneDelegate.swift in Sources */,
+				5DC3DC1424322108000B3AF3 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +339,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F97R65KMAU;
 				INFOPLIST_FILE = ReGo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -298,7 +347,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.annamelkhova.ReGo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -309,6 +358,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F97R65KMAU;
 				INFOPLIST_FILE = ReGo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -316,7 +366,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.annamelkhova.ReGo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
