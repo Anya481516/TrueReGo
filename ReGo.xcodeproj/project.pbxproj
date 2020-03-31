@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */; };
+		5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */; };
 		5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DBF02431CD05000B3AF3 /* AppDelegate.swift */; };
 		5DC3DBF32431CD05000B3AF3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DBF22431CD05000B3AF3 /* SceneDelegate.swift */; };
 		5DC3DBF52431CD05000B3AF3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DBF42431CD05000B3AF3 /* ViewController.swift */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
+		5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		5DC3DBED2431CD05000B3AF3 /* ReGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DC3DBF02431CD05000B3AF3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5DC3DBF22431CD05000B3AF3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 				5DC3DBF22431CD05000B3AF3 /* SceneDelegate.swift */,
 				5DC3DC0A2431D132000B3AF3 /* MapViewController.swift */,
 				5DC3DC1324322108000B3AF3 /* HomeViewController.swift */,
+				5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */,
+				5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -188,6 +194,8 @@
 			files = (
 				5DC3DBF52431CD05000B3AF3 /* ViewController.swift in Sources */,
 				5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */,
+				5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */,
+				5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */,
 				5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */,
 				5DC3DBFB2431CD05000B3AF3 /* ReGo.xcdatamodeld in Sources */,
 				5DC3DC0B2431D132000B3AF3 /* MapViewController.swift in Sources */,
