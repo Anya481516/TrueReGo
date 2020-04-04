@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D0BBB1E24374EB700EDDECC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D0BBB1D24374EB700EDDECC /* GoogleService-Info.plist */; };
+		5D0BBB20243752CE00EDDECC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0BBB1F243752CE00EDDECC /* User.swift */; };
 		5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */; };
 		5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */; };
 		5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DBF02431CD05000B3AF3 /* AppDelegate.swift */; };
@@ -25,6 +27,8 @@
 
 /* Begin PBXFileReference section */
 		0BC59A72B69DE07006BEB759 /* Pods-ReGo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReGo.release.xcconfig"; path = "Target Support Files/Pods-ReGo/Pods-ReGo.release.xcconfig"; sourceTree = "<group>"; };
+		5D0BBB1D24374EB700EDDECC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5D0BBB1F243752CE00EDDECC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		5DC3DBED2431CD05000B3AF3 /* ReGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,7 +67,6 @@
 				977B895A014BD228EFC7A8A1 /* Pods-ReGo.debug.xcconfig */,
 				0BC59A72B69DE07006BEB759 /* Pods-ReGo.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -92,6 +95,7 @@
 				5DC3DC082431CD36000B3AF3 /* Model */,
 				5DC3DC072431CD2E000B3AF3 /* View */,
 				5DC3DC012431CD0B000B3AF3 /* Info.plist */,
+				5D0BBB1D24374EB700EDDECC /* GoogleService-Info.plist */,
 				5DC3DBF92431CD05000B3AF3 /* ReGo.xcdatamodeld */,
 			);
 			path = ReGo;
@@ -111,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */,
+				5D0BBB1F243752CE00EDDECC /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -149,6 +154,7 @@
 				5DC3DBE92431CD05000B3AF3 /* Sources */,
 				5DC3DBEA2431CD05000B3AF3 /* Frameworks */,
 				5DC3DBEB2431CD05000B3AF3 /* Resources */,
+				C32ED01C0709E92A6910CAE2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -198,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DC3DC002431CD0B000B3AF3 /* LaunchScreen.storyboard in Resources */,
+				5D0BBB1E24374EB700EDDECC /* GoogleService-Info.plist in Resources */,
 				5DC3DBFD2431CD0B000B3AF3 /* Assets.xcassets in Resources */,
 				5DC3DBF82431CD05000B3AF3 /* Main.storyboard in Resources */,
 			);
@@ -228,6 +235,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C32ED01C0709E92A6910CAE2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReGo/Pods-ReGo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ReGo/Pods-ReGo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ReGo/Pods-ReGo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -243,6 +267,7 @@
 				5DC3DBFB2431CD05000B3AF3 /* ReGo.xcdatamodeld in Sources */,
 				5DC3DC0B2431D132000B3AF3 /* MapViewController.swift in Sources */,
 				5DC3DBF32431CD05000B3AF3 /* SceneDelegate.swift in Sources */,
+				5D0BBB20243752CE00EDDECC /* User.swift in Sources */,
 				5DC3DC1424322108000B3AF3 /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

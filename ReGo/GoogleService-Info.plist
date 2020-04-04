@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>125473858581-hcq42u2dda5319u9tu9ushc699p6vj47.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.125473858581-hcq42u2dda5319u9tu9ushc699p6vj47</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA7C4CmdTLU-rQ84DF7-J4iv8CSQWHTvrQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>125473858581</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.annamelkhova.ReGo</string>
+	<key>PROJECT_ID</key>
+	<string>rego-830c1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rego-830c1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:125473858581:ios:bab86dd0324099677dda1c</string>
+	<key>DATABASE_URL</key>
+	<string>https://rego-830c1.firebaseio.com</string>
+</dict>
+</plist>
