@@ -8,9 +8,14 @@
 
 import UIKit
 
-class HomeViewControlle : UIViewController {
+class HomeViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    // MARK: METHODS:
+    func goToNextView() {
+        self.performSegue(withIdentifier: "fromHomeToLogin", sender: self)
     }
 }

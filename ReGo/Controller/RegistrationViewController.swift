@@ -25,22 +25,31 @@ class RegistrationViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // MARK: IBActions:
+    
+    @IBAction func showPasswordButtonPressed(_ sender: UIButton) {
+        if passwordTextField.isSecureTextEntry == true {
+            passwordTextField.isSecureTextEntry = false
+            passwordTextField.placeholder = "123456"
+            sender.setImage(UIImage.init(systemName: "eye.slash.fill"), for: [])
+        }
+        else {
+            passwordTextField.isSecureTextEntry = true
+            passwordTextField.placeholder = "******"
+            sender.setImage(UIImage.init(systemName: "eye.fill"), for: [])
+        }
+    }
+    
     @IBAction func editingStarted(_ sender: UITextField) {
         if sender.layer.borderColor == UIColor.red.cgColor
         {
             sender.layer.borderColor = UIColor.gray.cgColor
             self.view.layoutIfNeeded()
         }
-        
-        // тут надо поднять вьюху йоу и так же еще сделать так чтобы когда закончили, она назад опускалась ух
-//        UIView.animate(withDuration: 0.5) {
-//            //self.heightConstraint.constant = 308
-//            self.view.layoutIfNeeded()
-//        }
-        
     }
     
     @IBAction func signUpButtonPressed(_ sender: UIButton) {
@@ -51,6 +60,17 @@ class RegistrationViewController : UIViewController {
                     Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
                         if error != nil {
                             print(error!)
+                            // описать что делать при каждых ошибочках
+                            if userName.isEmpty {
+                                // alert
+                                self.showAlert(alertTitle: "Incorrect Username", alertMessage: "Please insert the Username", actionTitle: "OK", textField: self.usernameTextField)
+                            }
+                            else if userPassword.isEmpty || userPassword.count < 6{
+                                self.showAlert(alertTitle: "Incorrect Password", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
+                            }
+                            else if userEmail.isEmpty {
+                                self.showAlert(alertTitle: "Incorrect Email", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
+                            }
                         }
                         else {
                             print("Succesfully registered")
@@ -71,32 +91,47 @@ class RegistrationViewController : UIViewController {
                                        }
                                    }
                             //SVProgressHUD.dismiss()
-                            // тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
+                            // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                             self.dismiss(animated: true) {
                                 
                             }
                         }
                     }
                 }
-                else {
-                    passwordTextField.layer.borderColor = UIColor.red.cgColor
-                    self.view.layoutIfNeeded()
-                }
             }
-            else {
-                emailTextField.layer.borderColor = UIColor.red.cgColor
-                self.view.layoutIfNeeded()
-            }
-        }
-        else {
-            usernameTextField.layer.borderColor = UIColor.red.cgColor
-            self.view.layoutIfNeeded()
         }
     }
     
+    // надо придумать как то блен
     @IBAction func logInButtonPressed(_ sender: UIButton) {
-    
+        // TODO: self.parent!.performSegue(withIdentifier: "fromHomeToLogin", sender: self.parent!)
+        self.dismiss(animated: true) {
+           
+        }
     }
     
     // MARK: METHODS:
+    func showAlert(alertTitle : String, alertMessage : String, actionTitle : String, textField : UITextField) {
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        let action = UIAlertAction(title: actionTitle, style: .default) { (UIAlertAction) in
+            textField.layer.borderColor = UIColor.red.cgColor
+            self.view.layoutIfNeeded()
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    // with the keyboard
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= (keyboardSize.height - 80)
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
 }
