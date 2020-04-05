@@ -12,7 +12,15 @@ import FirebaseAuth
 import FirebaseDatabase
 //import FirebaseStorage
 
+protocol RegistrationDelegate {
+    func goToLogIn()
+    func showLoggedInView()
+}
+
 class RegistrationViewController : UIViewController {
+    
+    //Declare the delegate variable here:
+    var delegate : RegistrationDelegate?
     
     // MARK: ELEMENTS INIT:
     @IBOutlet weak var usernameTextField: UITextField!
@@ -65,11 +73,14 @@ class RegistrationViewController : UIViewController {
                                 // alert
                                 self.showAlert(alertTitle: "Incorrect Username", alertMessage: "Please insert the Username", actionTitle: "OK", textField: self.usernameTextField)
                             }
-                            else if userPassword.isEmpty || userPassword.count < 6{
+                            else if userPassword.isEmpty || userPassword.count < 6 {
                                 self.showAlert(alertTitle: "Incorrect Password", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
                             }
                             else if userEmail.isEmpty {
                                 self.showAlert(alertTitle: "Incorrect Email", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
+                            }
+                            else {
+                                self.showAlert(alertTitle: "Error", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
                             }
                         }
                         else {
@@ -93,7 +104,7 @@ class RegistrationViewController : UIViewController {
                             //SVProgressHUD.dismiss()
                             // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                             self.dismiss(animated: true) {
-                                
+                                 self.delegate?.showLoggedInView()
                             }
                         }
                     }
@@ -102,12 +113,12 @@ class RegistrationViewController : UIViewController {
         }
     }
     
-    // надо придумать как то блен
     @IBAction func logInButtonPressed(_ sender: UIButton) {
         // TODO: self.parent!.performSegue(withIdentifier: "fromHomeToLogin", sender: self.parent!)
         self.dismiss(animated: true) {
-           
+            self.delegate?.goToLogIn()
         }
+        
     }
     
     // MARK: METHODS:
@@ -134,4 +145,6 @@ class RegistrationViewController : UIViewController {
             self.view.frame.origin.y = 0
         }
     }
+    
+    
 }

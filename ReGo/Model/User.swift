@@ -22,4 +22,11 @@ class User {
         self.password = password
         placesAdded = 0
     }
+    init (id : String) {
+        self.id = id
+        self.name = ""
+        self.email = ""
+        self.password = ""
+        placesAdded = 0
+    }
 }
