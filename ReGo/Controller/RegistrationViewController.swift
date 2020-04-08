@@ -22,7 +22,7 @@ class RegistrationViewController : UIViewController {
     //Declare the delegate variable here:
     var delegate : RegistrationDelegate?
     
-    // MARK: ELEMENTS INIT:
+    // MARK: IBOutlets:
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -90,9 +90,8 @@ class RegistrationViewController : UIViewController {
                             // сохранить инфу о юзере так же в базе данных йоууу
                             let userDB = Firebase.Database.database().reference().child("Users")
                                    
-                            let userDictionary = ["UserId" : self.currentUser!.id, "Name" : self.currentUser!.name, "PlacesAdded" : self.currentUser!.placesAdded, "ProfilePicture" : false] as [String : Any]
-                                   
-                                   userDB.childByAutoId().setValue(userDictionary) {
+                            let userDictionary = ["Name" : self.currentUser!.name, "PlacesAdded" : self.currentUser!.placesAdded, "ProfilePicture" : false] as [String : Any]
+                                   userDB.child(self.currentUser!.id).setValue(userDictionary) {
                                        (error, reference) in
                                        if error != nil {
                                            print(error!)
