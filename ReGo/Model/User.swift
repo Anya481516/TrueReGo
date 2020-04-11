@@ -12,7 +12,7 @@ class User {
     var id : String
     var name : String
     var email : String
-    var password : String
+    //var password : String
     var placesAdded : Int
     var hasProfileImage : Bool
     
@@ -20,7 +20,7 @@ class User {
         self.id = id
         self.name = name
         self.email = email
-        self.password = password
+        //self.password = password
         placesAdded = 0
         hasProfileImage = false
     }
@@ -28,7 +28,7 @@ class User {
         self.id = id
         self.name = ""
         self.email = ""
-        self.password = ""
+        //self.password = ""
         placesAdded = 0
         hasProfileImage = false
     }
@@ -36,7 +36,7 @@ class User {
         self.id = ""
         self.name = ""
         self.email = ""
-        self.password = ""
+        //self.password = ""
         placesAdded = 0
         hasProfileImage = false
     }

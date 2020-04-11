@@ -11,10 +11,12 @@ import CoreData
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+import SVProgressHUD
 //import FirebaseStorage
 
 // MARK: global variables:
 var language : String = "RU"
+var currentUser = User()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

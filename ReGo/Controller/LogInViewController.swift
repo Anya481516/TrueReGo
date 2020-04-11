@@ -10,10 +10,12 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+import SVProgressHUD
 //import FirebaseStorage
 
 protocol LogInDelegate {
     func goToRegistration()
+    func retrieveUserInfo()
     func showLoggedInView()
 }
 
@@ -21,17 +23,18 @@ class LogInViewController : UIViewController {
     
     //MARK: variables:
        var delegate : LogInDelegate?
-       var currentUser : User?
     
     // MARK: IBOutlets:
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var eyeButton: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
     
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //signUpButton.currentTitleColor = UIColor.init(named: "BlackWhite")
+        //signUpButton.setTitleColor(UIColor.init(named: "BlackWhite"), for: .normal)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -65,11 +68,10 @@ class LogInViewController : UIViewController {
                     }
                     else {
                         print("Succesfully logged in")
-                        // в каретн юзера занеcли инфу
-                        self.currentUser = User(id: Auth.auth().currentUser!.uid)
                         //SVProgressHUD.dismiss()
                         // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                         self.dismiss(animated: true) {
+                            self.delegate?.retrieveUserInfo()
                             self.delegate?.showLoggedInView()
                         }
                     }

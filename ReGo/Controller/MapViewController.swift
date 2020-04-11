@@ -9,6 +9,10 @@
 import UIKit
 import CoreLocation
 import MapKit
+import SVProgressHUD
+import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
@@ -33,6 +37,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.startUpdatingLocation()
     
+        if let user = Auth.auth().currentUser {
+            retrieveUserInfo()
+        }
+        
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -104,10 +112,34 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.startUpdatingLocation()
     }
     @IBAction func addNewPlaceButtonPressed(_ sender: UIButton) {
+        // TODO:
+        if currentUser.name == "" {
+            // show alert that the user need to log in
+            print("YOU HAVE TO LOG IN")
+        }
+        else {
+            // here go to new view to create a pin
+            print("GO AHEAD!")
+        }
     }
     
     // MARK: METHODS:
     func showCurrentLocation(){
         mapView.userTrackingMode = .follow
+    }
+    
+    func retrieveUserInfo() {
+        let userDB = Firebase.Database.database().reference().child("Users")
+        currentUser.id = Auth.auth().currentUser!.uid
+        currentUser.email = Auth.auth().currentUser!.email!
+        
+        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+            let snapshotValue = snapshot.value as! NSDictionary
+            currentUser.name = snapshotValue["Name"] as! String
+            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
 }

@@ -10,10 +10,12 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+import SVProgressHUD
 //import FirebaseStorage
 
 protocol RegistrationDelegate {
     func goToLogIn()
+    func retrieveUserInfo()
     func showLoggedInView()
 }
 
@@ -26,13 +28,13 @@ class RegistrationViewController : UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    
-    var currentUser : User?
+    @IBOutlet weak var logInButton: UIButton!
     
     // MARK: DID_LOAD:
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        logInButton.setTitleColor(UIColor.init(named: "WhiteBlack"), for: .normal)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -86,12 +88,12 @@ class RegistrationViewController : UIViewController {
                         else {
                             print("Succesfully registered")
                             // в каретн юзера занеcли инфу
-                            self.currentUser = User(id: Auth.auth().currentUser!.uid, name: userName, email: userEmail, password: userPassword)
+                            currentUser = User(id: Auth.auth().currentUser!.uid, name: userName, email: userEmail, password: userPassword)
                             // сохранить инфу о юзере так же в базе данных йоууу
                             let userDB = Firebase.Database.database().reference().child("Users")
                                    
-                            let userDictionary = ["Name" : self.currentUser!.name, "PlacesAdded" : self.currentUser!.placesAdded, "ProfilePicture" : false] as [String : Any]
-                                   userDB.child(self.currentUser!.id).setValue(userDictionary) {
+                            let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false] as [String : Any]
+                                   userDB.child(currentUser.id).setValue(userDictionary) {
                                        (error, reference) in
                                        if error != nil {
                                            print(error!)
@@ -103,6 +105,7 @@ class RegistrationViewController : UIViewController {
                             //SVProgressHUD.dismiss()
                             // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                             self.dismiss(animated: true) {
+                                self.delegate?.retrieveUserInfo()
                                  self.delegate?.showLoggedInView()
                             }
                         }
