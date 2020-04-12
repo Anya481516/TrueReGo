@@ -10,8 +10,8 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
-import SVProgressHUD
-//import FirebaseStorage
+import FirebaseStorage
+import Kingfisher
 
 class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate, EditProfileDelegate {
     
@@ -33,10 +33,9 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         clearLoggedInView()
         
         if currentUser.name != "" {
-            showLoggedInView()
-            updateInterface()
+            retrieveUserInfo()
         }
-        else if let user = Auth.auth().currentUser {
+        else if let user = Auth.auth().currentUser{
             retrieveUserInfo()
         }
         else {
@@ -91,6 +90,19 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         self.usernameLabel.text = currentUser.name
         self.placesLabel.text = "Places added : \(currentUser.placesAdded)"
         self.emailLabel.text = "Email: \(currentUser.email)"
+        // TODO: KINGFISHER TO DOWNLOAD THE IMAGE!!! ______________________________________________
+        if currentUser.hasProfileImage {
+            let url = URL(string: currentUser.imageURL)
+            let resource = ImageResource(downloadURL: url!)
+            self.profileImage.kf.setImage(with: resource) { (image, error, cacheType, url) in
+                if let error = error {
+                    print("Error!!!!!! from updating image in Home")
+                }
+                else {
+                    print("Success updated image in Home")
+                }
+            }
+        }
         print("updating info")
         print("UPDATING Name:\(currentUser.name), Places Added:\(currentUser.placesAdded)")
     }
@@ -112,16 +124,14 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             currentUser.name = snapshotValue["Name"] as! String
             currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
             currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+            
+            
             self.updateInterface()
             self.showLoggedInView()
         }) { (error) in
             print(error)
         }
-        
-        // to check for updates
-//        userDB.observe(.childChanged) { (snapshot) in
-//            <#code#>
-//        }
         
     }
     

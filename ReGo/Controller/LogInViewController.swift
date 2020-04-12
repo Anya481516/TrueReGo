@@ -10,7 +10,6 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
-import SVProgressHUD
 //import FirebaseStorage
 
 protocol LogInDelegate {

@@ -954,15 +954,47 @@
                                             <constraint firstAttribute="width" secondItem="lAu-ia-WJ6" secondAttribute="height" multiplier="1:1" id="Jfl-9e-gTW"/>
                                         </constraints>
                                     </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hJL-vd-sca" userLabel="Profile Pic View">
+                                        <rect key="frame" x="16" y="16" width="66.5" height="66.5"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="aOe-UR-gQT" userLabel="Edit Image View">
+                                                <rect key="frame" x="0.0" y="41.5" width="66.5" height="23.5"/>
+                                                <color key="backgroundColor" name="forChangeImage"/>
+                                                <color key="tintColor" name="WhiteBlack"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="aOe-UR-gQT" secondAttribute="height" multiplier="34:13" id="VaS-hN-4uh"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="aOe-UR-gQT" secondAttribute="trailing" id="2SO-c3-gH0"/>
+                                            <constraint firstItem="aOe-UR-gQT" firstAttribute="leading" secondItem="hJL-vd-sca" secondAttribute="leading" id="F2Y-JG-Zpa"/>
+                                            <constraint firstAttribute="bottom" secondItem="aOe-UR-gQT" secondAttribute="bottom" id="NTc-bS-Wrq"/>
+                                            <constraint firstAttribute="width" secondItem="hJL-vd-sca" secondAttribute="height" multiplier="1:1" id="Yqx-EE-OhL"/>
+                                        </constraints>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PmB-7A-gT6" userLabel="Image Button">
+                                        <rect key="frame" x="16" y="16" width="66.5" height="66.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="PmB-7A-gT6" secondAttribute="height" multiplier="1:1" id="2rf-4K-cuI"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="imageButtonPressed:" destination="Ajw-Y6-AMv" eventType="touchUpInside" id="N7D-gY-mQI"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="PmB-7A-gT6" firstAttribute="top" secondItem="ne5-nE-51C" secondAttribute="top" constant="16" id="3Sv-OG-OHb"/>
+                                    <constraint firstAttribute="bottom" secondItem="PmB-7A-gT6" secondAttribute="bottom" constant="16" id="6le-QX-yjI"/>
                                     <constraint firstItem="qrN-zr-AYt" firstAttribute="centerY" secondItem="ne5-nE-51C" secondAttribute="centerY" id="9fp-Mh-J0E"/>
-                                    <constraint firstItem="qrN-zr-AYt" firstAttribute="centerY" secondItem="ne5-nE-51C" secondAttribute="centerY" id="QsY-7u-Rkr"/>
+                                    <constraint firstItem="hJL-vd-sca" firstAttribute="leading" secondItem="ne5-nE-51C" secondAttribute="leading" constant="16" id="Fba-fv-Fk8"/>
+                                    <constraint firstAttribute="bottom" secondItem="hJL-vd-sca" secondAttribute="bottom" constant="16" id="fbE-t3-ESs"/>
                                     <constraint firstItem="lAu-ia-WJ6" firstAttribute="leading" secondItem="ne5-nE-51C" secondAttribute="leading" constant="16" id="fdk-fO-vpU"/>
+                                    <constraint firstItem="hJL-vd-sca" firstAttribute="top" secondItem="ne5-nE-51C" secondAttribute="top" constant="16" id="j2Y-a8-Y3W"/>
                                     <constraint firstItem="lAu-ia-WJ6" firstAttribute="top" secondItem="ne5-nE-51C" secondAttribute="top" constant="16" id="jRg-U7-SB4"/>
                                     <constraint firstItem="qrN-zr-AYt" firstAttribute="centerX" secondItem="ne5-nE-51C" secondAttribute="centerX" id="lJQ-Bh-afa"/>
                                     <constraint firstAttribute="bottom" secondItem="lAu-ia-WJ6" secondAttribute="bottom" constant="16" id="mVX-Xy-XTC"/>
-                                    <constraint firstItem="qrN-zr-AYt" firstAttribute="centerX" secondItem="ne5-nE-51C" secondAttribute="centerX" id="yBK-hj-Ng3"/>
+                                    <constraint firstItem="PmB-7A-gT6" firstAttribute="leading" secondItem="ne5-nE-51C" secondAttribute="leading" constant="16" id="x4R-Xf-ZFS"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="auz-8c-TX4" userLabel="Bottom View">
@@ -1201,20 +1233,23 @@
                     </view>
                     <navigationItem key="navigationItem" id="CV5-pa-5cx"/>
                     <connections>
+                        <outlet property="editImageView" destination="aOe-UR-gQT" id="lHs-yJ-Xey"/>
                         <outlet property="emailTextField" destination="WJI-my-01V" id="yWy-dS-sWg"/>
                         <outlet property="newPasswordTextField" destination="3XH-tL-H8c" id="Yfj-9l-NUh"/>
                         <outlet property="oldPasswordTextField" destination="MWQ-Js-0JU" id="Jmc-tx-ecM"/>
+                        <outlet property="profileImageView" destination="lAu-ia-WJ6" id="2BE-Gg-JcU"/>
                         <outlet property="userNameTextField" destination="qKM-6g-uVA" id="yB4-5W-Bbg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9et-6T-Gd7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1954" y="1434"/>
+            <point key="canvasLocation" x="1953.75" y="1433.4507042253522"/>
         </scene>
     </scenes>
     <resources>
         <image name="LogInScreen" width="750" height="1334"/>
         <image name="ReGO iPhone8 LoadScreen" width="750" height="1334"/>
+        <image name="camera.fill" catalog="system" width="128" height="96"/>
         <image name="doc.text" catalog="system" width="115" height="128"/>
         <image name="email" width="1201" height="1201"/>
         <image name="eye.fill" catalog="system" width="128" height="78"/>
@@ -1246,6 +1281,9 @@
         </namedColor>
         <namedColor name="WhiteGray">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="forChangeImage">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

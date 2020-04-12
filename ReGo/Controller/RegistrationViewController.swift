@@ -10,7 +10,6 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
-import SVProgressHUD
 //import FirebaseStorage
 
 protocol RegistrationDelegate {
@@ -92,7 +91,7 @@ class RegistrationViewController : UIViewController {
                             // сохранить инфу о юзере так же в базе данных йоууу
                             let userDB = Firebase.Database.database().reference().child("Users")
                                    
-                            let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false] as [String : Any]
+                            let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL] as [String : Any]
                                    userDB.child(currentUser.id).setValue(userDictionary) {
                                        (error, reference) in
                                        if error != nil {

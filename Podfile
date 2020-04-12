@@ -8,7 +8,8 @@ target 'ReGo' do
   pod 'Firebase'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
-  pod 'SVProgressHUD'
+  pod 'Firebase/Storage'
+  pod 'Kingfisher'
 
 end
 

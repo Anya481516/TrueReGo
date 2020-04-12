@@ -11,8 +11,8 @@ import CoreData
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
-import SVProgressHUD
-//import FirebaseStorage
+import FirebaseStorage
+
 
 // MARK: global variables:
 var language : String = "RU"

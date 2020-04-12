@@ -9,7 +9,6 @@
 import UIKit
 import CoreLocation
 import MapKit
-import SVProgressHUD
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase

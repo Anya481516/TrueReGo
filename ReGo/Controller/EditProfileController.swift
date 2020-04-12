@@ -10,18 +10,21 @@ import UIKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
-import SVProgressHUD
-//import FirebaseStorage
+import FirebaseStorage
+import Kingfisher
 
 protocol EditProfileDelegate {
     func retrieveUserInfo()
     func showLoggedInView()
+    func updateInterface()
 }
 
-class EditProfileController : UIViewController {
+class EditProfileController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     //MARK: variables:
     var delegate : EditProfileDelegate?
+    var imagePicker = UIImagePickerController()
+    var imageChanged = false
     
     // MARK: IBOutlets:
     
@@ -29,24 +32,29 @@ class EditProfileController : UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var oldPasswordTextField: UITextField!
     @IBOutlet weak var newPasswordTextField: UITextField!
+    @IBOutlet weak var editImageView: UIImageView!
+    @IBOutlet weak var profileImageView: UIImageView!
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        userNameTextField.text = currentUser.name
-        emailTextField.text = currentUser.email
-
+        updateInterface()
     }
     
     // MARK: IBActions:
     
     @IBAction func saveChangesButtonPressed(_ sender: UIButton) {
+        if imageChanged {
+            saveImageToDatabase()
+            
+            showAlert(alertTitle: "Success", alertMessage: "Image was saved to the database")
+        }
         if let newUserName = userNameTextField.text {
             if let newEmail = emailTextField.text {
                 if currentUser.email != newEmail {
                     Auth.auth().currentUser?.updateEmail(to: newEmail, completion: { (error) in
-                        if let error = error {
+                        if error != nil {
                             //self.showAlert(alertTitle: "Error!", alertMessage: error.localizedDescription)
                             // need toreauthenticate
                             let alert = UIAlertController(title: "Password is required", message: "To change the email please insert your password below:", preferredStyle: .alert)
@@ -153,7 +161,30 @@ class EditProfileController : UIViewController {
         }
     }
     
+    @IBAction func imageButtonPressed(_ sender: UIButton) {
+        showImageChooseAlert()
+        
+    }
+    
+    
     // MARK: METHODS:
+    
+    func updateInterface() {
+        userNameTextField.text = currentUser.name
+        emailTextField.text = currentUser.email
+        if currentUser.hasProfileImage {
+            let url = URL(string: currentUser.imageURL)
+            let resource = ImageResource(downloadURL: url!)
+            self.profileImageView.kf.setImage(with: resource) { (image, error, cacheType, url) in
+                if let error = error {
+                    print("Error!!!!!! in updatin image fron edit view")
+                }
+                else {
+                    print("Success updated image in edit view")
+                }
+            }
+        }
+    }
     
     func sendPasswordByEmail() {
         Auth.auth().sendPasswordReset(withEmail: currentUser.email) { error in
@@ -168,8 +199,7 @@ class EditProfileController : UIViewController {
     func showAlert(alertTitle : String, alertMessage : String) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
-            self.delegate?.retrieveUserInfo()
-            self.delegate?.showLoggedInView()
+            
         }
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
@@ -195,5 +225,95 @@ class EditProfileController : UIViewController {
                 self.showAlert(alertTitle: "Success", alertMessage: "Your email has changed!")
             }
         })
+    }
+    
+    
+    func showImageChooseAlert() {
+        var alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
+        
+        let cameraAction = UIAlertAction(title: "Camera", style: .default){ UIAlertAction in
+            self.openCamera()
+        }
+        let galleryAction = UIAlertAction(title: "Gallery", style: .default){ UIAlertAction in
+            self.openGallery()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel){ UIAlertAction in
+            
+        }
+        alert.addAction(cameraAction)
+        alert.addAction(galleryAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func openCamera() {
+        if(UIImagePickerController .isSourceTypeAvailable(.camera)){
+            imagePicker.sourceType = .camera
+            imageChanged = true
+            self.present(imagePicker, animated: true, completion: nil)
+            updateInterface()
+            self.delegate?.retrieveUserInfo()
+        } else {
+            showAlert(alertTitle: "Camera error", alertMessage: "We don't have access to your camera")
+        }
+    }
+    
+    func openGallery() {
+        imagePicker.delegate = self
+        imagePicker.sourceType = .savedPhotosAlbum
+        imagePicker.allowsEditing = false
+
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[.originalImage] as? UIImage else {
+            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
+        }
+        profileImageView.image = image
+        imageChanged = true
+    }
+    
+    func saveImageToDatabase() {
+        // save image to a variable
+        guard let image = profileImageView.image,
+            let data = image.jpegData(compressionQuality: 1.0) else {
+                showAlert(alertTitle: "Error", alertMessage: "Something went wrong with saving your Profile image to the storage.Try again.")
+                return
+        }
+        // name the image as our user id
+        let imageName = currentUser.id
+        
+        let imageReference = Storage.storage().reference().child("ProfileImages").child(imageName)
+        imageReference.putData(data, metadata: nil) { (metadata, error) in
+            if let error = error {
+                self.showAlert(alertTitle: "Error", alertMessage: error.localizedDescription)
+                return
+            }
+            imageReference.downloadURL { (url, error) in
+                if let error = error {
+                    self.showAlert(alertTitle: "Error", alertMessage: error.localizedDescription)
+                    return
+                }
+                guard let url = url else {
+                    self.showAlert(alertTitle: "Error", alertMessage: "Something went wrong")
+                    return
+                }
+                //let dataReference = Firestore.firestore().collection("ProfileImages").document()
+                //let documentUid = dataReference.documentID
+                
+                let urlString = url.absoluteString
+                //let data = ["ImageUID" : documentUid, "ImageURL" : urlString]
+                
+                currentUser.imageURL = urlString
+                currentUser.hasProfileImage = true
+                // update the User info in the database
+                let userDB = Firebase.Database.database().reference().child("Users")
+                userDB.child(currentUser.id).updateChildValues(["ImageURL" : urlString, "ProfilePicture" : true])
+                self.delegate?.updateInterface()
+            }
+        }
     }
 }

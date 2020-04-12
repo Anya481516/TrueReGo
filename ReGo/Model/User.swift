@@ -15,6 +15,7 @@ class User {
     //var password : String
     var placesAdded : Int
     var hasProfileImage : Bool
+    var imageURL : String
     
     init (id : String, name : String, email : String, password : String) {
         self.id = id
@@ -23,6 +24,7 @@ class User {
         //self.password = password
         placesAdded = 0
         hasProfileImage = false
+        imageURL = ""
     }
     init (id : String) {
         self.id = id
@@ -31,6 +33,7 @@ class User {
         //self.password = ""
         placesAdded = 0
         hasProfileImage = false
+        imageURL = ""
     }
     init () {
         self.id = ""
@@ -39,5 +42,6 @@ class User {
         //self.password = ""
         placesAdded = 0
         hasProfileImage = false
+        imageURL = ""
     }
 }
