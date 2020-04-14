@@ -14,8 +14,6 @@ import FirebaseStorage
 import Kingfisher
 
 protocol EditProfileDelegate {
-    func retrieveUserInfo()
-    func showLoggedInView()
     func updateInterface()
 }
 
@@ -47,9 +45,9 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     @IBAction func saveChangesButtonPressed(_ sender: UIButton) {
         if imageChanged {
             saveImageToDatabase()
-            
             showAlert(alertTitle: "Success", alertMessage: "Image was saved to the database")
         }
+        var isChanged = false
         if let newUserName = userNameTextField.text {
             if let newEmail = emailTextField.text {
                 if currentUser.email != newEmail {
@@ -86,6 +84,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
                         else {
                             currentUser.email = newEmail
                             self.showAlert(alertTitle: "Success!", alertMessage: "Values have been changed")
+                            isChanged = true
                         }
                     })
                 }
@@ -94,10 +93,16 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
                     currentUser.name = newUserName
                     userDB.child(currentUser.id).updateChildValues(["Name" : newUserName])
                     showAlert(alertTitle: "Success!", alertMessage: "Values have been changed")
+                    isChanged = true
                 }
             }
         }
+        if isChanged {
+            self.delegate?.updateInterface()
+        }
     }
+    
+    
     @IBAction func changePasswordButtonPressed(_ sender: UIButton) {
         if oldPasswordTextField.text?.isEmpty == false {
             // reauthenticate the user
@@ -163,7 +168,6 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     @IBAction func imageButtonPressed(_ sender: UIButton) {
         showImageChooseAlert()
-        
     }
     
     
@@ -253,7 +257,9 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
             imageChanged = true
             self.present(imagePicker, animated: true, completion: nil)
             updateInterface()
-            self.delegate?.retrieveUserInfo()
+            currentUser.retrieveInfoFromDatabase { (success) in
+                self.delegate!.updateInterface()
+            }
         } else {
             showAlert(alertTitle: "Camera error", alertMessage: "We don't have access to your camera")
         }
@@ -286,6 +292,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         // name the image as our user id
         let imageName = currentUser.id
         
+        // saving the image to the storage
         let imageReference = Storage.storage().reference().child("ProfileImages").child(imageName)
         imageReference.putData(data, metadata: nil) { (metadata, error) in
             if let error = error {

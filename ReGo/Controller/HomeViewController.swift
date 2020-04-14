@@ -32,11 +32,17 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         super.viewDidLoad()
         clearLoggedInView()
         
+        // when info retrieced already
         if currentUser.name != "" {
-            retrieveUserInfo()
+            updateInterface()
+            
         }
+        // when info not retrieved but user is logged in
         else if let user = Auth.auth().currentUser{
-            retrieveUserInfo()
+            //retrieveUserInfo()
+            currentUser.retrieveInfoFromDatabase { (success) in
+                updateInterface()
+            }
         }
         else {
             showNotLoggedInView()
@@ -87,9 +93,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     
     func updateInterface() {
-        self.usernameLabel.text = currentUser.name
-        self.placesLabel.text = "Places added : \(currentUser.placesAdded)"
-        self.emailLabel.text = "Email: \(currentUser.email)"
+        
         // TODO: KINGFISHER TO DOWNLOAD THE IMAGE!!! ______________________________________________
         if currentUser.hasProfileImage {
             let url = URL(string: currentUser.imageURL)
@@ -103,36 +107,23 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
                 }
             }
         }
+        else {
+            profileImage.image = UIImage(named: "ReGO iPhone8 LoadScreen")
+        }
+        
+        self.usernameLabel.text = currentUser.name
+        self.placesLabel.text = "Places added : \(currentUser.placesAdded)"
+        self.emailLabel.text = "Email: \(currentUser.email)"
+        
         print("updating info")
         print("UPDATING Name:\(currentUser.name), Places Added:\(currentUser.placesAdded)")
+        showLoggedInView()
     }
     
     func clearLoggedInView() {
         usernameLabel.text = ""
         emailLabel.text = ""
         placesLabel.text = ""
-    }
-    
-    // retrieve data from our FirebaseDatabase and put it to the current user
-    func retrieveUserInfo() {
-        let userDB = Firebase.Database.database().reference().child("Users")
-        currentUser.id = Auth.auth().currentUser!.uid
-        currentUser.email = Auth.auth().currentUser!.email as! String
-        
-        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
-            let snapshotValue = snapshot.value as! NSDictionary
-            currentUser.name = snapshotValue["Name"] as! String
-            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
-            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
-            currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            
-            
-            self.updateInterface()
-            self.showLoggedInView()
-        }) { (error) in
-            print(error)
-        }
-        
     }
     
     // prepare method
@@ -163,10 +154,8 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     func showLoggedInView() {
         self.view.bringSubviewToFront(loggedInView)
         // взять инфу о юзере с firebase
-        //SVProgressHUD.show()
         profileImage.layer.cornerRadius = profileImage.frame.height / 3
         profileImage.layer.masksToBounds = true
-        //SVProgressHUD.dismiss()
         logOutButton.isHidden = false
     }
     

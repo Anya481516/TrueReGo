@@ -15,7 +15,7 @@ import FirebaseDatabase
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
-    // MARK: ELEMENTS INITS
+    // MARK: IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
     @IBOutlet weak var zoomInButton: UIButton!
     @IBOutlet weak var zoomOutButton: UIButton!
@@ -25,6 +25,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     // MARK: LOCATION MAN
     let locationManager = CLLocationManager()
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationManager.stopUpdatingLocation()
+        locationManager.delegate = nil
+            
+        mapView.showsUserLocation = true
+        showCurrentLocation()
+    }
+    
+    // MARK: ViewDidLoad:
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -37,20 +46,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.startUpdatingLocation()
     
         if let user = Auth.auth().currentUser {
-            retrieveUserInfo()
+            currentUser.retrieveInfoFromDatabase { (success) in
+                
+            }
         }
         
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        locationManager.stopUpdatingLocation()
-        locationManager.delegate = nil
-            
-        mapView.showsUserLocation = true
-        showCurrentLocation()
-    }
-    
-    // MARK: BUTTONS:
+    // MARK: IBActions:
     
     @IBAction func zoomInButtonPressed(_ sender: UIButton) {
         
@@ -119,6 +122,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         else {
             // here go to new view to create a pin
             print("GO AHEAD!")
+            self.performSegue(withIdentifier: "fromMapToAddPlace", sender: self)
         }
     }
     
@@ -127,18 +131,4 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.userTrackingMode = .follow
     }
     
-    func retrieveUserInfo() {
-        let userDB = Firebase.Database.database().reference().child("Users")
-        currentUser.id = Auth.auth().currentUser!.uid
-        currentUser.email = Auth.auth().currentUser!.email!
-        
-        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
-            let snapshotValue = snapshot.value as! NSDictionary
-            currentUser.name = snapshotValue["Name"] as! String
-            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
-            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
 }

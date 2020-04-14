@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D034EBA244484760091DA1A /* CustomPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D034EB9244484760091DA1A /* CustomPin.swift */; };
+		5D034EBC244493E20091DA1A /* AddPlaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D034EBB244493E20091DA1A /* AddPlaceController.swift */; };
 		5D0BBB1E24374EB700EDDECC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D0BBB1D24374EB700EDDECC /* GoogleService-Info.plist */; };
 		5D0BBB20243752CE00EDDECC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0BBB1F243752CE00EDDECC /* User.swift */; };
+		5D18395F2445CEF8000E835B /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D18395E2445CEF8000E835B /* Place.swift */; };
 		5D2EF09E2440917F008446F5 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2EF09D2440917F008446F5 /* EditProfileController.swift */; };
 		5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */; };
 		5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */; };
@@ -28,8 +31,11 @@
 
 /* Begin PBXFileReference section */
 		0BC59A72B69DE07006BEB759 /* Pods-ReGo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReGo.release.xcconfig"; path = "Target Support Files/Pods-ReGo/Pods-ReGo.release.xcconfig"; sourceTree = "<group>"; };
+		5D034EB9244484760091DA1A /* CustomPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPin.swift; sourceTree = "<group>"; };
+		5D034EBB244493E20091DA1A /* AddPlaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceController.swift; sourceTree = "<group>"; };
 		5D0BBB1D24374EB700EDDECC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5D0BBB1F243752CE00EDDECC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5D18395E2445CEF8000E835B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		5D2EF09D2440917F008446F5 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
 		5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +124,8 @@
 			children = (
 				5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */,
 				5D0BBB1F243752CE00EDDECC /* User.swift */,
+				5D034EB9244484760091DA1A /* CustomPin.swift */,
+				5D18395E2445CEF8000E835B /* Place.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -133,6 +141,7 @@
 				5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */,
 				5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */,
 				5D2EF09D2440917F008446F5 /* EditProfileController.swift */,
+				5D034EBB244493E20091DA1A /* AddPlaceController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -262,9 +271,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D034EBC244493E20091DA1A /* AddPlaceController.swift in Sources */,
+				5D034EBA244484760091DA1A /* CustomPin.swift in Sources */,
 				5DC3DBF52431CD05000B3AF3 /* ViewController.swift in Sources */,
 				5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */,
 				5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */,
+				5D18395F2445CEF8000E835B /* Place.swift in Sources */,
 				5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */,
 				5D2EF09E2440917F008446F5 /* EditProfileController.swift in Sources */,
 				5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */,

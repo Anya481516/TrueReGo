@@ -14,8 +14,7 @@ import FirebaseDatabase
 
 protocol RegistrationDelegate {
     func goToLogIn()
-    func retrieveUserInfo()
-    func showLoggedInView()
+    func updateInterface()
 }
 
 class RegistrationViewController : UIViewController {
@@ -62,7 +61,6 @@ class RegistrationViewController : UIViewController {
     }
     
     @IBAction func signUpButtonPressed(_ sender: UIButton) {
-        //SVProgressHUD.show()
         if let userName = usernameTextField.text {
             if let userEmail = emailTextField.text {
                 if let userPassword = passwordTextField.text {
@@ -87,11 +85,11 @@ class RegistrationViewController : UIViewController {
                         else {
                             print("Succesfully registered")
                             // в каретн юзера занеcли инфу
-                            currentUser = User(id: Auth.auth().currentUser!.uid, name: userName, email: userEmail, password: userPassword)
+                            //currentUser = User(id: Auth.auth().currentUser!.uid, name: userName, email: userEmail, password: userPassword)
                             // сохранить инфу о юзере так же в базе данных йоууу
                             let userDB = Firebase.Database.database().reference().child("Users")
                                    
-                            let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL] as [String : Any]
+                            let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL, "SuperUser" : currentUser.superUser] as [String : Any]
                                    userDB.child(currentUser.id).setValue(userDictionary) {
                                        (error, reference) in
                                        if error != nil {
@@ -103,10 +101,8 @@ class RegistrationViewController : UIViewController {
                                    }
                             //SVProgressHUD.dismiss()
                             // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
-                            self.dismiss(animated: true) {
-                                self.delegate?.retrieveUserInfo()
-                                 self.delegate?.showLoggedInView()
-                            }
+                            self.dismiss(animated: true)
+                            self.retrieveUserInfo()
                         }
                     }
                 }
@@ -144,6 +140,28 @@ class RegistrationViewController : UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
+        }
+    }
+    
+    func retrieveUserInfo(){
+        let userDB = Firebase.Database.database().reference().child("Users")
+        
+        currentUser.id = Auth.auth().currentUser!.uid
+        currentUser.email = Auth.auth().currentUser!.email!
+        
+        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+            let snapshotValue = snapshot.value as! NSDictionary
+            currentUser.name = snapshotValue["Name"] as! String
+            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
+            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+            print("Info retrieved !!!")
+            // here
+            self.delegate?.updateInterface()
+            return
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
     

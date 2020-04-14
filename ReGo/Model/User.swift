@@ -7,15 +7,20 @@
 //
 
 import Foundation
+import Firebase
+import FirebaseAuth
+import FirebaseDatabase
+import FirebaseStorage
+import UIKit
 
 class User {
     var id : String
     var name : String
     var email : String
-    //var password : String
     var placesAdded : Int
     var hasProfileImage : Bool
     var imageURL : String
+    var superUser : Bool
     
     init (id : String, name : String, email : String, password : String) {
         self.id = id
@@ -25,6 +30,7 @@ class User {
         placesAdded = 0
         hasProfileImage = false
         imageURL = ""
+        superUser = false
     }
     init (id : String) {
         self.id = id
@@ -34,6 +40,7 @@ class User {
         placesAdded = 0
         hasProfileImage = false
         imageURL = ""
+        superUser = false
     }
     init () {
         self.id = ""
@@ -43,5 +50,50 @@ class User {
         placesAdded = 0
         hasProfileImage = false
         imageURL = ""
+        superUser = false
+    }
+    
+    // все хуйня, я тупица и не могу норм сделать
+//    func retrieveInfoFromDatabase(complition : (_ success : Bool) -> Void) {
+//        var success = false
+//        let userDB = Firebase.Database.database().reference().child("Users")
+//
+//        currentUser.id = Auth.auth().currentUser!.uid
+//        currentUser.email = Auth.auth().currentUser!.email!
+//
+//        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+//            let snapshotValue = snapshot.value as! NSDictionary
+//            currentUser.name = snapshotValue["Name"] as! String
+//            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+//            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+//            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
+//            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+//            print("Info retrieved !!!")
+//            success = true
+//            //complition(success)
+//            return
+//        }) { (error) in
+//            print(error.localizedDescription)
+//            success = false
+//        }
+//
+//        complition(success)
+//    }
+    
+    func saveToDatabase() {
+        
+    }
+    
+    func sendPasswordByEmail(email : String) -> String {
+        var result = ""
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                result = error.localizedDescription
+            }
+            else {
+                result = "Success"
+            }
+        }
+        return result
     }
 }
