@@ -13,7 +13,17 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, AddPlaceDelegate {
+    
+    func addNewAnnotation(ann: Place) {
+        mapView.addAnnotation(ann)
+    }
+    
+    
+    func updateInterface() {
+        
+    }
+    
     
     // MARK: IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
@@ -46,9 +56,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.startUpdatingLocation()
     
         if let user = Auth.auth().currentUser {
-            currentUser.retrieveInfoFromDatabase { (success) in
-                
-            }
+            retrieveUserInfo()
         }
         
     }
@@ -131,4 +139,55 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.userTrackingMode = .follow
     }
     
+    func retrieveUserInfo(){
+        let userDB = Firebase.Database.database().reference().child("Users")
+        
+        currentUser.id = Auth.auth().currentUser!.uid
+        currentUser.email = Auth.auth().currentUser!.email!
+        
+        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+            let snapshotValue = snapshot.value as! NSDictionary
+            currentUser.name = snapshotValue["Name"] as! String
+            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
+            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+            print("Info retrieved !!!")
+            
+            return
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    // prepare method
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "fromMapToAddPlace" {
+            let destinationVC = segue.destination as! AddPlaceController
+            destinationVC.delegate = self
+        }
+    }
+    
+//    func retrieveAnnotations() {
+//        let messageDB = Firebase.Database.database().reference().child("Places")
+//        
+//        messageDB.observe(.childAdded) { (snapshot) in
+//            let snapshotValue = snapshot.value as! Dictionary<String,String>
+//            
+//            let title = snapshotValue["Title"]
+//            let type = snapshotValue["Type"]
+//            
+//            print(text, sender)
+//            
+//            let message = Message()
+//            message.messageBody = text
+//            message.sender = sender
+//            
+//            self.messageArray.append(message)
+//            
+//            self.configureTableView()
+//            
+//            self.messageTableView.reloadData()
+//        }
+//    }
 }

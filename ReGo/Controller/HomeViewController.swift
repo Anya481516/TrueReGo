@@ -40,9 +40,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         // when info not retrieved but user is logged in
         else if let user = Auth.auth().currentUser{
             //retrieveUserInfo()
-            currentUser.retrieveInfoFromDatabase { (success) in
-                updateInterface()
-            }
+            retrieveUserInfo()
         }
         else {
             showNotLoggedInView()
@@ -162,5 +160,27 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     func showNotLoggedInView() {
         logOutButton.isHidden = true
         self.view.bringSubviewToFront(notLoggedInView)
+    }
+    
+    func retrieveUserInfo(){
+        let userDB = Firebase.Database.database().reference().child("Users")
+        
+        currentUser.id = Auth.auth().currentUser!.uid
+        currentUser.email = Auth.auth().currentUser!.email!
+        
+        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+            let snapshotValue = snapshot.value as! NSDictionary
+            currentUser.name = snapshotValue["Name"] as! String
+            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
+            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+            print("Info retrieved !!!")
+            // here
+            self.updateInterface()
+            return
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
 }

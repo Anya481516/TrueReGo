@@ -20,7 +20,7 @@ protocol LogInDelegate {
 class LogInViewController : UIViewController {
     
     //MARK: variables:
-       var delegate : LogInDelegate?
+    var delegate : LogInDelegate?
     
     // MARK: IBOutlets:
     @IBOutlet weak var emailTextField: UITextField!

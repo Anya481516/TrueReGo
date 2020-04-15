@@ -12,34 +12,46 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
+import MapKit
 
 class Place : CustomPin {
     
-    var id : String?
-    var imageURLString : String?
-    var otherThings : String?
+    var id : String = ""
+    var hasImage : Bool = false
+    var imageURLString : String = ""
+    var bottles : Bool = false
+    var batteries : Bool = false
+    var bulbs : Bool = false
+    var other : String = ""
+    var userId : String = ""
     // как то еще коменты вставить бы сюда
     
     init(pin: CustomPin) {
         super.init()
         self.coordinate = pin.coordinate
+        id = String(coordinate.latitude) + String(coordinate.longitude)
     }
     
     override init() {
         super.init()
     }
     
-    // MARK: METHODS:
-    func saveToDatabase() {
-        let userDB = Firebase.Database.database().reference().child("Places")
-        
-        let placeDictionary = ["Title" : title!, "Address" : subtitle!, "HasImage" : false, "ImageURL" : imageURLString!, "Longitude" : coordinate.longitude, "Latitude" : coordinate.latitude, "Type" : type!] as [String : Any]
-        self.id = currentUser.id + self.type! + self.subtitle!
-        userDB.child(self.id!).setValue(placeDictionary)
-        
-        print("saved a place to database")
-        
+     override init(location: CLLocationCoordinate2D){
+        super.init()
+        id = String(location.latitude) + String(location.longitude)
     }
+    
+    // MARK: METHODS:
+//    func saveToDatabase() {
+//        let userDB = Firebase.Database.database().reference().child("Places")
+//
+//        let placeDictionary = ["Title" : title!, "Address" : subtitle!, "HasImage" : false, "ImageURL" : imageURLString!, "Longitude" : coordinate.longitude, "Latitude" : coordinate.latitude, "Type" : type!] as [String : Any]
+//        self.id = currentUser.id + self.type! + self.subtitle!
+//        userDB.child(self.id!).setValue(placeDictionary)
+//
+//        print("saved a place to database")
+//
+//    }
     
     func saveImageToStorage(imageView : UIImageView) -> String {
         // save image to a variable

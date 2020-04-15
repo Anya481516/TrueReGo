@@ -257,9 +257,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
             imageChanged = true
             self.present(imagePicker, animated: true, completion: nil)
             updateInterface()
-            currentUser.retrieveInfoFromDatabase { (success) in
-                self.delegate!.updateInterface()
-            }
+            retrieveUserInfo()
         } else {
             showAlert(alertTitle: "Camera error", alertMessage: "We don't have access to your camera")
         }
@@ -321,6 +319,28 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
                 userDB.child(currentUser.id).updateChildValues(["ImageURL" : urlString, "ProfilePicture" : true])
                 self.delegate?.updateInterface()
             }
+        }
+    }
+    
+    func retrieveUserInfo(){
+        let userDB = Firebase.Database.database().reference().child("Users")
+        
+        currentUser.id = Auth.auth().currentUser!.uid
+        currentUser.email = Auth.auth().currentUser!.email!
+        
+        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+            let snapshotValue = snapshot.value as! NSDictionary
+            currentUser.name = snapshotValue["Name"] as! String
+            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
+            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+            print("Info retrieved !!!")
+            // here
+            self.delegate?.updateInterface()
+            return
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
 }

@@ -17,7 +17,7 @@ import FirebaseStorage
 // MARK: global variables:
 var language : String = "RU"
 var currentUser = User()
-var newPlace = Place()
+var places = [Place]()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
