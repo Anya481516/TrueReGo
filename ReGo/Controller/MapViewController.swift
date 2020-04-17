@@ -21,9 +21,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func updateInterface() {
-        
+        for place in places {
+            addNewAnnotation(ann: place)
+        }
     }
     
+    // MARK: variables:
+    var places = [Place]()
     
     // MARK: IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
@@ -59,6 +63,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             retrieveUserInfo()
         }
         
+        retrieveAnnotations()
     }
     
     // MARK: IBActions:
@@ -167,27 +172,91 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             destinationVC.delegate = self
         }
     }
+
     
-//    func retrieveAnnotations() {
-//        let messageDB = Firebase.Database.database().reference().child("Places")
-//        
-//        messageDB.observe(.childAdded) { (snapshot) in
-//            let snapshotValue = snapshot.value as! Dictionary<String,String>
-//            
-//            let title = snapshotValue["Title"]
-//            let type = snapshotValue["Type"]
-//            
-//            print(text, sender)
-//            
-//            let message = Message()
-//            message.messageBody = text
-//            message.sender = sender
-//            
-//            self.messageArray.append(message)
-//            
-//            self.configureTableView()
-//            
-//            self.messageTableView.reloadData()
-//        }
-//    }
+    func retrieveAnnotations() {
+        let messageDB = Firebase.Database.database().reference().child("Places")
+        
+        messageDB.observe(.childAdded) { (snapshot) in
+            let snapshotValue = snapshot.value as! Dictionary<String,Any>
+        
+            let title = snapshotValue["Title"] as! String
+            let address = snapshotValue["Address"] as! String
+            let hasImage = snapshotValue["HasImage"] as! Bool
+            let imageURL = snapshotValue["ImageURL"] as! String
+            let longitude = snapshotValue["Longitude"] as! CLLocationDegrees
+            let latitude = snapshotValue["Latitude"] as! CLLocationDegrees
+            let type = snapshotValue["Type"] as! String
+            let bottles = snapshotValue["Bottles"] as! Bool
+            let batteries = snapshotValue["Batteries"] as! Bool
+            let bulbs = snapshotValue["Bulbs"] as! Bool
+            let other = snapshotValue["Other"] as! String
+            let userID = snapshotValue["UserID"] as! String
+            let id = snapshotValue["ID"] as! String
+        
+            print(title, address, hasImage, imageURL, latitude, longitude, bottles, batteries, bulbs, other, userID)
+        
+            let place = Place()
+            place.title = title
+            place.subtitle = type // type
+            place.hasImage = hasImage
+            place.imageURLString = imageURL
+            place.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            place.bottles = bottles
+            place.batteries = batteries
+            place.bulbs = bulbs
+            place.other = other
+            place.userId = userID
+            place.address = address
+            place.id = id
+        
+            self.places.append(place)
+            //self.messageArray.append(message)
+            //self.configureTableView()
+        
+            //self.messageTableView.reloadData()
+            self.updateInterface()
+        }
+    }
+    
+    // MARK: Annotation extention
+    
+    internal func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "AnnotationView")
+        if annotationView == nil {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "AnnotationView")
+        }
+        
+        if annotation.subtitle == "Bottles" {
+            annotationView?.image = UIImage(named: "IconBottle")
+            print("It's a bottle")
+        } else if annotation.subtitle  == "Batteries" {
+            annotationView?.image = UIImage(named: "IconBattery")
+            print("It's a battery")
+        } else if annotation.subtitle  == "Bulbs" {
+            annotationView?.image = UIImage(named: "IconBulb")
+            print("It's a bulb")
+        } else if annotation.subtitle  == "BatteriesAndBulbs" {
+            annotationView?.image = UIImage(named: "IconBatteryBulb")
+            print("It's a battery bulb")
+        } else if annotation.subtitle  == "Other" {
+            annotationView?.image = UIImage(named: "IconOther")
+            print("It's something else")
+        }
+
+        annotationView?.canShowCallout = true
+        return annotationView
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        
+        var currentPlace = Place()
+        for place in places {
+            if (place.title == view.annotation?.title) && (place.coordinate.latitude == view.annotation?.coordinate.latitude) && (place.coordinate.longitude == view.annotation?.coordinate.longitude) {
+                currentPlace = place
+            }
+        }
+        
+        print("The annotation was selected: \(String(describing: currentPlace.title))")
+    }
 }

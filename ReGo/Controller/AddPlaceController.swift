@@ -84,6 +84,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         if !photoAdded {
             photoAdded = true
             deletePhotoButton.isHidden = false
+            newPlace.hasImage = true
             showImageChooseAlert()
         }
     }
@@ -91,6 +92,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         if photoAdded {
             deletePhotoButton.isHidden = true
             photoAdded = false
+            newPlace.hasImage = false
         }
     }
     
@@ -167,22 +169,22 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         else {
             // выбираем тип
             if bottlesChecked && !batteriesChecked && !bulbsChecked && !otherChecked {
-                newPlace.type = "Bottles"
+                newPlace.subtitle = "Bottles"
             }
             else if !bottlesChecked && batteriesChecked && !bulbsChecked && !otherChecked {
-                newPlace.type = "Batteries"
+                newPlace.subtitle = "Batteries"
             }
             else if !bottlesChecked && !batteriesChecked && bulbsChecked && !otherChecked {
-                newPlace.type = "Bulbs"
+                newPlace.subtitle = "Bulbs"
             }
             else if !bottlesChecked && batteriesChecked && bulbsChecked && !otherChecked {
-                newPlace.type = "BatteriesAndBulbs"
+                newPlace.subtitle = "BatteriesAndBulbs"
             }
             else if !otherChecked {
-                newPlace.type = "Other"
+                newPlace.subtitle = "Other"
             }
             else {
-                newPlace.type = "Other"
+                newPlace.subtitle = "Other"
                 newPlace.other = whatCollectsTextField.text!
             }
             
@@ -191,7 +193,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
                 newPlace.title = titleTextField.text!
             }
             if addressTextField.text != "" {
-                newPlace.subtitle = addressTextField.text!
+                newPlace.address = addressTextField.text!
             }
             
             
@@ -202,6 +204,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
                 // добавить фотку в сторадж и в базу данных url
                 saveImageToDatabase()
             }
+            
             
             
         }
@@ -221,12 +224,18 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
             userDB = Firebase.Database.database().reference().child("NewPlaces")
         }
         
-        let placeDictionary = ["Title" : place.title!, "Address" : place.subtitle!, "HasImage" : place.hasImage, "ImageURL" : place.imageURLString, "Longitude" : place.coordinate.longitude, "Latitude" : place.coordinate.latitude, "Type" : place.type, "Bottles" : place.bottles, "Batteries" : place.batteries, "Bulbs" : place.bulbs, "Other" : place.other, "UserID" : currentUser.id] as [String : Any]
+        // created an ID for DB
+        let randomID = userDB.childByAutoId()
+        newPlace.id = randomID.key!
         
-        print("yo bitch \(place.id)")
-        userDB.childByAutoId().setValue(placeDictionary)
+        let placeDictionary = ["Title" : place.title!, "Address" : place.address, "HasImage" : place.hasImage, "ImageURL" : place.imageURLString, "Longitude" : place.coordinate.longitude, "Latitude" : place.coordinate.latitude, "Type" : place.subtitle!, "Bottles" : place.bottles, "Batteries" : place.batteries, "Bulbs" : place.bulbs, "Other" : place.other, "UserID" : currentUser.id, "ID" : newPlace.id] as [String : Any]
+        print("yo bitch \(newPlace.id)")
+        
+        userDB.child(newPlace.id).setValue(placeDictionary)
     
         print("saved a place to database")
+        
+        self.delegate?.retrieveAnnotations()
     }
     
     func saveImageToDatabase() {

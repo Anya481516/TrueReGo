@@ -24,6 +24,7 @@ class Place : CustomPin {
     var bulbs : Bool = false
     var other : String = ""
     var userId : String = ""
+    var address : String = ""
     // как то еще коменты вставить бы сюда
     
     init(pin: CustomPin) {
