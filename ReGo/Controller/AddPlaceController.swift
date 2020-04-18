@@ -74,6 +74,9 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         
         // спрячем кнопку удаления фотки пока
         deletePhotoButton.isHidden = true
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // MARK: IBActions:
@@ -81,12 +84,10 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
          mapView.userTrackingMode = .follow
     }
     @IBAction func addPhotoButtonPressed(_ sender: Any) {
-        if !photoAdded {
-            photoAdded = true
-            deletePhotoButton.isHidden = false
-            newPlace.hasImage = true
+        //if !photoAdded {
+            
             showImageChooseAlert()
-        }
+        //}
     }
     @IBAction func deletePhotoButtonPressed(_ sender: UIButton) {
         if photoAdded {
@@ -212,6 +213,21 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     }
     
     // MARK: METHODS:
+    
+    // with the keyboard
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= (keyboardSize.height - 80)
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
     func addNewAnnotationToDatabase(place : Place) {
         var userDB = DatabaseReference()
         
@@ -236,6 +252,8 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         print("saved a place to database")
         
         self.delegate?.retrieveAnnotations()
+        
+        self.showAlertWithClosingView(alertTitle: "Thank you!", alertMessage: "Your place has been added successfully")
     }
     
     func saveImageToDatabase() {
@@ -290,6 +308,15 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         self.present(alert, animated: true, completion: nil)
     }
     
+    func showAlertWithClosingView(alertTitle : String, alertMessage : String) {
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     
     // MARK: ImagePicker
     func showImageChooseAlert() {
@@ -334,6 +361,9 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
             fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
         }
         placeImageView.image = image
+        photoAdded = true
+        deletePhotoButton.isHidden = false
+        newPlace.hasImage = true
     }
     
 }

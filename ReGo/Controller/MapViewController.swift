@@ -44,7 +44,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.delegate = nil
             
         mapView.showsUserLocation = true
-        showCurrentLocation()
+        mapView.userTrackingMode = .follow
     }
     
     // MARK: ViewDidLoad:
@@ -58,6 +58,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.startUpdatingLocation()
+        
+        mapView.showsUserLocation = true
+        mapView.userTrackingMode = .follow
+
     
         if let user = Auth.auth().currentUser {
             retrieveUserInfo()
