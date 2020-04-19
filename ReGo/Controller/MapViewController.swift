@@ -225,11 +225,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // MARK: Annotation extention
     
-    internal func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        guard annotation as? MKUserLocation != mapView.userLocation else { return nil }
+        
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "AnnotationView")
+        
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "AnnotationView")
         }
+        
+       
         
         if annotation.subtitle == "Bottles" {
             annotationView?.image = UIImage(named: "IconBottle")
@@ -247,8 +253,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             annotationView?.image = UIImage(named: "IconOther")
             print("It's something else")
         }
-
+        
         annotationView?.canShowCallout = true
+        
         return annotationView
     }
     
@@ -260,7 +267,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 currentPlace = place
             }
         }
-        
+        // тут напишеем чтобы вызывалась вьюшка со всей инфрй йоу
         print("The annotation was selected: \(String(describing: currentPlace.title))")
     }
 }
