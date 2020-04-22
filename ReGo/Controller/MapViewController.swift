@@ -12,13 +12,18 @@ import MapKit
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
+import Kingfisher
 
-class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, AddPlaceDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, AddPlaceDelegate, PlaceInfoDelegate {
+    
+    //MARK:- From Delegates:
+    func getPlace() -> Place {
+        return currentPlace
+    }
     
     func addNewAnnotation(ann: Place) {
         mapView.addAnnotation(ann)
     }
-    
     
     func updateInterface() {
         for place in places {
@@ -28,6 +33,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // MARK: variables:
     var places = [Place]()
+    var currentImage = UIImageView()
+    var currentPlace = Place()
     
     // MARK: IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
@@ -35,6 +42,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var zoomOutButton: UIButton!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var locationButton: UIButton!
+    @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var iconImage: UIImageView!
     
     // MARK: LOCATION MAN
     let locationManager = CLLocationManager()
@@ -47,7 +56,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.userTrackingMode = .follow
     }
     
-    // MARK: ViewDidLoad:
+    // MARK:- ViewDidLoad:
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,10 +76,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             retrieveUserInfo()
         }
         
+        currentImage.image = UIImage(named: "vk")!
+        
         retrieveAnnotations()
     }
     
-    // MARK: IBActions:
+    // MARK:- IBActions:
+    
+    @IBAction func doneButtonPressed(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "fromMapToAddPlace", sender: self)
+    }
     
     @IBAction func zoomInButtonPressed(_ sender: UIButton) {
         
@@ -100,6 +115,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
         
     }
+    
     @IBAction func zoomOutButtonPressed(_ sender: UIButton) {
         
         mapView.userTrackingMode = .none
@@ -126,26 +142,82 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
     }
+    
     @IBAction func locationButtonPressed(_ sender: UIButton) {
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
     }
+    
     @IBAction func addNewPlaceButtonPressed(_ sender: UIButton) {
-        // TODO:
-        if currentUser.name == "" {
-            // show alert that the user need to log in
-            print("YOU HAVE TO LOG IN")
+        if sender.currentImage == UIImage(systemName: "mappin.slash") {
+            sender.setImage(UIImage.init(systemName: "mappin"), for: [])
+            doneButton.isHidden = true
+            iconImage.isHidden = true
+        }
+        else if currentUser.name == "" {
+            showAlert(alertTitle: "Error", alertMessage: "To add new places you have to log in")
         }
         else {
             // here go to new view to create a pin
-            print("GO AHEAD!")
-            self.performSegue(withIdentifier: "fromMapToAddPlace", sender: self)
+            let alert = UIAlertController(title: "Create a new place", message: "Choose the location for  new place", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
+                sender.setImage(UIImage.init(systemName: "mappin.slash"), for: [])
+                self.doneButton.isHidden = false
+                self.iconImage.isHidden = false
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (UIAlertAction) in
+                
+            }
+            alert.addAction(okAction)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
-    // MARK: METHODS:
+    // MARK:- METHODS:
+    
+    func showAlert(alertTitle : String, alertMessage : String) {
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
+            
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    // prepare method
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "fromMapToPlaceInfo" {
+            let destinationVC = segue.destination as! PlaceInfoConteoller
+            destinationVC.delegate = self
+        }
+        
+        if segue.identifier == "fromMapToAddPlace" {
+            let destinationVC = segue.destination as! AddPlaceController
+            destinationVC.placeLocation = mapView.region.center
+            destinationVC.delegate = self
+        }
+    }
+    
     func showCurrentLocation(){
         mapView.userTrackingMode = .follow
+    }
+    
+    func imageFromDB(currentPlace : Place) -> UIImage {
+        let vkImage = UIImage(named: "vk")!
+        var newimage = UIImageView(image: vkImage)
+        let url = URL(string: currentPlace.imageURLString)
+        let resource = ImageResource(downloadURL: url!)
+            
+        newimage.kf.setImage(with: resource) { (image, error, cachType, url) in
+                    if let error = error {
+                        print(error)
+                    }
+                    else {
+                        print("Success updated image in calout!")
+                    }
+                }
+        return newimage.image!
     }
     
     func retrieveUserInfo(){
@@ -166,14 +238,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             return
         }) { (error) in
             print(error.localizedDescription)
-        }
-    }
-    
-    // prepare method
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "fromMapToAddPlace" {
-            let destinationVC = segue.destination as! AddPlaceController
-            destinationVC.delegate = self
         }
     }
 
@@ -223,9 +287,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
-    // MARK: Annotation extention
+    // MARK:- Annotation extention
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        // находим именно то место
+        var currentPlace = Place()
+        for place in places {
+        if (place.title == annotation.title) && (place.coordinate.latitude == annotation.coordinate.latitude) && (place.coordinate.longitude == annotation.coordinate.longitude) {
+                currentPlace = place
+            }
+        }
+        //TODO: картинку загрузить ух
+        let rect = CGRect(origin: .zero, size: CGSize(width: 200, height: 100))
+        let snapshotView = UIView()
+        snapshotView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let imageView = UIImageView(frame: rect)
+        if currentPlace.imageURLString != "" {
+            imageView.image = currentImage.image
+        }
         
         guard annotation as? MKUserLocation != mapView.userLocation else { return nil }
         
@@ -234,8 +315,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if annotationView == nil {
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: "AnnotationView")
         }
-        
-       
         
         if annotation.subtitle == "Bottles" {
             annotationView?.image = UIImage(named: "IconBottle")
@@ -254,6 +333,26 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             print("It's something else")
         }
         
+       
+        
+        // делаем вью
+        
+        let button = UIButton(frame: CGRect(origin: .init(x: 0, y: 30), size: CGSize(width: 200, height: 40)))
+        button.setTitle("More Information", for: .normal)
+        button.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
+        button.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)
+        
+        snapshotView.addSubview(imageView)
+        snapshotView.addSubview(button)
+
+        annotationView?.detailCalloutAccessoryView = snapshotView
+        
+        NSLayoutConstraint.activate([
+            snapshotView.widthAnchor.constraint(equalToConstant: rect.width),
+            snapshotView.heightAnchor.constraint(equalToConstant: rect.height)
+        ])
+        
+        // done
         annotationView?.canShowCallout = true
         
         return annotationView
@@ -261,13 +360,35 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
-        var currentPlace = Place()
+        guard view.annotation as? MKUserLocation != mapView.userLocation else { return }
+        
+        // находим именно то место
         for place in places {
             if (place.title == view.annotation?.title) && (place.coordinate.latitude == view.annotation?.coordinate.latitude) && (place.coordinate.longitude == view.annotation?.coordinate.longitude) {
                 currentPlace = place
             }
         }
+        
+        
+        let vkImage = UIImage(named: "vk")!
+        var newimage = UIImageView(image: vkImage)
+        let url = URL(string: currentPlace.imageURLString)
+        let resource = ImageResource(downloadURL: url!)
+            
+        currentImage.kf.setImage(with: resource) { (image, error, cachType, url) in
+                    if let error = error {
+                        print(error)
+                    }
+                    else {
+                        print("Success updated image in calout!")
+                        
+                    }
+                }
+        //currentImage = imageFromDB(currentPlace: currentPlace)
+    
         // тут напишеем чтобы вызывалась вьюшка со всей инфрй йоу
         print("The annotation was selected: \(String(describing: currentPlace.title))")
+        
+        self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
     }
 }

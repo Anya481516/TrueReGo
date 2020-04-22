@@ -198,7 +198,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
             let resource = ImageResource(downloadURL: url!)
             self.profileImageView.kf.setImage(with: resource) { (image, error, cacheType, url) in
                 if let error = error {
-                    print("Error!!!!!! in updatin image fron edit view")
+                    print(error)
                 }
                 else {
                     print("Success updated image in edit view")
@@ -250,7 +250,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     
     func showImageChooseAlert() {
-        var alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
         
         let cameraAction = UIAlertAction(title: "Camera", style: .default){ UIAlertAction in
             self.openCamera()

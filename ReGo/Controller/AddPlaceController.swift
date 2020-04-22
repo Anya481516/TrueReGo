@@ -29,7 +29,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     var bulbsChecked = false
     var otherChecked = false
     var photoAdded = false
-    
+    var placeLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var newPlace = Place()
     
     // MARK: IBOutlets:
@@ -58,6 +58,9 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
             
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+        
+        let region = MKCoordinateRegion(center: placeLocation, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+        mapView.setRegion(region, animated: true)
     }
     
     // MARK: ViewDidLoad:
@@ -81,7 +84,9 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     
     // MARK: IBActions:
     @IBAction func findMyLocationButtonPressed(_ sender: UIButton) {
-         mapView.userTrackingMode = .follow
+        //mapView.userTrackingMode = .follow
+        let region = MKCoordinateRegion(center: placeLocation, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+        mapView.setRegion(region, animated: true)
     }
     @IBAction func addPhotoButtonPressed(_ sender: Any) {
         //if !photoAdded {
@@ -218,7 +223,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= (keyboardSize.height - 80)
+                self.view.frame.origin.y -= (keyboardSize.height)
             }
         }
     }
