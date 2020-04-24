@@ -8,16 +8,21 @@
 
 import UIKit
 
-//class AnnotationView : UIView {
-//    var image : UIImage
-//    var button : UIButton
-//
-//    init (rect: CGRect, image: UIImage) {
-//        super.init(frame: rect)
-//        self.image = image
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
+class AnnotationView : UIView {
+
+    var button = UIButton()
+
+    init (rect: CGRect, button: UIButton) {
+        super.init(frame: rect)
+        self.button = button
+        self.addSubview(self.button)
+    }
+    
+    init () {
+        super.init(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

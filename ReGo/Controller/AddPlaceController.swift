@@ -49,7 +49,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var sendButton: UIButton!
     
-    // MARK: LOCATION MAN
+    // MARK:- LOCATION MAN
     let locationManager = CLLocationManager()
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -89,10 +89,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         mapView.setRegion(region, animated: true)
     }
     @IBAction func addPhotoButtonPressed(_ sender: Any) {
-        //if !photoAdded {
-            
             showImageChooseAlert()
-        //}
     }
     @IBAction func deletePhotoButtonPressed(_ sender: UIButton) {
         if photoAdded {
@@ -150,6 +147,11 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     }
     
     @IBAction func sendButtonPressed(_ sender: UIButton) {
+        // remove the pinfom the original map
+        delegate?.iconImage.isHidden = false
+        delegate?.doneButton.isHidden = false
+        delegate?.addNewPlaceButton.setImage(UIImage.init(systemName: "mappin"), for: [])
+        
         // initialize (with coordinates and id yo)
         newPlace.coordinate = mapView.region.center
         newPlace.id = "\(newPlace.coordinate.latitude)-\(newPlace.coordinate.longitude)"
@@ -202,16 +204,13 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
                 newPlace.address = addressTextField.text!
             }
             
-            
             addNewAnnotationToDatabase(place: newPlace)
-            
             
             if photoAdded {
                 // добавить фотку в сторадж и в базу данных url
                 saveImageToDatabase()
+                self.dismiss(animated: true, completion: nil)
             }
-            
-            
             
         }
         
@@ -237,6 +236,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
         var userDB = DatabaseReference()
         
         if currentUser.superUser {
+            addCountPlacesToUser()
             userDB = Firebase.Database.database().reference().child("Places")
             self.delegate?.addNewAnnotation(ann: newPlace)
             places.append(newPlace)
@@ -288,7 +288,6 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
                 let urlString = url.absoluteString
                 self.newPlace.imageURLString = urlString
                 
-                currentUser.hasProfileImage = true
                 // update the Place info in the database
                 if currentUser.superUser {
                     let userDB = Firebase.Database.database().reference().child("Places")
@@ -302,6 +301,14 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
             }
             return
         }
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func addCountPlacesToUser() {
+        currentUser.placesAdded = currentUser.placesAdded + 1
+        let userDB = Firebase.Database.database().reference().child("Users")
+        userDB.child(currentUser.id).updateChildValues(["PlacesAdded" : currentUser.placesAdded])
     }
     
     func showAlert(alertTitle : String, alertMessage : String) {
@@ -323,7 +330,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     }
     
     
-    // MARK: ImagePicker
+    // MARK:- ImagePicker
     func showImageChooseAlert() {
         var alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
         

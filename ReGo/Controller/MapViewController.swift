@@ -44,6 +44,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var iconImage: UIImageView!
+    @IBOutlet weak var layerButton: UIButton!
     
     // MARK: LOCATION MAN
     let locationManager = CLLocationManager()
@@ -82,6 +83,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     // MARK:- IBActions:
+    
+    @IBAction func layerButtonPressed(_ sender: UIButton) {
+        if mapView.mapType == MKMapType.standard {
+            mapView.mapType = MKMapType.satellite
+        }
+        else {
+            mapView.mapType = MKMapType.standard
+        }
+    }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
         self.performSegue(withIdentifier: "fromMapToAddPlace", sender: self)
@@ -298,15 +308,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 currentPlace = place
             }
         }
-        //TODO: картинку загрузить ух
-        let rect = CGRect(origin: .zero, size: CGSize(width: 200, height: 100))
-        let snapshotView = UIView()
-        snapshotView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let imageView = UIImageView(frame: rect)
-        if currentPlace.imageURLString != "" {
-            imageView.image = currentImage.image
-        }
         
         guard annotation as? MKUserLocation != mapView.userLocation else { return nil }
         
@@ -336,23 +337,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
        
         
         // делаем вью
+        let rect = CGRect(origin: .zero, size: CGSize(width: 200, height: 50))
         
-        let button = UIButton(frame: CGRect(origin: .init(x: 0, y: 30), size: CGSize(width: 200, height: 40)))
-        button.setTitle("More Information", for: .normal)
+        
+        let yForButton = rect.height / 2 - 20
+        let button = UIButton(frame: CGRect(origin: .init(x: 0, y: yForButton), size: CGSize(width: 100, height: 40)))
+        button.setTitle("More Info", for: .normal)
+        button.sizeToFit()
         button.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         button.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)
         
-        snapshotView.addSubview(imageView)
-        snapshotView.addSubview(button)
-
-        annotationView?.detailCalloutAccessoryView = snapshotView
-        
-        NSLayoutConstraint.activate([
-            snapshotView.widthAnchor.constraint(equalToConstant: rect.width),
-            snapshotView.heightAnchor.constraint(equalToConstant: rect.height)
-        ])
-        
         // done
+        annotationView?.leftCalloutAccessoryView = button
+        annotationView?.sizeToFit()
         annotationView?.canShowCallout = true
         
         return annotationView
@@ -371,24 +368,28 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         
         let vkImage = UIImage(named: "vk")!
-        var newimage = UIImageView(image: vkImage)
-        let url = URL(string: currentPlace.imageURLString)
-        let resource = ImageResource(downloadURL: url!)
-            
-        currentImage.kf.setImage(with: resource) { (image, error, cachType, url) in
-                    if let error = error {
-                        print(error)
-                    }
-                    else {
-                        print("Success updated image in calout!")
-                        
-                    }
-                }
+        currentImage.image = vkImage
+        if let url = URL(string: currentPlace.imageURLString) {
+            print("it has an image")
+            let resource = ImageResource(downloadURL: url)
+            currentImage.kf.setImage(with: resource) { (image, error, cachType, url) in
+                          if let error = error {
+                                   print(error)
+                               }
+                               else {
+                                   print("Success updated image in calout!")
+                               }
+                           }
+        }
+       
         //currentImage = imageFromDB(currentPlace: currentPlace)
     
-        // тут напишеем чтобы вызывалась вьюшка со всей инфрй йоу
         print("The annotation was selected: \(String(describing: currentPlace.title))")
         
-        self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
+        //self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        print("Annotation button was tapped yo")
     }
 }

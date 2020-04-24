@@ -42,7 +42,5 @@ class PlaceInfoConteoller : UIViewController {
     
     
     // MARK:- IBActions:
-    @IBAction func editButtonPressed(_ sender: Any) {
-    }
     
 }
