@@ -12,7 +12,6 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 import Kingfisher
-import SDWebImage
 
 protocol EditProfileDelegate {
     func updateInterface()
