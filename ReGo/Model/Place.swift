@@ -37,6 +37,22 @@ class Place : CustomPin {
         super.init()
     }
     
+    init(place : Place) {
+        super.init()
+        id = place.id
+        hasImage = place.hasImage
+        imageURLString = place.imageURLString
+        bottles = place.bottles
+        batteries = place.batteries
+        bulbs = place.bulbs
+        other = place.other
+        userId = place.userId
+        address = place.address
+        title = place.title
+        subtitle = place.subtitle
+        coordinate = place.coordinate
+    }
+    
      override init(location: CLLocationCoordinate2D){
         super.init()
         id = String(location.latitude) + String(location.longitude)

@@ -332,7 +332,7 @@ class AddPlaceController : UIViewController,  MKMapViewDelegate, CLLocationManag
     
     // MARK:- ImagePicker
     func showImageChooseAlert() {
-        var alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
         
         let cameraAction = UIAlertAction(title: "Camera", style: .default){ UIAlertAction in
             self.openCamera()

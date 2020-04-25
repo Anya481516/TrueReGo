@@ -198,7 +198,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     // prepare method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromMapToPlaceInfo" {
-            let destinationVC = segue.destination as! PlaceInfoConteoller
+            let destinationVC = segue.destination as! PlaceInfoController
             destinationVC.delegate = self
         }
         
@@ -215,7 +215,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func imageFromDB(currentPlace : Place) -> UIImage {
         let vkImage = UIImage(named: "vk")!
-        var newimage = UIImageView(image: vkImage)
+        let newimage = UIImageView(image: vkImage)
         let url = URL(string: currentPlace.imageURLString)
         let resource = ImageResource(downloadURL: url!)
             
@@ -302,12 +302,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         // находим именно то место
-        var currentPlace = Place()
-        for place in places {
-        if (place.title == annotation.title) && (place.coordinate.latitude == annotation.coordinate.latitude) && (place.coordinate.longitude == annotation.coordinate.longitude) {
-                currentPlace = place
-            }
-        }
+//        var currentPlace = Place()
+//        for place in places {
+//        if (place.title == annotation.title) && (place.coordinate.latitude == annotation.coordinate.latitude) && (place.coordinate.longitude == annotation.coordinate.longitude) {
+//                currentPlace = place
+//            }
+//        }
         
         guard annotation as? MKUserLocation != mapView.userLocation else { return nil }
         
@@ -391,5 +391,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         print("Annotation button was tapped yo")
+        
+        
+        self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
     }
 }

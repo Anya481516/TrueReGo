@@ -14,18 +14,23 @@ import FirebaseAuth
 import FirebaseDatabase
 import Kingfisher
 
+protocol EditPlaceDelegate {
+    func getPlace() -> Place
+}
+
 class EditPlaceController : UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     //MARK:- Variables
+    var delegate : PlaceInfoController?
+    var currentPlace = Place()
+    
     var imagePicker = UIImagePickerController()
-    var delegate : MapViewController?
     var bottlesChecked = false
     var batteriesChecked = false
     var bulbsChecked = false
     var otherChecked = false
     var photoAdded = false
     var placeLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    var newPlace = Place()
     
     // MARK:- IBOutlets
     @IBOutlet weak var titleLabel: UILabel!
@@ -90,36 +95,36 @@ class EditPlaceController : UIViewController, MKMapViewDelegate, CLLocationManag
         if bottlesChecked {
             bottlesChecked = false
             sender.backgroundColor = UIColor(named: "WhiteGray")
-            newPlace.bottles = false
+            currentPlace.bottles = false
         }
         else {
             bottlesChecked = true
             sender.backgroundColor = UIColor(named: "DarkLightGreenTransparent")
-            newPlace.bottles = true
+            currentPlace.bottles = true
         }
     }
     @IBAction func batteriesButtonPressed(_ sender: UIButton) {
         if batteriesChecked {
             batteriesChecked = false
             sender.backgroundColor = UIColor(named: "WhiteGray")
-            newPlace.batteries = false
+            currentPlace.batteries = false
         }
         else {
             batteriesChecked = true
             sender.backgroundColor = UIColor(named: "DarkLightGreenTransparent")
-            newPlace.batteries = true
+            currentPlace.batteries = true
         }
     }
     @IBAction func bulbsButtonPressed(_ sender: UIButton) {
         if bulbsChecked {
             bulbsChecked = false
             sender.backgroundColor = UIColor(named: "WhiteGray")
-            newPlace.bulbs = false
+            currentPlace.bulbs = false
         }
         else {
             bulbsChecked = true
             sender.backgroundColor = UIColor(named: "DarkLightGreenTransparent")
-            newPlace.bulbs = true
+            currentPlace.bulbs = true
         }
     }
     @IBAction func otherButtonPressed(_ sender: UIButton) {
@@ -140,7 +145,7 @@ class EditPlaceController : UIViewController, MKMapViewDelegate, CLLocationManag
         if photoAdded {
             deletePhotoButton.isHidden = true
             photoAdded = false
-            newPlace.hasImage = false
+            currentPlace.hasImage = false
         }
     }
     @IBAction func sendChangesButtonPressed(_ sender: UIButton) {
@@ -148,6 +153,10 @@ class EditPlaceController : UIViewController, MKMapViewDelegate, CLLocationManag
     }
     
     // MARK:- METHODS:
+    
+    func updateInterface() {
+        //___________________--------------______________________--------------___________________________
+    }
     
     func showAlert(alertTitle : String, alertMessage : String) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
@@ -175,7 +184,7 @@ class EditPlaceController : UIViewController, MKMapViewDelegate, CLLocationManag
     
     // MARK:- ImagePicker
     func showImageChooseAlert() {
-        var alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
         
         let cameraAction = UIAlertAction(title: "Camera", style: .default){ UIAlertAction in
             self.openCamera()
@@ -218,6 +227,6 @@ class EditPlaceController : UIViewController, MKMapViewDelegate, CLLocationManag
         imageView.image = image
         photoAdded = true
         deletePhotoButton.isHidden = false
-        newPlace.hasImage = true
+        currentPlace.hasImage = true
     }
 }

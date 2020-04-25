@@ -35,7 +35,6 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         // when info retrieced already
         if currentUser.name != "" {
             updateInterface()
-            
         }
         // when info not retrieved but user is logged in
         else if let user = Auth.auth().currentUser{
@@ -98,7 +97,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             let resource = ImageResource(downloadURL: url!)
             self.profileImage.kf.setImage(with: resource) { (image, error, cacheType, url) in
                 if let error = error {
-                    print("Error!!!!!! from updating image in Home")
+                    print(error)
                 }
                 else {
                     print("Success updated image in Home")
