@@ -15,7 +15,10 @@ import FirebaseDatabase
 import Kingfisher
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, AddPlaceDelegate, PlaceInfoDelegate {
-    
+    func getCurretLocation() -> CLLocation {
+        return locationManager.location!
+    }
+
     //MARK:- From Delegates:
     func getPlace() -> Place {
         return currentPlace
@@ -35,6 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var places = [Place]()
     var currentImage = UIImageView()
     var currentPlace = Place()
+    var currentAddress = String()
     
     // MARK: IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
@@ -43,7 +47,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
-    @IBOutlet weak var iconImage: UIImageView!
+    @IBOutlet weak var mapPinIcon: UIImageView!
     @IBOutlet weak var layerButton: UIButton!
     
     // MARK: LOCATION MAN
@@ -55,6 +59,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+        
+        // for address
+        CLGeocoder().reverseGeocodeLocation(locations.last!) { (placemarks, error) in
+            if let placemarks = placemarks {
+                let placemark = placemarks[0]
+                self.currentAddress = placemark.addressDictionary!["Street"] as! String
+                print("Address is - \(self.currentAddress)")
+            }
+        }
     }
     
     // MARK:- ViewDidLoad:
@@ -94,6 +107,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
+        
         self.performSegue(withIdentifier: "fromMapToAddPlace", sender: self)
     }
     
@@ -122,7 +136,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.setRegion(region, animated: true)
             zoomInButton.isEnabled = false
         }
-        print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
+        //print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
         
     }
     
@@ -150,7 +164,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.setRegion(region, animated: true)
             zoomOutButton.isEnabled = false
         }
-        print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
+        //print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
     }
     
     @IBAction func locationButtonPressed(_ sender: UIButton) {
@@ -162,7 +176,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if sender.currentImage == UIImage(systemName: "mappin.slash") {
             sender.setImage(UIImage.init(systemName: "mappin"), for: [])
             doneButton.isHidden = true
-            iconImage.isHidden = true
+            mapPinIcon.isHidden = true
+            sender.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         }
         else if currentUser.name == "" {
             showAlert(alertTitle: "Error", alertMessage: "To add new places you have to log in")
@@ -173,7 +188,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let okAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
                 sender.setImage(UIImage.init(systemName: "mappin.slash"), for: [])
                 self.doneButton.isHidden = false
-                self.iconImage.isHidden = false
+                self.mapPinIcon.isHidden = false
+                sender.backgroundColor = UIColor(named: "RedTransparent")
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (UIAlertAction) in
                 
@@ -185,6 +201,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     // MARK:- METHODS:
+    
+    
+    
     
     func showAlert(alertTitle : String, alertMessage : String) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
@@ -203,7 +222,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         
         if segue.identifier == "fromMapToAddPlace" {
-            let destinationVC = segue.destination as! AddPlaceController
+            let destinationVC = segue.destination as! AddAndEditPlaceController
             destinationVC.placeLocation = mapView.region.center
             destinationVC.delegate = self
         }
@@ -243,7 +262,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
             currentUser.superUser = snapshotValue["SuperUser"] as! Bool
             currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            print("Info retrieved !!!")
+            //print("Info retrieved !!!")
             
             return
         }) { (error) in
@@ -272,7 +291,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let userID = snapshotValue["UserID"] as! String
             let id = snapshotValue["ID"] as! String
         
-            print(title, address, hasImage, imageURL, latitude, longitude, bottles, batteries, bulbs, other, userID)
+            //print(title, address, hasImage, imageURL, latitude, longitude, bottles, batteries, bulbs, other, userID)
         
             let place = Place()
             place.title = title
@@ -319,19 +338,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         if annotation.subtitle == "Bottles" {
             annotationView?.image = UIImage(named: "IconBottle")
-            print("It's a bottle")
+            //print("It's a bottle")
         } else if annotation.subtitle  == "Batteries" {
             annotationView?.image = UIImage(named: "IconBattery")
-            print("It's a battery")
+            //print("It's a battery")
         } else if annotation.subtitle  == "Bulbs" {
             annotationView?.image = UIImage(named: "IconBulb")
-            print("It's a bulb")
+            //print("It's a bulb")
         } else if annotation.subtitle  == "BatteriesAndBulbs" {
             annotationView?.image = UIImage(named: "IconBatteryBulb")
-            print("It's a battery bulb")
+            //print("It's a battery bulb")
         } else if annotation.subtitle  == "Other" {
             annotationView?.image = UIImage(named: "IconOther")
-            print("It's something else")
+            //print("It's something else")
         }
         
        
@@ -384,15 +403,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
        
         //currentImage = imageFromDB(currentPlace: currentPlace)
     
-        print("The annotation was selected: \(String(describing: currentPlace.title))")
+        //print("The annotation was selected: \(String(describing: currentPlace.title))")
         
         //self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("Annotation button was tapped yo")
-        
-        
         self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
     }
 }

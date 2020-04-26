@@ -36,6 +36,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     var editView = false
     
     // MARK: IBOutlets:
+    @IBOutlet weak var viewTitle: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deletePhotoButton: UIButton!
     @IBOutlet weak var placeImageView: UIImageView!
@@ -122,7 +123,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         //showPlaceAddress()
         
         if editView {
-            titleLabel.text = "Edit Place"
+            viewTitle.text = "Edit Place"
             updateInterface()
             if oldPlace.hasImage {
                 deletePhotoButton.isHidden = false
@@ -520,7 +521,9 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     
     func openCamera() {
         if(UIImagePickerController .isSourceTypeAvailable(.camera)){
+             imagePicker.delegate = self
             imagePicker.sourceType = .camera
+            imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
         } else {
             showAlert(alertTitle: "Camera error", alertMessage: "We don't have access to your camera")

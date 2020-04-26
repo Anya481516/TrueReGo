@@ -11,23 +11,33 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
+import CoreLocation
 import Kingfisher
 
 protocol PlaceInfoDelegate {
     func getPlace() -> Place
+    func getCurretLocation() -> CLLocation
 }
 
-class PlaceInfoController : UIViewController {
+class PlaceInfoController : UIViewController, AddPlaceDelegate {
+    
+    func addNewAnnotation(ann: Place) {
+        
+    }
     
     // MARK:- Variables:
     var delegate : MapViewController?
     var currentPlace = Place()
+    var distanceM = Int()
+    var distanceK = Int()
     
     // MARK:- IBOutlets:
     @IBOutlet weak var informationLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var placeImage: UIImageView!
+    @IBOutlet weak var goButton: UIButton!
+    @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var addresLabel: UILabel!
     @IBOutlet weak var addressTextField: UITextField!
     @IBOutlet weak var whtaItCollectsLabel: UILabel!
@@ -46,6 +56,12 @@ class PlaceInfoController : UIViewController {
         
         waitingThing.isHidden = true
         currentPlace = Place( place: delegate!.getPlace() )
+        let currentLocation = delegate?.getCurretLocation()
+        distanceM = Int(CLLocation(latitude: currentPlace.coordinate.latitude, longitude: currentPlace.coordinate.longitude).distance(from: currentLocation!))
+        if distanceM > 999 {
+            distanceK = distanceM / 1000
+            distanceM = distanceM - distanceK * 1000
+        }
         updateInterface()
     }
     
@@ -55,23 +71,42 @@ class PlaceInfoController : UIViewController {
         
     }
     
+    @IBAction func goButtonPressed(_ sender: UIButton) {
+        
+    }
+    
+    
     //MARK:- METHODS:
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "fromInfoToEditPlace" {
+            let destinationVC = segue.destination as! AddAndEditPlaceController
+            destinationVC.placeInfoDelegate = self
+            destinationVC.oldPlace = Place(place: currentPlace)
+            destinationVC.newPlace = Place(place: currentPlace)
+            destinationVC.editView = true
+        }
+    }
+    
     func updateInterface() {
-        if currentUser.hasProfileImage {
+        if currentPlace.hasImage {
             waitingThing.isHidden = false
-            let url = URL(string: currentPlace.imageURLString)
-            //self.placeImage.sd_setImage(with: url) { (image, error, SDImageCacheType, URL) in }
-            let resource = ImageResource(downloadURL: url!)
-            self.placeImage.kf.setImage(with: resource) { (image, error, cacheType, url) in
-                if let error = error {
-                    print(error)
-                }
-                else {
-                    self.waitingThing.isHidden = true
-                    print("Success updated image in edit view")
+            if currentUser.imageURL != "" {
+                let url = URL(string: currentPlace.imageURLString)
+                //self.placeImage.sd_setImage(with: url) { (image, error, SDImageCacheType, URL) in }
+                let resource = ImageResource(downloadURL: url!)
+                self.placeImage.kf.setImage(with: resource) { (image, error, cacheType, url) in
+                    if let error = error {
+                        print(error)
+                    }
+                    else {
+                        self.waitingThing.isHidden = true
+                        print("Success updated image in edit view")
+                    }
                 }
             }
         }
+        distanceLabel.text = "\(distanceK).\(distanceM) km from you"
         titleTextField.text = currentPlace.title
         addressTextField.text = currentPlace.address
         if currentPlace.bottles == false {

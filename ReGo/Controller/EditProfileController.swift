@@ -270,11 +270,13 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     func openCamera() {
         if(UIImagePickerController .isSourceTypeAvailable(.camera)){
+            imagePicker.delegate = self
             imagePicker.sourceType = .camera
-            imageChanged = true
+            //imageChanged = true
+            imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
-            updateInterface()
-            retrieveUserInfo()
+            //updateInterface()
+            //retrieveUserInfo()
         } else {
             showAlert(alertTitle: "Camera error", alertMessage: "We don't have access to your camera")
         }
@@ -288,6 +290,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         present(imagePicker, animated: true, completion: nil)
     }
     
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[.originalImage] as? UIImage else {
@@ -296,6 +299,8 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         profileImageView.image = image
         imageChanged = true
     }
+    
+    
     
     func saveImageToDatabase() {
         // save image to a variable
