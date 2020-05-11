@@ -15,6 +15,8 @@ import FirebaseDatabase
 protocol LogInDelegate {
     func goToRegistration()
     func updateInterface()
+    func showLoggedInView()
+    func showNotLoggedInView()
 }
 
 class LogInViewController : UIViewController {
@@ -23,6 +25,7 @@ class LogInViewController : UIViewController {
     var delegate : LogInDelegate?
     
     // MARK: IBOutlets:
+    @IBOutlet var logInView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!
@@ -40,6 +43,11 @@ class LogInViewController : UIViewController {
         updateLang()
         //signUpButton.currentTitleColor = UIColor.init(named: "BlackWhite")
         //signUpButton.setTitleColor(UIColor.init(named: "BlackWhite"), for: .normal)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
+        logInView.addGestureRecognizer(tapGesture)
+        
+        self.emailTextField.keyboardType = UIKeyboardType.emailAddress
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -79,6 +87,7 @@ class LogInViewController : UIViewController {
                         print("Succesfully logged in")
                         // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                         self.dismiss(animated: true)
+                        self.delegate?.showLoggedInView()
                         self.retrieveUserInfo()
                     }
                 }
@@ -112,6 +121,11 @@ class LogInViewController : UIViewController {
     }
     
     // with the keyboard
+    
+    @objc func outOfKeyBoardTapped(){
+        self.view.endEditing(true)
+    }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {

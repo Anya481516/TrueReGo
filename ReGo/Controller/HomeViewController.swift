@@ -30,6 +30,9 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var logInButton: ButtonWithImage!
     @IBOutlet weak var signUpButton: ButtonWithImage!
+    @IBOutlet weak var langButton: ButtonWithImage!
+    
+
     
     // MARK: didLoad
     override func viewDidLoad() {
@@ -43,10 +46,14 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         }
         // when info not retrieved but user is logged in
         else if let user = Auth.auth().currentUser{
+            print(user.email)
             //retrieveUserInfo()
+            showLoggedInView()
             retrieveUserInfo()
+            updateInterface()
         }
         else {
+            print("not logged in")
             showNotLoggedInView()
         }
     }
@@ -62,31 +69,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     @IBAction func aboutButtonPressed(_ sender: UIButton) {
     }
     @IBAction func changeLanguageButtonPressed(_ sender: Any) {
-        let alert = UIAlertController(title: myKeys.alert.changeLangTitle, message: myKeys.alert.changeLangQuestion, preferredStyle: .alert)
-        let action1 = UIAlertAction(title: myKeys.alert.yesButton, style: .default) { (UIAlertAction) in
-            
-                if language == "RUS"
-                {
-                    language = "ENG"
-                    myKeys.changeToEng()
-                }
-                else {
-                    language = "RUS"
-                    
-                    myKeys.changeToRus()
-                }
-            UserDefaults.standard.set(language, forKey: "Lang")
-            self.updateLang()
-            
-            print("language is changed")
-            
-        }
-        let action2 = UIAlertAction(title: myKeys.alert.noButton, style: .cancel) { (UIAlertAction) in
-            
-        }
-        alert.addAction(action1)
-        alert.addAction(action2)
-        self.present(alert, animated: true, completion: nil)
+        showChangeLanguageAlert()
     }
     @IBAction func editProfileButtonPressed(_ sender: Any) {
     }
@@ -118,13 +101,14 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         logOutButton.setTitle(myKeys.home.logOutButton, for: .normal)
         requestLabel.text = myKeys.home.loginRequest
         logInButton.setTitle(myKeys.home.logInButton, for: .normal)
-        signUpButton.setTitle(myKeys.home.logOutButton, for: .normal)
+        signUpButton.setTitle(myKeys.home.signUpButton, for: .normal)
         usernameLabel.text = myKeys.home.usernameLabel
         emailLabel.text = myKeys.home.emailLabel
         placesLabel.text = myKeys.home.placesAddedLabel
         aboutButton.setTitle(myKeys.home.aboutButton, for: .normal)
         languageButton.setTitle(myKeys.home.changeLangButton, for: .normal)
         editButton.setTitle(myKeys.home.editPofileButton, for: .normal)
+        langButton.setTitle(myKeys.home.changeLangButton, for: .normal)
         
         updateInterface()
     }
@@ -134,6 +118,33 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     func goToRegistrationView() {
         self.performSegue(withIdentifier: "fromHomeToRegistration", sender: self)
+    }
+    
+    func showChangeLanguageAlert(){
+        let alert = UIAlertController(title: myKeys.alert.changeLangTitle, message: myKeys.alert.changeLangQuestion, preferredStyle: .alert)
+        let action1 = UIAlertAction(title: myKeys.alert.yesButton, style: .default) { (UIAlertAction) in
+                if language == "RUS"
+                {
+                    language = "ENG"
+                    myKeys.changeToEng()
+                }
+                else {
+                    language = "RUS"
+                    
+                    myKeys.changeToRus()
+                }
+            UserDefaults.standard.set(language, forKey: "Lang")
+            self.updateLang()
+            
+            print("language is changed")
+            
+        }
+        let action2 = UIAlertAction(title: myKeys.alert.noButton, style: .cancel) { (UIAlertAction) in
+            
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func updateInterface() {
@@ -159,9 +170,12 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         self.placesLabel.text = "\(myKeys.home.placesAddedLabel)\(currentUser.placesAdded)"
         self.emailLabel.text = currentUser.email
         
-        print("updating info")
-        print("UPDATING Name:\(currentUser.name), Places Added:\(currentUser.placesAdded)")
-        showLoggedInView()
+        //print("updating info")
+        //print("UPDATING Name:\(currentUser.name), Places Added:\(currentUser.placesAdded)")
+        if let user = Auth.auth().currentUser {
+            showLoggedInView()
+        }
+        
     }
     
     func clearLoggedInView() {

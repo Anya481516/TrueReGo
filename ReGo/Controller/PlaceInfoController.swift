@@ -47,9 +47,11 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     @IBOutlet weak var bulbImage: UIImageView!
     @IBOutlet weak var otherImage: UIImageView!
     @IBOutlet weak var batteryImage: UIImageView!
-    @IBOutlet weak var otherTextField: UITextField!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var waitingThing: UIActivityIndicatorView!
+    @IBOutlet weak var otherTextView: UITextView!
+    @IBOutlet weak var titleTextView: UITextView!
+    @IBOutlet weak var addressTextView: UITextView!
     
     
     //MARK:- ViewDidLoad
@@ -87,11 +89,11 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         goThereButton.setTitle(myKeys.placeInfo.goThereButton, for: .normal)
         distanceLabel.text = myKeys.placeInfo.distanceFromYou
         titleLabel.text = myKeys.placeInfo.titleLabel
-        titleTextField.placeholder = myKeys.placeInfo.titleTextField
+        titleTextView.text = myKeys.placeInfo.titleTextField
         addresLabel.text = myKeys.placeInfo.addressLabel
-        addressTextField.placeholder = myKeys.placeInfo.addressTextField
+        addressTextView.text = myKeys.placeInfo.addressTextField
         whtaItCollectsLabel.text = myKeys.placeInfo.whatItCollectsLabel
-        otherTextField.text = myKeys.placeInfo.otherTextField
+        otherTextView.text = myKeys.placeInfo.otherTextField
         editButton.setTitle(myKeys.placeInfo.editButton, for: .normal)
         
     }
@@ -133,8 +135,8 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
             }
         }
         distanceLabel.text = "\(distanceK).\(distanceM) km from you"
-        titleTextField.text = currentPlace.title
-        addressTextField.text = currentPlace.address
+        titleTextView.text = currentPlace.title
+        addressTextView.text = currentPlace.address
         if currentPlace.bottles == false {
             bottleImage.image = UIImage(named: "BottleUnchecked")
         }
@@ -146,11 +148,11 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         }
         if currentPlace.other == "" {
             otherImage.image = UIImage(named: "OtherUnchecked")
-            otherTextField.text = myKeys.placeInfo.otherTextField
+            otherTextView.text = myKeys.placeInfo.otherTextField
         }
         else {
             otherImage.image = UIImage(named: "OtherChecked")
-            otherTextField.text = currentPlace.other
+            otherTextView.text = currentPlace.other
         }
     }
     

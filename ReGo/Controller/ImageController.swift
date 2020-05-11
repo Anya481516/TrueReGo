@@ -29,10 +29,10 @@ class ImageController: UIViewController, UIScrollViewDelegate {
         
         
         let width = self.view.frame.width
-        let height = self.view.frame.height
-        var image = delegate?.placeImage.image
-        var imageWidth = image!.size.width
-        var imageHeight = image!.size.height
+        //let height = self.view.frame.height
+        let image = delegate?.placeImage.image
+        let imageWidth = image!.size.width
+        //var imageHeight = image!.size.height
         
         scale =  width / imageWidth
         

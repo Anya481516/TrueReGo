@@ -26,6 +26,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     // MARK: IBOutlets:
     
+    @IBOutlet var editProfileView: UIView!
     @IBOutlet weak var editProfileTitleLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
@@ -45,6 +46,11 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
+        editProfileView.addGestureRecognizer(tapGesture)
+        
+        self.emailTextField.keyboardType = UIKeyboardType.emailAddress
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -185,6 +191,11 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     // MARK: METHODS:
     
     // with the keyboard
+    
+    @objc func outOfKeyBoardTapped(){
+        self.view.endEditing(true)
+    }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {

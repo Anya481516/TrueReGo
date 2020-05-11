@@ -57,6 +57,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     @IBOutlet weak var disableView: UIView!
     @IBOutlet weak var mapPin: UIImageView!
     @IBOutlet weak var waitingThing: UIActivityIndicatorView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     // MARK:- LOCATION MAN
     let locationManager = CLLocationManager()
@@ -65,9 +66,11 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locationManager.stopUpdatingLocation()
         locationManager.delegate = nil
-            
-        mapView.showsUserLocation = true
-        mapView.userTrackingMode = .follow
+        
+        if isUsingLocation{
+            mapView.showsUserLocation = true
+            mapView.userTrackingMode = .follow
+        }
         
         previousLocation = getCenterLocation(for: mapView)
 
@@ -120,6 +123,8 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             deletePhotoButton.isHidden = true
         }
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
+        scrollView.addGestureRecognizer(tapGesture)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -242,7 +247,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.whatRecycle)
             return
         }
-        else if otherChecked && whatCollectsTextField.text == "" {
+        else if otherChecked && whatCollectsTextField.placeholder == "" {
             showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.writeOther)
             return
         }
@@ -299,13 +304,17 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         batteriesButton.setTitle(myKeys.addAndEdit.batteriesButton, for: .normal)
         bulbsButton.setTitle(myKeys.addAndEdit.bulbsButton, for: .normal)
         otherButton.setTitle(myKeys.addAndEdit.otherButton, for: .normal)
-        whatCollectsTextField.text = myKeys.addAndEdit.otherTextField
+        whatCollectsTextField.placeholder = myKeys.addAndEdit.otherTextField
         addPhotoButton.setTitle(myKeys.addAndEdit.addPhotoButton, for: .normal)
         titleLabel.text = myKeys.addAndEdit.titleLabel
         titleTextField.placeholder = myKeys.addAndEdit.titleTextField
         addressLabel.text = myKeys.addAndEdit.addressLabel
         addressTextField.placeholder = myKeys.addAndEdit.addressTextField
         sendButton.setTitle(myKeys.addAndEdit.sendButton, for: .normal)
+    }
+    
+    @objc func outOfKeyBoardTapped(){
+        self.view.endEditing(true)
     }
     
     func getAddress() {

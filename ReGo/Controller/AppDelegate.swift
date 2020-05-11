@@ -15,11 +15,12 @@ import FirebaseStorage
 
 
 // MARK: global variables:
-var language : String = "RUS"
+var language: String = "RUS"
 var currentUser = User()
 var places = [Place]()
 var myKeys = MyKeys()
 var defaults = UserDefaults.standard
+var isUsingLocation: Bool = true
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -88,8 +88,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.startUpdatingLocation()
         
-        mapView.showsUserLocation = true
-        mapView.userTrackingMode = .follow
+        if isUsingLocation{
+            mapView.showsUserLocation = true
+            mapView.userTrackingMode = .follow
+        }
+        
 
     
         if let user = Auth.auth().currentUser {
@@ -282,12 +285,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }) { (error) in
             print(error.localizedDescription)
         }
+
     }
 
     
     func retrieveAnnotations() {
         let messageDB = Firebase.Database.database().reference().child("Places")
         
+        // when a child added
         messageDB.observe(.childAdded) { (snapshot) in
             let snapshotValue = snapshot.value as! Dictionary<String,Any>
         
@@ -327,6 +332,43 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
             //self.messageTableView.reloadData()
             self.updateInterface()
+        }
+        
+        // a child has changed
+        messageDB.observe(.childChanged) { (snapshot) in
+            let snapshotValue = snapshot.value as! Dictionary<String,Any>
+            
+            let title = snapshotValue["Title"] as! String
+            let address = snapshotValue["Address"] as! String
+            let hasImage = snapshotValue["HasImage"] as! Bool
+            let imageURL = snapshotValue["ImageURL"] as! String
+            let longitude = snapshotValue["Longitude"] as! CLLocationDegrees
+            let latitude = snapshotValue["Latitude"] as! CLLocationDegrees
+            let type = snapshotValue["Type"] as! String
+            let bottles = snapshotValue["Bottles"] as! Bool
+            let batteries = snapshotValue["Batteries"] as! Bool
+            let bulbs = snapshotValue["Bulbs"] as! Bool
+            let other = snapshotValue["Other"] as! String
+            let userID = snapshotValue["UserID"] as! String
+            let id = snapshotValue["ID"] as! String
+            
+            for place in self.places {
+                if place.id == id {
+                    place.title = title
+                    place.subtitle = type
+                    place.address = address
+                    place.hasImage = hasImage
+                    place.imageURLString = imageURL
+                    place.coordinate.latitude = latitude
+                    place.coordinate.longitude = longitude
+                    place.bottles = bottles
+                    place.batteries = batteries
+                    place.bulbs = bulbs
+                    place.other = other
+                    place.userId = userID
+                    place.address = address
+                }
+            }
         }
     }
     
@@ -375,7 +417,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         let yForButton = rect.height / 2 - 20
         let button = UIButton(frame: CGRect(origin: .init(x: 0, y: yForButton), size: CGSize(width: 100, height: 40)))
-        button.setTitle(myKeys.map.doneButton, for: .normal)
+        button.setTitle(myKeys.map.moreInfoButton, for: .normal)
         button.sizeToFit()
         button.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         button.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)

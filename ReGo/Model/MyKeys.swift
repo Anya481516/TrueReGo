@@ -65,11 +65,11 @@ class MapViewControllerLabels {
     var moreInfoButton = String()
     
     func changeToEng(){
-        doneButton = "Done"
+        doneButton = " Done"
         moreInfoButton = "More Info"
     }
     func changeToRus() {
-        doneButton = "Готово"
+        doneButton = " Готово"
         moreInfoButton = "Подробнее"
     }
 }
@@ -113,7 +113,7 @@ class HomeViewControllerLabels {
         logOutButton = "Выйти"
         loginRequest = "Войдите в приложение чтобы добавлять новые места"
         logInButton = "Войти"
-        signUpButton = "Зарегистрироваться"
+        signUpButton = "Регистрация"
         
         usernameLabel = "Имя"
         emailLabel = "Почта: "
@@ -160,7 +160,7 @@ class LogInRegistrationViewControllerLabels {
         emailLabel = "Электронная почта:"
         emailTextField = "flora@mail.ru"
         passwordLabel = "Пароль:"
-        signUpButton = "Зарегистрироваться"
+        signUpButton = "Регистрация"
         logInButton = "Войти"
         forgotPasswordButton = "Забыли пароль?"
     }
@@ -213,16 +213,16 @@ class AddAndEditPlaceViewControllerLabels {
     func changeToRus() {
         addNewPlaceTitleLabel = "Добавить Место"
         editPlaceTitleLabel = "Редактировать Место"
-        enableMapButton = " Активировать карту"
-        disableMapButton = " Дезактивировать карту"
+        enableMapButton = " Активировать"
+        disableMapButton = " Дезактивировать"
         whatDoesItCollectLabel = "Что можно приносить?"
         bottlesButton = "Бутылки"
         batteriesButton  = "Батарейки"
         bulbsButton = "Лампы"
         otherButton = "Другое"
         otherTextField = "Запишите сюда что конкретно другое можно принести"
-        addPhotoButton = "Добавить Фото"
-        changePhotoButton = "Изменить Фото"
+        addPhotoButton = "+ Фото"
+        changePhotoButton = "+ Фото"
         titleLabel = "Название:"
         titleTextField = "Контейне для пластика"
         addressLabel = "Адрес:"
@@ -262,7 +262,7 @@ class PlaceInfoViewControllerLabels {
     }
     func changeToRus() {
         infoTitleLabel = "Информация"
-        goThereButton = "Идти"
+        goThereButton = " Идти"
         distanceFromYou = "км от Вас"
         titleLabel = "Название:"
         titleTextField = "Контейнер для пластика"
