@@ -23,6 +23,12 @@ class LogInViewController : UIViewController {
     var delegate : LogInDelegate?
     
     // MARK: IBOutlets:
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var passwordLabel: UILabel!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var signupButton: UIButton!
+    @IBOutlet weak var forgotPasswordButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var eyeButton: UIButton!
@@ -31,6 +37,7 @@ class LogInViewController : UIViewController {
     // MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateLang()
         //signUpButton.currentTitleColor = UIColor.init(named: "BlackWhite")
         //signUpButton.setTitleColor(UIColor.init(named: "BlackWhite"), for: .normal)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -55,17 +62,17 @@ class LogInViewController : UIViewController {
         if let userEmail = emailTextField.text {
             if let userPassword = passwordTextField.text {
                 Auth.auth().signIn(withEmail: userEmail, password: userPassword) { (user, error) in
-                    if error != nil {
-                        print(error!)
+                    if let error = error {
+                        print(error)
                         // описать что делать при каждых ошибочках
-                        if userPassword.isEmpty || userPassword.count < 6{
-                            self.showAlert(alertTitle: "Incorrect Password", alertMessage: error!.localizedDescription)
+                        if userPassword.isEmpty{
+                            self.showAlert(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage)
                         }
                         else if userEmail.isEmpty {
-                            self.showAlert(alertTitle: "Incorrect Email", alertMessage: error!.localizedDescription)
+                            self.showAlert(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage)
                         }
                         else {
-                            self.showAlert(alertTitle: "Error", alertMessage: error!.localizedDescription)
+                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
                         }
                     }
                     else {
@@ -92,13 +99,23 @@ class LogInViewController : UIViewController {
         }
     }
     
-    // MARK: METHODS:
+    // MARK:- METHODS:
+    
+    func updateLang(){
+        titleLabel.text = myKeys.loginRegistration.logInTitleLabel
+        emailLabel.text = myKeys.loginRegistration.emailLabel
+        emailTextField.placeholder = myKeys.loginRegistration.emailTextField
+        passwordLabel.text = myKeys.loginRegistration.passwordLabel
+        loginButton.setTitle(myKeys.loginRegistration.logInButton, for: .normal)
+        forgotPasswordButton.setTitle(myKeys.loginRegistration.forgotPasswordButton, for: .normal)
+        signUpButton.setTitle(myKeys.loginRegistration.signUpButton, for: .normal)
+    }
     
     // with the keyboard
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= (keyboardSize.height - 80)
+                self.view.frame.origin.y -= (keyboardSize.height)
             }
         }
     }
@@ -111,16 +128,16 @@ class LogInViewController : UIViewController {
     func sendPasswordByEmail() {
         let result = currentUser.sendPasswordByEmail(email: currentUser.email)
         if result == "Success" {
-            self.showAlert(alertTitle: "Success!", alertMessage: "Your link to change password was sent to \(currentUser.email). Check you email")
+            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)")
         }
         else {
-            self.showAlert(alertTitle: "Error", alertMessage: result)
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: result)
         }
     }
     
     func showAlert(alertTitle : String, alertMessage : String) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
+        let action = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
             
         }
         alert.addAction(action)

@@ -15,19 +15,38 @@ import FirebaseStorage
 
 
 // MARK: global variables:
-var language : String = "RU"
+var language : String = "RUS"
 var currentUser = User()
 var places = [Place]()
+var myKeys = MyKeys()
+var defaults = UserDefaults.standard
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-    
+        if let lang = defaults.string(forKey: "Lang") {
+            language = lang
+        }
+        else {
+            myKeys.changeToRus()
+        }
+        
+        if language == "ENG" {
+            myKeys.changeToEng()
+        }
+        else {
+            myKeys.changeToRus()
+        }
+        
         FirebaseApp.configure()
+        
         return true
     }
+    
+    // MARK: - my custon functions:
+   
 
     // MARK: UISceneSession Lifecycle
 

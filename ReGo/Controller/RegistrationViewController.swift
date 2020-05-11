@@ -23,6 +23,12 @@ class RegistrationViewController : UIViewController {
     var delegate : RegistrationDelegate?
     
     // MARK: IBOutlets:
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var passwordLabel: UILabel!
+    @IBOutlet weak var signupButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -31,6 +37,8 @@ class RegistrationViewController : UIViewController {
     // MARK: DID_LOAD:
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        updateLang()
         
         logInButton.setTitleColor(UIColor.init(named: "WhiteBlack"), for: .normal)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -62,24 +70,24 @@ class RegistrationViewController : UIViewController {
     
     @IBAction func signUpButtonPressed(_ sender: UIButton) {
         if let userName = usernameTextField.text {
-            if let userEmail = emailTextField.text {
+            if userName.isEmpty {
+                // alert
+                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noUsernameLabel, alertMessage: myKeys.alert.noUsernameMessage, actionTitle: myKeys.alert.okButton, textField: self.usernameTextField)
+            }
+            else if let userEmail = emailTextField.text {
                 if let userPassword = passwordTextField.text {
                     Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
-                        if error != nil {
-                            print(error!)
+                        if let error = error {
+                            print(error)
                             // описать что делать при каждых ошибочках
-                            if userName.isEmpty {
-                                // alert
-                                self.showAlert(alertTitle: "Incorrect Username", alertMessage: "Please insert the Username", actionTitle: "OK", textField: self.usernameTextField)
-                            }
-                            else if userPassword.isEmpty || userPassword.count < 6 {
-                                self.showAlert(alertTitle: "Incorrect Password", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
+                            if userPassword.isEmpty {
+                                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
                             }
                             else if userEmail.isEmpty {
-                                self.showAlert(alertTitle: "Incorrect Email", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
+                                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
                             }
                             else {
-                                self.showAlert(alertTitle: "Error", alertMessage: error!.localizedDescription, actionTitle: "OK", textField: self.emailTextField)
+                                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
                             }
                         }
                         else {
@@ -92,11 +100,13 @@ class RegistrationViewController : UIViewController {
                             let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL, "SuperUser" : currentUser.superUser] as [String : Any]
                                    userDB.child(currentUser.id).setValue(userDictionary) {
                                        (error, reference) in
-                                       if error != nil {
-                                           print(error!)
+                                       if let error = error {
+                                           print(error)
+                                        self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton)
                                        }
                                        else{
                                            print("User added to the DB")
+                                        self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.successfulRefistrataion, actionTitle: myKeys.alert.okButton)
                                        }
                                    }
                             //SVProgressHUD.dismiss()
@@ -119,10 +129,31 @@ class RegistrationViewController : UIViewController {
     }
     
     // MARK: METHODS:
-    func showAlert(alertTitle : String, alertMessage : String, actionTitle : String, textField : UITextField) {
+    
+    func updateLang(){
+        titleLabel.text = myKeys.loginRegistration.registrationTitleLabel
+        usernameLabel.text = myKeys.loginRegistration.usenameLabel
+        usernameTextField.placeholder = myKeys.loginRegistration.usernameTextField
+        emailLabel.text = myKeys.loginRegistration.emailLabel
+        emailTextField.placeholder = myKeys.loginRegistration.emailTextField
+        passwordLabel.text = myKeys.loginRegistration.passwordLabel
+        signupButton.setTitle(myKeys.loginRegistration.signUpButton, for: .normal)
+        logInButton.setTitle(myKeys.loginRegistration.logInButton, for: .normal)
+    }
+    
+    func showAlertHighlitingTextfield(alertTitle : String, alertMessage : String, actionTitle : String, textField : UITextField) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
         let action = UIAlertAction(title: actionTitle, style: .default) { (UIAlertAction) in
-            textField.layer.borderColor = UIColor.red.cgColor
+            textField.isHighlighted = true
+            self.view.layoutIfNeeded()
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showAlert(alertTitle : String, alertMessage : String, actionTitle : String) {
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        let action = UIAlertAction(title: actionTitle, style: .default) { (UIAlertAction) in
             self.view.layoutIfNeeded()
         }
         alert.addAction(action)

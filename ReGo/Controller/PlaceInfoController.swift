@@ -32,11 +32,13 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     var distanceK = Int()
     
     // MARK:- IBOutlets:
-    @IBOutlet weak var informationLabel: UILabel!
+    @IBAction func goThereButton(_ sender: Any) {
+    }
+    @IBOutlet weak var controllerTitleLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var placeImage: UIImageView!
-    @IBOutlet weak var goButton: UIButton!
+    @IBOutlet weak var goThereButton: UIButton!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var addresLabel: UILabel!
     @IBOutlet weak var addressTextField: UITextField!
@@ -53,6 +55,9 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     //MARK:- ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateLang()
+        
+        
         
         waitingThing.isHidden = true
         currentPlace = Place( place: delegate!.getPlace() )
@@ -77,6 +82,19 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     
     
     //MARK:- METHODS:
+    func updateLang() {
+        controllerTitleLabel.text = myKeys.placeInfo.titleLabel
+        goThereButton.setTitle(myKeys.placeInfo.goThereButton, for: .normal)
+        distanceLabel.text = myKeys.placeInfo.distanceFromYou
+        titleLabel.text = myKeys.placeInfo.titleLabel
+        titleTextField.placeholder = myKeys.placeInfo.titleTextField
+        addresLabel.text = myKeys.placeInfo.addressLabel
+        addressTextField.placeholder = myKeys.placeInfo.addressTextField
+        whtaItCollectsLabel.text = myKeys.placeInfo.whatItCollectsLabel
+        otherTextField.text = myKeys.placeInfo.otherTextField
+        editButton.setTitle(myKeys.placeInfo.editButton, for: .normal)
+        
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromInfoToEditPlace" {
@@ -85,6 +103,11 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
             destinationVC.oldPlace = Place(place: currentPlace)
             destinationVC.newPlace = Place(place: currentPlace)
             destinationVC.editView = true
+        }
+        else if segue.identifier == "fromInfoToImage" {
+            let destinationVC = segue.destination as! ImageController
+            destinationVC.delegate = self
+            //destinationVC.imageView.image = placeImage.image
         }
     }
     
@@ -100,6 +123,9 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
                         print(error)
                     }
                     else {
+                        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.placeImageTapped))
+                        self.placeImage.isUserInteractionEnabled = true
+                        self.placeImage.addGestureRecognizer(tapGesture)
                         self.waitingThing.isHidden = true
                         print("Success updated image in edit view")
                     }
@@ -120,7 +146,7 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         }
         if currentPlace.other == "" {
             otherImage.image = UIImage(named: "OtherUnchecked")
-            otherTextField.text = "It doesn't collect any specific things"
+            otherTextField.text = myKeys.placeInfo.otherTextField
         }
         else {
             otherImage.image = UIImage(named: "OtherChecked")
@@ -128,4 +154,9 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         }
     }
     
+    @objc func placeImageTapped(){
+        print("image was tapped!")
+        
+        self.performSegue(withIdentifier: "fromInfoToImage", sender: self)
+    }
 }

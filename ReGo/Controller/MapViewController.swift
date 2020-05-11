@@ -36,6 +36,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // MARK: variables:
     var places = [Place]()
+    var bottlePlaces = [Place]()
+    var bulbPlaces = [Place]()
+    var batteryPlaces = [Place]()
+    var otherPlaces = [Place]()
     var currentImage = UIImageView()
     var currentPlace = Place()
     var currentAddress = String()
@@ -64,8 +68,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         CLGeocoder().reverseGeocodeLocation(locations.last!) { (placemarks, error) in
             if let placemarks = placemarks {
                 let placemark = placemarks[0]
-                self.currentAddress = placemark.addressDictionary!["Street"] as! String
-                print("Address is - \(self.currentAddress)")
+                if let address = placemark.addressDictionary!["Street"] as? String {
+                    self.currentAddress = address
+                    print("Address is - \(self.currentAddress)")
+                }
             }
         }
     }
@@ -93,6 +99,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         currentImage.image = UIImage(named: "vk")!
         
         retrieveAnnotations()
+        
+        if defaults.string(forKey: "Lang") == nil{
+            setLanguage()
+        }
+        
+        updateaLang()
     }
     
     // MARK:- IBActions:
@@ -180,18 +192,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             sender.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         }
         else if currentUser.name == "" {
-            showAlert(alertTitle: "Error", alertMessage: "To add new places you have to log in")
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.loginReminder)
         }
         else {
             // here go to new view to create a pin
-            let alert = UIAlertController(title: "Create a new place", message: "Choose the location for  new place", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default) { (UIAlertAction) in
+            let alert = UIAlertController(title: myKeys.alert.createNewPlaceTitle, message: myKeys.alert.createNewPlaceMessage, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
                 sender.setImage(UIImage.init(systemName: "mappin.slash"), for: [])
                 self.doneButton.isHidden = false
                 self.mapPinIcon.isHidden = false
                 sender.backgroundColor = UIColor(named: "RedTransparent")
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (UIAlertAction) in
+            let cancelAction = UIAlertAction(title: myKeys.alert.cancelButton, style: .cancel) { (UIAlertAction) in
                 
             }
             alert.addAction(okAction)
@@ -202,12 +214,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // MARK:- METHODS:
     
-    
+    func updateaLang() {
+        doneButton.setTitle(myKeys.map.doneButton, for: .normal)
+    }
     
     
     func showAlert(alertTitle : String, alertMessage : String) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
+        let action = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
             
         }
         alert.addAction(action)
@@ -361,7 +375,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         let yForButton = rect.height / 2 - 20
         let button = UIButton(frame: CGRect(origin: .init(x: 0, y: yForButton), size: CGSize(width: 100, height: 40)))
-        button.setTitle("More Info", for: .normal)
+        button.setTitle(myKeys.map.doneButton, for: .normal)
         button.sizeToFit()
         button.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         button.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)
@@ -410,5 +424,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        updateaLang()
+    }
+    
+    func setLanguage() {
+        let alert = UIAlertController(title: myKeys.alert.setLangTitle, message: myKeys.alert.setLangRequest, preferredStyle: .alert)
+        let actionRus = UIAlertAction(title: myKeys.alert.rus, style: .default) { (UIAlertAction) in
+            myKeys.changeToRus()
+        }
+        let actionEng = UIAlertAction(title: myKeys.alert.eng, style: .default) { (UIAlertAction) in
+            myKeys.changeToEng()
+        }
+        alert.addAction(actionRus)
+        alert.addAction(actionEng)
+        self.present(alert, animated: true, completion: nil)
     }
 }

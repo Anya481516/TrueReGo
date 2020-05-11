@@ -36,7 +36,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     var editView = false
     
     // MARK: IBOutlets:
-    @IBOutlet weak var viewTitle: UILabel!
+    @IBOutlet weak var controllerTitleLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deletePhotoButton: UIButton!
     @IBOutlet weak var placeImageView: UIImageView!
@@ -81,36 +81,19 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let center = getCenterLocation(for: mapView)
-        let geoCoder = CLGeocoder()
         
         // checking if the new location canges a lot
         guard let previousLocation = self.previousLocation else {return}
         guard center.distance(from: previousLocation) > 50 else { return }
         self.previousLocation = center
         
-        geoCoder.reverseGeocodeLocation(center) { [weak self] (placemarks, error) in
-            guard let self = self else { return }
-            if let _ = error {
-                //TODO: show alert
-                return
-            }
-            guard let placemark = placemarks?.first else {
-                //TODO: show alert
-                return
-            }
-            
-            let streetName = placemark.thoroughfare ?? ""
-            let streetNumber = placemark.subThoroughfare ?? ""
-            
-            DispatchQueue.main.async {
-                self.addressTextField.text = "\(streetName) \(streetNumber)"
-            }
-        }
+        getAddress()
     }
     
     // MARK: ViewDidLoad:
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateLang()
         waitingThing.isHidden = true
         
         self.mapView.delegate = self
@@ -121,9 +104,10 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.startUpdatingLocation()
         //showPlaceAddress()
+        getAddress()
         
         if editView {
-            viewTitle.text = "Edit Place"
+            controllerTitleLabel.text = myKeys.addAndEdit.editPlaceTitleLabel
             updateInterface()
             if oldPlace.hasImage {
                 deletePhotoButton.isHidden = false
@@ -149,7 +133,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             mapView.isZoomEnabled = false
             sender.setImage(UIImage(systemName: "lock.fill"), for: .normal)
             sender.backgroundColor = UIColor(named: "GreenTransparent")
-            sender.setTitle(" Enable Map", for: .normal)
+            sender.setTitle(myKeys.addAndEdit.enableMapButton, for: .normal)
             //locationButton.isEnabled = false
             disableView.isHidden = false
         }
@@ -158,7 +142,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             mapView.isZoomEnabled = true
             sender.setImage(UIImage(systemName: "lock.open.fill"), for: .normal)
             sender.backgroundColor = UIColor(named: "RedTransparent")
-            sender.setTitle(" Disable Map", for: .normal)
+            sender.setTitle(myKeys.addAndEdit.disableMapButton, for: .normal)
             //locationButton.isEnabled = true
             disableView.isHidden = true
         }
@@ -239,6 +223,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     }
     
     @IBAction func sendButtonPressed(_ sender: UIButton) {
+        self.view.bringSubviewToFront(waitingThing)
         waitingThing.isHidden = false
         
         
@@ -246,19 +231,19 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         newPlace.coordinate = mapView.region.center
         
         if titleTextField.text == "" {
-            showAlert(alertTitle: "Error", alertMessage: "Enter the title of the place")
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.enterTitle)
             return
         }
         else if addressTextField.text == "" {
-            showAlert(alertTitle: "Error", alertMessage: "Enter the address of the place")
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.enterAddress)
             return
         }
         else if !bottlesChecked && !batteriesChecked && !bulbsChecked && !otherChecked && whatCollectsTextField.text == ""{
-            showAlert(alertTitle: "Error", alertMessage: "Select what you can recycle at that place")
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.whatRecycle)
             return
         }
         else if otherChecked && whatCollectsTextField.text == "" {
-            showAlert(alertTitle: "Error", alertMessage: "You have chosen option OTHER. Please enter ehat exaclty you can recycle at the place")
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.writeOther)
             return
         }
         // когда все необходимые поля заполнены то йоу идем дальше
@@ -305,6 +290,47 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     }
     
     // MARK:- METHODS:
+    
+    func updateLang(){
+        controllerTitleLabel.text = myKeys.addAndEdit.addNewPlaceTitleLabel
+        mapEnablerButton.setTitle(myKeys.addAndEdit.enableMapButton, for: .normal)
+        whatCollectsLabel.text = myKeys.addAndEdit.whatDoesItCollectLabel
+        bottlesButton.setTitle(myKeys.addAndEdit.bottlesButton, for: .normal)
+        batteriesButton.setTitle(myKeys.addAndEdit.batteriesButton, for: .normal)
+        bulbsButton.setTitle(myKeys.addAndEdit.bulbsButton, for: .normal)
+        otherButton.setTitle(myKeys.addAndEdit.otherButton, for: .normal)
+        whatCollectsTextField.text = myKeys.addAndEdit.otherTextField
+        addPhotoButton.setTitle(myKeys.addAndEdit.addPhotoButton, for: .normal)
+        titleLabel.text = myKeys.addAndEdit.titleLabel
+        titleTextField.placeholder = myKeys.addAndEdit.titleTextField
+        addressLabel.text = myKeys.addAndEdit.addressLabel
+        addressTextField.placeholder = myKeys.addAndEdit.addressTextField
+        sendButton.setTitle(myKeys.addAndEdit.sendButton, for: .normal)
+    }
+    
+    func getAddress() {
+        let center = getCenterLocation(for: mapView)
+        let geoCoder = CLGeocoder()
+        
+        geoCoder.reverseGeocodeLocation(center) { [weak self] (placemarks, error) in
+            guard let self = self else { return }
+            if let _ = error {
+                //TODO: show alert
+                return
+            }
+            guard let placemark = placemarks?.first else {
+                //TODO: show alert
+                return
+            }
+            
+            let streetName = placemark.thoroughfare ?? ""
+            let streetNumber = placemark.subThoroughfare ?? ""
+            
+            DispatchQueue.main.async {
+                self.addressTextField.text = "\(streetName) \(streetNumber)"
+            }
+        }
+    }
     
     // address
     func getCenterLocation(for mapView: MKMapView) -> CLLocation {
@@ -357,7 +383,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         }
         else {
             self.delegate?.retrieveAnnotations()
-            self.showAlertWithClosingView(alertTitle: "Thank you!", alertMessage: "Your place has been added successfully")
+            self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeAdded)
         }
         
         
@@ -386,13 +412,14 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         }
         else {
             self.delegate?.retrieveAnnotations()
-            self.showAlertWithClosingView(alertTitle: "Thank you!", alertMessage: "The place has been edited successfully")
+            self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeEdited)
         }
     }
     
     func saveImageToDatabase() {
+        newPlace.hasImage = false;
         guard let image = placeImageView.image, let data = image.jpegData(compressionQuality: 1.0) else {
-                showAlert(alertTitle: "Error", alertMessage: "Something went wrong with saving your Place photo to the storage.Try again.")
+                showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.saveImageToDatabaseErrorMessage)
             return
         }
         
@@ -401,20 +428,21 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         // to the storage
         imageReference.putData(data, metadata: nil) { (metadata, error) in
             if let error = error {
-                self.showAlert(alertTitle: "Error", alertMessage: error.localizedDescription)
+                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
                 return
             }
             imageReference.downloadURL { (url, error) in
                 if let error = error {
-                    self.showAlert(alertTitle: "Error", alertMessage: error.localizedDescription)
+                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
                     return
                 }
                 guard let url = url else {
-                    self.showAlert(alertTitle: "Error", alertMessage: "Something went wrong")
+                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.somethingWendWrong)
                     return
                 }
                 
                 let urlString = url.absoluteString
+                self.newPlace.hasImage = true
                 self.newPlace.imageURLString = urlString
                 
                 // update the Place info in the database
@@ -428,10 +456,10 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
                 }
                 self.delegate?.retrieveAnnotations()
                 if self.editView {
-                     self.showAlertWithClosingView(alertTitle: "Thank you!", alertMessage: "The place has been edited successfully")
+                     self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeEdited)
                 }
                 else {
-                     self.showAlertWithClosingView(alertTitle: "Thank you!", alertMessage: "Your place has been added successfully")
+                     self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeAdded)
                 }
                
             }
@@ -449,7 +477,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     
     func showAlert(alertTitle : String, alertMessage : String) {
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
+        let action = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
             
         }
         alert.addAction(action)
@@ -459,7 +487,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     func showAlertWithClosingView(alertTitle : String, alertMessage : String) {
         waitingThing.isHidden = true
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { (UIAlertAction) in
+        let action = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
             self.delegate?.mapPinIcon.isHidden = true
             self.delegate?.doneButton.isHidden = true
             self.delegate?.addNewPlaceButton.setImage(UIImage.init(systemName: "mappin"), for: [])
@@ -495,21 +523,21 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         }
         titleTextField.text = oldPlace.title
         addressTextField.text = oldPlace.address
-        sendButton.setTitle("Send Changes", for: .normal)
+        sendButton.setTitle(myKeys.addAndEdit.sendChangesButton, for: .normal)
     }
     
     
     // MARK:- ImagePicker
     func showImageChooseAlert() {
-        let alert = UIAlertController(title: "Choose new profile image", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: myKeys.alert.chooseNewProfileImageTitle, message: nil, preferredStyle: .alert)
         
-        let cameraAction = UIAlertAction(title: "Camera", style: .default){ UIAlertAction in
+        let cameraAction = UIAlertAction(title: myKeys.alert.cameraButton, style: .default){ UIAlertAction in
             self.openCamera()
         }
-        let galleryAction = UIAlertAction(title: "Gallery", style: .default){ UIAlertAction in
+        let galleryAction = UIAlertAction(title: myKeys.alert.galleryButton, style: .default){ UIAlertAction in
             self.openGallery()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel){ UIAlertAction in
+        let cancelAction = UIAlertAction(title: myKeys.alert.cancelButton, style: .cancel){ UIAlertAction in
             
         }
         alert.addAction(cameraAction)
@@ -526,7 +554,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
         } else {
-            showAlert(alertTitle: "Camera error", alertMessage: "We don't have access to your camera")
+            showAlert(alertTitle: myKeys.alert.okButton, alertMessage: myKeys.alert.cameraErrorMessage)
         }
     }
     

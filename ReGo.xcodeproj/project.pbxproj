@@ -14,6 +14,7 @@
 		5D0BBB20243752CE00EDDECC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0BBB1F243752CE00EDDECC /* User.swift */; };
 		5D18395F2445CEF8000E835B /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D18395E2445CEF8000E835B /* Place.swift */; };
 		5D2EF09E2440917F008446F5 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2EF09D2440917F008446F5 /* EditProfileController.swift */; };
+		5D9A90DD245625B400ED3717 /* ListOfPlacesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9A90DC245625B400ED3717 /* ListOfPlacesController.swift */; };
 		5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */; };
 		5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */; };
 		5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DBF02431CD05000B3AF3 /* AppDelegate.swift */; };
@@ -27,7 +28,9 @@
 		5DC3DC102431ED5C000B3AF3 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC3DC0E2431ED57000B3AF3 /* MapKit.framework */; };
 		5DC3DC1424322108000B3AF3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DC1324322108000B3AF3 /* HomeViewController.swift */; };
 		5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */; };
+		5DD075D1245C969C00E39E36 /* MyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD075D0245C969C00E39E36 /* MyKeys.swift */; };
 		5DF70001244DC00400224A6F /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF70000244DC00400224A6F /* AnnotationView.swift */; };
+		5DFF3DAB24695B8100A74044 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFF3DAA24695B8100A74044 /* ImageController.swift */; };
 		94B94AE9A4E75B494CDA06C1 /* Pods_ReGo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB78AA652B23D1B98A3CF22F /* Pods_ReGo.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +43,7 @@
 		5D0BBB1F243752CE00EDDECC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5D18395E2445CEF8000E835B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		5D2EF09D2440917F008446F5 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
+		5D9A90DC245625B400ED3717 /* ListOfPlacesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfPlacesController.swift; sourceTree = "<group>"; };
 		5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		5DC3DBED2431CD05000B3AF3 /* ReGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -55,7 +59,9 @@
 		5DC3DC0E2431ED57000B3AF3 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		5DC3DC1324322108000B3AF3 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5DC3DC15243221CB000B3AF3 /* ButtonWithImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithImage.swift; sourceTree = "<group>"; };
+		5DD075D0245C969C00E39E36 /* MyKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyKeys.swift; sourceTree = "<group>"; };
 		5DF70000244DC00400224A6F /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
+		5DFF3DAA24695B8100A74044 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
 		977B895A014BD228EFC7A8A1 /* Pods-ReGo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReGo.debug.xcconfig"; path = "Target Support Files/Pods-ReGo/Pods-ReGo.debug.xcconfig"; sourceTree = "<group>"; };
 		AB78AA652B23D1B98A3CF22F /* Pods_ReGo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReGo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -131,6 +137,7 @@
 				5D034EB9244484760091DA1A /* CustomPin.swift */,
 				5D18395E2445CEF8000E835B /* Place.swift */,
 				5DF70000244DC00400224A6F /* AnnotationView.swift */,
+				5DD075D0245C969C00E39E36 /* MyKeys.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -148,6 +155,8 @@
 				5D2EF09D2440917F008446F5 /* EditProfileController.swift */,
 				5D034EBB244493E20091DA1A /* AddAndEditPlaceController.swift */,
 				5D04A17D244F03F5009C81FB /* PlaceInfoController.swift */,
+				5D9A90DC245625B400ED3717 /* ListOfPlacesController.swift */,
+				5DFF3DAA24695B8100A74044 /* ImageController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -284,13 +293,16 @@
 				5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */,
 				5D18395F2445CEF8000E835B /* Place.swift in Sources */,
 				5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */,
+				5DD075D1245C969C00E39E36 /* MyKeys.swift in Sources */,
 				5DF70001244DC00400224A6F /* AnnotationView.swift in Sources */,
 				5D2EF09E2440917F008446F5 /* EditProfileController.swift in Sources */,
 				5D04A17E244F03F5009C81FB /* PlaceInfoController.swift in Sources */,
 				5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */,
+				5DFF3DAB24695B8100A74044 /* ImageController.swift in Sources */,
 				5DC3DBFB2431CD05000B3AF3 /* ReGo.xcdatamodeld in Sources */,
 				5DC3DC0B2431D132000B3AF3 /* MapViewController.swift in Sources */,
 				5DC3DBF32431CD05000B3AF3 /* SceneDelegate.swift in Sources */,
+				5D9A90DD245625B400ED3717 /* ListOfPlacesController.swift in Sources */,
 				5D0BBB20243752CE00EDDECC /* User.swift in Sources */,
 				5DC3DC1424322108000B3AF3 /* HomeViewController.swift in Sources */,
 			);
