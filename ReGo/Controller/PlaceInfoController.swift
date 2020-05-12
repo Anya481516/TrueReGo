@@ -30,6 +30,7 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     var currentPlace = Place()
     var distanceM = Int()
     var distanceK = Int()
+    var zeros = ""
     
     // MARK:- IBOutlets:
     @IBAction func goThereButton(_ sender: Any) {
@@ -65,9 +66,14 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         currentPlace = Place( place: delegate!.getPlace() )
         let currentLocation = delegate?.getCurretLocation()
         distanceM = Int(CLLocation(latitude: currentPlace.coordinate.latitude, longitude: currentPlace.coordinate.longitude).distance(from: currentLocation!))
-        if distanceM > 999 {
-            distanceK = distanceM / 1000
-            distanceM = distanceM - distanceK * 1000
+       
+        distanceK = distanceM / 1000
+        distanceM = distanceM - distanceK * 1000
+        if (distanceM < 10){
+            zeros = "00"
+        }
+        else if (distanceM < 100){
+            zeros = "0"
         }
         updateInterface()
     }
@@ -134,7 +140,7 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
                 }
             }
         }
-        distanceLabel.text = "\(distanceK).\(distanceM) km from you"
+        distanceLabel.text = "\(distanceK).\(zeros)\(distanceM) km from you"
         titleTextView.text = currentPlace.title
         addressTextView.text = currentPlace.address
         if currentPlace.bottles == false {

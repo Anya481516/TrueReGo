@@ -32,10 +32,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         for place in places {
             addNewAnnotation(ann: place)
         }
+        print(places.count)
     }
     
     // MARK: variables:
-    var places = [Place]()
+    //var places = [Place]()
     var bottlePlaces = [Place]()
     var bulbPlaces = [Place]()
     var batteryPlaces = [Place]()
@@ -63,6 +64,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+        
+        currectLocation = locationManager.location!
         
         // for address
         CLGeocoder().reverseGeocodeLocation(locations.last!) { (placemarks, error) in
@@ -326,11 +329,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             place.address = address
             place.id = id
         
-            self.places.append(place)
-            //self.messageArray.append(message)
-            //self.configureTableView()
-        
-            //self.messageTableView.reloadData()
+            places.append(place)
+            if bottles {
+                self.bottlePlaces.append(place)
+            }
+            if batteries {
+                self.batteryPlaces.append(place)
+            }
+            if bulbs {
+                self.bulbPlaces.append(place)
+            }
+            
             self.updateInterface()
         }
         
@@ -352,7 +361,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let userID = snapshotValue["UserID"] as! String
             let id = snapshotValue["ID"] as! String
             
-            for place in self.places {
+            for place in places {
                 if place.id == id {
                     place.title = title
                     place.subtitle = type

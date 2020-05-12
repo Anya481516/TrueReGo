@@ -280,12 +280,24 @@ class ListOfPlacesViewControllerLabels {
     }
     
     var listOfPlacesTitle = String()
+    var all = String()
+    var bottles = String()
+    var batteries = String()
+    var bulbs = String()
     
     func changeToEng(){
         listOfPlacesTitle = "List of places"
+        all = "All"
+        bottles = "Bottles"
+        batteries = "Batteries"
+        bulbs = "Bulbs"
     }
     func changeToRus() {
         listOfPlacesTitle = "Список мест"
+        all = "Все"
+        bottles = "Бутылки"
+        batteries = "Батарейки"
+        bulbs = "Лампочки"
     }
 }
 

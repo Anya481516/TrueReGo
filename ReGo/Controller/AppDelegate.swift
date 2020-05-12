@@ -12,15 +12,20 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
+import CoreLocation
 
 
 // MARK: global variables:
 var language: String = "RUS"
 var currentUser = User()
+var currectLocation = CLLocation()
 var places = [Place]()
 var myKeys = MyKeys()
 var defaults = UserDefaults.standard
 var isUsingLocation: Bool = true
+var bottlePlaces = [Place]()
+var batteryPlaces = [Place]()
+var bulbPlaces = [Place]()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
