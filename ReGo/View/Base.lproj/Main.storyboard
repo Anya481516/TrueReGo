@@ -168,6 +168,26 @@
                                     <action selector="layerButtonPressed:" destination="Ldd-YR-Dj5" eventType="touchUpInside" id="T1O-L7-oJ6"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYh-Aa-Sos" userLabel="Back From Directions Button">
+                                <rect key="frame" x="16" y="74" width="100" height="50"/>
+                                <color key="backgroundColor" name="LightDarkGreenTransparent"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="KWY-9n-V4B"/>
+                                    <constraint firstAttribute="height" constant="50" id="VNF-oq-aZ9"/>
+                                </constraints>
+                                <color key="tintColor" name="DarkLightGreenTransparent"/>
+                                <state key="normal" image="arrow.left" catalog="system">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="backFromDirectionButton:" destination="Ldd-YR-Dj5" eventType="touchUpInside" id="eBq-OX-ckK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -187,6 +207,8 @@
                             <constraint firstItem="9Zc-Fd-AwU" firstAttribute="trailing" secondItem="c7P-55-uzB" secondAttribute="trailing" id="Vvg-r4-CUY"/>
                             <constraint firstItem="mOa-uB-pwn" firstAttribute="top" secondItem="zjG-wQ-wvS" secondAttribute="bottom" constant="20" id="WVQ-Kr-pu9"/>
                             <constraint firstItem="9Zc-Fd-AwU" firstAttribute="top" secondItem="c7P-55-uzB" secondAttribute="top" id="WfV-ez-uVd"/>
+                            <constraint firstItem="JAE-6d-AyF" firstAttribute="top" secondItem="IYh-Aa-Sos" secondAttribute="bottom" constant="20" id="lz6-rg-f5I"/>
+                            <constraint firstItem="IYh-Aa-Sos" firstAttribute="leading" secondItem="c7P-55-uzB" secondAttribute="leading" constant="16" id="m8e-Wj-8Yx"/>
                             <constraint firstItem="Evn-kW-JeO" firstAttribute="centerX" secondItem="9Zc-Fd-AwU" secondAttribute="centerX" id="mUb-Bk-bRu"/>
                             <constraint firstItem="9Zc-Fd-AwU" firstAttribute="leading" secondItem="c7P-55-uzB" secondAttribute="leading" id="vKl-xz-dmB"/>
                             <constraint firstItem="Evn-kW-JeO" firstAttribute="centerY" secondItem="c7P-55-uzB" secondAttribute="centerY" constant="-30" id="x5q-hf-sHh"/>
@@ -198,6 +220,7 @@
                     </tabBarItem>
                     <connections>
                         <outlet property="addNewPlaceButton" destination="a16-ED-DZe" id="NSZ-Lp-9QX"/>
+                        <outlet property="backFromDirectionButton" destination="IYh-Aa-Sos" id="PLG-Qu-kpu"/>
                         <outlet property="doneButton" destination="vlO-gR-4Ej" id="aVs-33-x1C"/>
                         <outlet property="layerButton" destination="JAE-6d-AyF" id="qfh-sD-clG"/>
                         <outlet property="locationButton" destination="wBZ-hU-D3V" id="jhX-eU-xQX"/>
@@ -229,44 +252,64 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h8d-2a-UoF" userLabel="Choise View">
-                                <rect key="frame" x="0.0" y="104" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="104" width="414" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zh7-ce-Ocw">
-                                        <rect key="frame" x="0.0" y="0.0" width="103.5" height="44"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="103.5" height="25"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="All">
                                             <color key="titleColor" name="BlackWhite"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="allButtonPressed:" destination="6gp-x7-VGh" eventType="touchUpInside" id="vCe-2i-MTe"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbl-Jg-nq1">
-                                        <rect key="frame" x="207" y="0.0" width="103.5" height="44"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <rect key="frame" x="207" y="0.0" width="103.5" height="25"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Batteries">
                                             <color key="titleColor" name="BlackWhite"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="batteriesButtonPressed:" destination="6gp-x7-VGh" eventType="touchUpInside" id="MfK-a2-goN"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KMj-rE-L9n">
-                                        <rect key="frame" x="310.5" y="0.0" width="103.5" height="44"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <rect key="frame" x="310.5" y="0.0" width="103.5" height="25"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Bulbs">
                                             <color key="titleColor" name="BlackWhite"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="bulbsButtonPressed:" destination="6gp-x7-VGh" eventType="touchUpInside" id="Qoj-Tm-WR1"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5eu-HW-uPr">
-                                        <rect key="frame" x="103.5" y="0.0" width="103.5" height="44"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                        <rect key="frame" x="103.5" y="0.0" width="103.5" height="25"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Bottles">
                                             <color key="titleColor" name="BlackWhite"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="8"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="bottlesButtonPressed:" destination="6gp-x7-VGh" eventType="touchUpInside" id="f1M-aU-5WO"/>
                                         </connections>
@@ -274,23 +317,23 @@
                                 </subviews>
                                 <color key="backgroundColor" name="LightDarkGreen"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="6Sl-uY-zdO"/>
+                                    <constraint firstAttribute="height" constant="30" id="6Sl-uY-zdO"/>
                                     <constraint firstItem="pbl-Jg-nq1" firstAttribute="top" secondItem="h8d-2a-UoF" secondAttribute="top" id="Apq-hx-nOq"/>
                                     <constraint firstAttribute="trailing" secondItem="KMj-rE-L9n" secondAttribute="trailing" id="CEm-hr-Zab"/>
-                                    <constraint firstAttribute="bottom" secondItem="KMj-rE-L9n" secondAttribute="bottom" id="I1E-Ev-MzP"/>
+                                    <constraint firstAttribute="bottom" secondItem="KMj-rE-L9n" secondAttribute="bottom" constant="5" id="I1E-Ev-MzP"/>
                                     <constraint firstItem="pbl-Jg-nq1" firstAttribute="leading" secondItem="5eu-HW-uPr" secondAttribute="trailing" id="L5E-uN-gxb"/>
                                     <constraint firstItem="5eu-HW-uPr" firstAttribute="top" secondItem="h8d-2a-UoF" secondAttribute="top" id="MJ3-5a-MMk"/>
                                     <constraint firstItem="5eu-HW-uPr" firstAttribute="width" secondItem="zh7-ce-Ocw" secondAttribute="width" id="MSs-Xa-8q2"/>
-                                    <constraint firstAttribute="bottom" secondItem="pbl-Jg-nq1" secondAttribute="bottom" id="ZkF-8B-Q6J"/>
+                                    <constraint firstAttribute="bottom" secondItem="pbl-Jg-nq1" secondAttribute="bottom" constant="5" id="ZkF-8B-Q6J"/>
                                     <constraint firstItem="KMj-rE-L9n" firstAttribute="width" secondItem="zh7-ce-Ocw" secondAttribute="width" id="dKG-uC-9MR"/>
                                     <constraint firstItem="5eu-HW-uPr" firstAttribute="leading" secondItem="zh7-ce-Ocw" secondAttribute="trailing" id="h8K-jr-j6X"/>
                                     <constraint firstItem="zh7-ce-Ocw" firstAttribute="leading" secondItem="h8d-2a-UoF" secondAttribute="leading" id="hAe-OI-sgN"/>
                                     <constraint firstItem="pbl-Jg-nq1" firstAttribute="width" secondItem="zh7-ce-Ocw" secondAttribute="width" id="hkF-9v-UKd"/>
                                     <constraint firstItem="zh7-ce-Ocw" firstAttribute="top" secondItem="h8d-2a-UoF" secondAttribute="top" id="hxA-ij-cex"/>
                                     <constraint firstItem="KMj-rE-L9n" firstAttribute="top" secondItem="h8d-2a-UoF" secondAttribute="top" id="kXF-LE-t0D"/>
-                                    <constraint firstAttribute="bottom" secondItem="5eu-HW-uPr" secondAttribute="bottom" id="pBL-6J-ADF"/>
+                                    <constraint firstAttribute="bottom" secondItem="5eu-HW-uPr" secondAttribute="bottom" constant="5" id="pBL-6J-ADF"/>
                                     <constraint firstItem="KMj-rE-L9n" firstAttribute="leading" secondItem="pbl-Jg-nq1" secondAttribute="trailing" id="rDg-pF-7im"/>
-                                    <constraint firstAttribute="bottom" secondItem="zh7-ce-Ocw" secondAttribute="bottom" id="ysU-Gm-0kj"/>
+                                    <constraint firstAttribute="bottom" secondItem="zh7-ce-Ocw" secondAttribute="bottom" constant="5" id="ysU-Gm-0kj"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="la5-vM-0Jd" userLabel="Top Bar View">
@@ -311,7 +354,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Gsd-ys-p21">
-                                <rect key="frame" x="0.0" y="148" width="414" height="665"/>
+                                <rect key="frame" x="0.0" y="134" width="414" height="679"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
                         </subviews>
@@ -701,7 +744,7 @@
                         <outlet property="editButton" destination="sRw-nT-Gs6" id="CPL-i3-GlC"/>
                         <outlet property="emailLabel" destination="4bf-L1-eGb" id="8Oy-yW-Gue"/>
                         <outlet property="langButton" destination="0Wy-eC-cpy" id="5hB-Be-mbz"/>
-                        <outlet property="languageButton" destination="0Wy-eC-cpy" id="gxQ-7v-wJc"/>
+                        <outlet property="languageButton" destination="pUS-YP-rvO" id="jN8-ev-Imw"/>
                         <outlet property="logInButton" destination="pPs-yz-Ty4" id="xA9-R7-N3c"/>
                         <outlet property="logOutButton" destination="z96-J1-keh" id="8aS-Aa-z6R"/>
                         <outlet property="loggedInView" destination="7C8-0y-HhQ" id="haN-jS-aXN"/>

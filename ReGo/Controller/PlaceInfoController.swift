@@ -13,6 +13,7 @@ import FirebaseDatabase
 import FirebaseStorage
 import CoreLocation
 import Kingfisher
+import MapKit
 
 protocol PlaceInfoDelegate {
     func getPlace() -> Place
@@ -85,7 +86,7 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     }
     
     @IBAction func goButtonPressed(_ sender: UIButton) {
-        
+        showRoute()
     }
     
     
@@ -166,5 +167,48 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         print("image was tapped!")
         
         self.performSegue(withIdentifier: "fromInfoToImage", sender: self)
+    }
+    
+    func showRoute(){
+        waitingThing.startAnimating()
+        delegate?.locationManager.startUpdatingLocation()
+        
+        // showRoute
+        let sourcePlaceMark = MKPlacemark(coordinate: delegate?.locationManager.location?.coordinate as! CLLocationCoordinate2D)
+        let destPlacemark = MKPlacemark(coordinate: currentPlace.coordinate)
+        
+        let sourceItem = MKMapItem(placemark: sourcePlaceMark)
+        let destItem = MKMapItem(placemark: destPlacemark)
+        
+        let directionRequest = MKDirections.Request()
+        directionRequest.source = sourceItem
+        directionRequest.destination = destItem
+        directionRequest.transportType = .walking
+        directionRequest.requestsAlternateRoutes = true
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate { (responce, error) in
+            guard let responce = responce else {
+                if let error = error {
+                    print(error)
+                }
+                return
+            }
+            let route = responce.routes[0]
+            self.delegate?.mapView.addOverlay(route.polyline)
+            self.delegate?.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+        }
+        
+        // remove all the annotations
+        delegate?.allAnnotations = self.delegate?.mapView.annotations as! [MKAnnotation]
+        delegate?.mapView.removeAnnotations(delegate?.allAnnotations as! [MKAnnotation])
+        
+        delegate?.addNewAnnotation(ann: currentPlace)
+        // get the back button visible
+        delegate?.backFromDirectionButton.isHidden = false
+        // everything else is ...
+        
+        waitingThing.stopAnimating()
+        self.dismiss(animated: true, completion: nil)
     }
 }

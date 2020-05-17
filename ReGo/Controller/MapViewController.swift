@@ -37,13 +37,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     // MARK: variables:
     //var places = [Place]()
-    var bottlePlaces = [Place]()
-    var bulbPlaces = [Place]()
-    var batteryPlaces = [Place]()
-    var otherPlaces = [Place]()
     var currentImage = UIImageView()
     var currentPlace = Place()
     var currentAddress = String()
+    var allAnnotations = [MKAnnotation]()
     
     // MARK: IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
@@ -54,18 +51,22 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var mapPinIcon: UIImageView!
     @IBOutlet weak var layerButton: UIButton!
+    @IBOutlet weak var backFromDirectionButton: UIButton!
     
     // MARK: LOCATION MAN
     let locationManager = CLLocationManager()
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        backFromDirectionButton.isHidden = true
         locationManager.stopUpdatingLocation()
         locationManager.delegate = nil
-            
-        mapView.showsUserLocation = true
+        
+        mapView.showsUserLocation = showLocation
+        showLocation = true
+        
         mapView.userTrackingMode = .follow
         
-        currectLocation = locationManager.location!
+        currentLocation = locationManager.location!
         
         // for address
         CLGeocoder().reverseGeocodeLocation(locations.last!) { (placemarks, error) in
@@ -82,6 +83,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     // MARK:- ViewDidLoad:
     override func viewDidLoad() {
         super.viewDidLoad()
+        showLocation = true
         
         self.mapView.delegate = self
         locationManager.delegate = self
@@ -114,6 +116,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     // MARK:- IBActions:
+    
+    @IBAction func backFromDirectionButton(_ sender: UIButton) {
+        backFromDirectionButton.isHidden = true
+        let anns = mapView.annotations
+        mapView.removeAnnotations(anns)
+        
+        mapView.addAnnotations(allAnnotations)
+        
+        var overlays = mapView.overlays
+        mapView.removeOverlays(overlays)
+    }
     
     @IBAction func layerButtonPressed(_ sender: UIButton) {
         if mapView.mapType == MKMapType.standard {
@@ -222,6 +235,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func updateaLang() {
         doneButton.setTitle(myKeys.map.doneButton, for: .normal)
+        backFromDirectionButton.setTitle(myKeys.map.back, for: .normal)
     }
     
     
@@ -330,14 +344,15 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             place.id = id
         
             places.append(place)
+            
             if bottles {
-                self.bottlePlaces.append(place)
+                bottlePlaces.append(place)
             }
             if batteries {
-                self.batteryPlaces.append(place)
+                batteryPlaces.append(place)
             }
             if bulbs {
-                self.bulbPlaces.append(place)
+                bulbPlaces.append(place)
             }
             
             self.updateInterface()
@@ -378,6 +393,66 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     place.address = address
                 }
             }
+            
+            if bottles {
+                for place in bottlePlaces {
+                    if place.id == id {
+                        place.title = title
+                        place.subtitle = type
+                        place.address = address
+                        place.hasImage = hasImage
+                        place.imageURLString = imageURL
+                        place.coordinate.latitude = latitude
+                        place.coordinate.longitude = longitude
+                        place.bottles = bottles
+                        place.batteries = batteries
+                        place.bulbs = bulbs
+                        place.other = other
+                        place.userId = userID
+                        place.address = address
+                    }
+                }
+            }
+            if batteries {
+                for place in batteryPlaces {
+                    if place.id == id {
+                        place.title = title
+                        place.subtitle = type
+                        place.address = address
+                        place.hasImage = hasImage
+                        place.imageURLString = imageURL
+                        place.coordinate.latitude = latitude
+                        place.coordinate.longitude = longitude
+                        place.bottles = bottles
+                        place.batteries = batteries
+                        place.bulbs = bulbs
+                        place.other = other
+                        place.userId = userID
+                        place.address = address
+                    }
+                }
+            }
+            if bulbs {
+                for place in bulbPlaces {
+                    if place.id == id {
+                        place.title = title
+                        place.subtitle = type
+                        place.address = address
+                        place.hasImage = hasImage
+                        place.imageURLString = imageURL
+                        place.coordinate.latitude = latitude
+                        place.coordinate.longitude = longitude
+                        place.bottles = bottles
+                        place.batteries = batteries
+                        place.bulbs = bulbs
+                        place.other = other
+                        place.userId = userID
+                        place.address = address
+                    }
+                }
+            }
+            
+            self.updateInterface()
         }
     }
     
@@ -479,6 +554,28 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewWillAppear(_ animated: Bool) {
         updateaLang()
+        
+        if wasSelectedFromList {
+            wasSelectedFromList = false
+            let region = MKCoordinateRegion(center: selectedCoordinatesFromList, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+            mapView.setRegion(region, animated: true)
+            selectAnnotation()
+        }
+    }
+    
+    func selectAnnotation(){
+        for ann in mapView.annotations{
+            if ann.coordinate.latitude == selectedCoordinatesFromList.latitude && ann.coordinate.longitude == selectedCoordinatesFromList.longitude{
+                mapView.selectAnnotation(ann, animated: true)
+            }
+        }
+    }
+    
+    // for direction
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let render = MKPolylineRenderer(overlay: overlay as! MKPolyline)
+        render.strokeColor = UIColor(named: "DarkLightGreen")
+        return render
     }
     
     func setLanguage() {

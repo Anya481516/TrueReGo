@@ -63,14 +63,17 @@ class MapViewControllerLabels {
     
     var doneButton = String()
     var moreInfoButton = String()
+    var back = String()
     
     func changeToEng(){
         doneButton = " Done"
         moreInfoButton = "More Info"
+        back = " Back"
     }
     func changeToRus() {
         doneButton = " Готово"
         moreInfoButton = "Подробнее"
+        back = " Назад"
     }
 }
 //MARK:HomeView:
@@ -284,6 +287,7 @@ class ListOfPlacesViewControllerLabels {
     var bottles = String()
     var batteries = String()
     var bulbs = String()
+    var km = String()
     
     func changeToEng(){
         listOfPlacesTitle = "List of places"
@@ -291,6 +295,7 @@ class ListOfPlacesViewControllerLabels {
         bottles = "Bottles"
         batteries = "Batteries"
         bulbs = "Bulbs"
+        km = "km from you"
     }
     func changeToRus() {
         listOfPlacesTitle = "Список мест"
@@ -298,6 +303,7 @@ class ListOfPlacesViewControllerLabels {
         bottles = "Бутылки"
         batteries = "Батарейки"
         bulbs = "Лампочки"
+        km = "км от Вас"
     }
 }
 
@@ -491,7 +497,7 @@ class Alert {
         whatRecycle = "Укажите материалы, которые можно приносить сюда"
         writeOther = "Вы выбрали опцию ДРУГОЕ. Пожалуйста, укажите какие именно другие предметы можно сюда приносить"
         thankYou = "Спасибо!"
-        placeEdited = "Место было успещно изменено"
+        placeEdited = "Место было успешно изменено"
         placeAdded = "Место было успено добавлено"
         loginReminder = "Чтобы добавить новое место Вам нужно войти в свой аккаунт"
         createNewPlaceTitle = "Добавление нового места"
