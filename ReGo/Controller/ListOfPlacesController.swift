@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreLocation
-import Firebase
 
 class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, CLLocationManagerDelegate {
     
@@ -16,6 +15,7 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
     let locationManager = CLLocationManager()
     var type = "All"
     var refreshControl = UIRefreshControl()
+    var firebaseService = FirebaseService()
     
     // MARK:- IBOutlets:
     @IBOutlet weak var titleLabel: UILabel!
@@ -267,166 +267,22 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func retrieveLists() {
-        places.removeAll()
-        bottlePlaces.removeAll()
-        batteryPlaces.removeAll()
-        bulbPlaces.removeAll()
         
-        let messageDB = Firebase.Database.database().reference().child("Places")
-        
-        messageDB.observe(.childAdded) { (snapshot) in
-            let snapshotValue = snapshot.value as! Dictionary<String,Any>
-        
-            let title = snapshotValue["Title"] as! String
-            let address = snapshotValue["Address"] as! String
-            let hasImage = snapshotValue["HasImage"] as! Bool
-            let imageURL = snapshotValue["ImageURL"] as! String
-            let longitude = snapshotValue["Longitude"] as! CLLocationDegrees
-            let latitude = snapshotValue["Latitude"] as! CLLocationDegrees
-            let type = snapshotValue["Type"] as! String
-            let bottles = snapshotValue["Bottles"] as! Bool
-            let batteries = snapshotValue["Batteries"] as! Bool
-            let bulbs = snapshotValue["Bulbs"] as! Bool
-            let other = snapshotValue["Other"] as! String
-            let userID = snapshotValue["UserID"] as! String
-            let id = snapshotValue["ID"] as! String
-        
-            let place = Place()
-            place.title = title
-            place.subtitle = type 
-            place.hasImage = hasImage
-            place.imageURLString = imageURL
-            place.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            place.bottles = bottles
-            place.batteries = batteries
-            place.bulbs = bulbs
-            place.other = other
-            place.userId = userID
-            place.address = address
-            place.id = id
-        
-            places.append(place)
+        firebaseService.retrieveAnnotations {
             self.countDistanes(list: places)
             places.sort(by: { $0.distance < $1.distance })
             
-            if bottles {
-                bottlePlaces.append(place)
+            if self.bottlesButton.isSelected {
                 self.countDistanes(list: bottlePlaces)
                 bottlePlaces.sort(by: { $0.distance < $1.distance })
             }
-            if batteries {
-                batteryPlaces.append(place)
+            if self.batteriesButton.isSelected {
                 self.countDistanes(list: batteryPlaces)
                 batteryPlaces.sort(by: { $0.distance < $1.distance })
             }
-            if bulbs {
-                bulbPlaces.append(place)
+            if self.bulbsButton.isSelected {
                 self.countDistanes(list: bulbPlaces)
                 bulbPlaces.sort(by: { $0.distance < $1.distance })
-            }
-            
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
-        messageDB.observe(.childChanged) { (snapshot) in
-            let snapshotValue = snapshot.value as! Dictionary<String,Any>
-            
-            let title = snapshotValue["Title"] as! String
-            let address = snapshotValue["Address"] as! String
-            let hasImage = snapshotValue["HasImage"] as! Bool
-            let imageURL = snapshotValue["ImageURL"] as! String
-            let longitude = snapshotValue["Longitude"] as! CLLocationDegrees
-            let latitude = snapshotValue["Latitude"] as! CLLocationDegrees
-            let type = snapshotValue["Type"] as! String
-            let bottles = snapshotValue["Bottles"] as! Bool
-            let batteries = snapshotValue["Batteries"] as! Bool
-            let bulbs = snapshotValue["Bulbs"] as! Bool
-            let other = snapshotValue["Other"] as! String
-            let userID = snapshotValue["UserID"] as! String
-            let id = snapshotValue["ID"] as! String
-            
-            for place in places {
-                if place.id == id {
-                    place.title = title
-                    place.subtitle = type
-                    place.address = address
-                    place.hasImage = hasImage
-                    place.imageURLString = imageURL
-                    place.coordinate.latitude = latitude
-                    place.coordinate.longitude = longitude
-                    place.bottles = bottles
-                    place.batteries = batteries
-                    place.bulbs = bulbs
-                    place.other = other
-                    place.userId = userID
-                    place.address = address
-                }
-            }
-            self.countDistanes(list: places)
-            places.sort(by: { $0.distance < $1.distance })
-            
-            if bottles {
-                for place in bottlePlaces {
-                    if place.id == id {
-                        place.title = title
-                        place.subtitle = type
-                        place.address = address
-                        place.hasImage = hasImage
-                        place.imageURLString = imageURL
-                        place.coordinate.latitude = latitude
-                        place.coordinate.longitude = longitude
-                        place.bottles = bottles
-                        place.batteries = batteries
-                        place.bulbs = bulbs
-                        place.other = other
-                        place.userId = userID
-                        place.address = address
-                    }
-                }
-                self.countDistanes(list: bottlePlaces)
-                bottlePlaces.sort(by: { $0.distance < $1.distance })
-            }
-            if batteries {
-                for place in batteryPlaces {
-                    if place.id == id {
-                        place.title = title
-                        place.subtitle = type
-                        place.address = address
-                        place.hasImage = hasImage
-                        place.imageURLString = imageURL
-                        place.coordinate.latitude = latitude
-                        place.coordinate.longitude = longitude
-                        place.bottles = bottles
-                        place.batteries = batteries
-                        place.bulbs = bulbs
-                        place.other = other
-                        place.userId = userID
-                        place.address = address
-                    }
-                }
-                self.countDistanes(list: batteryPlaces)
-                batteryPlaces.sort(by: { $0.distance < $1.distance })
-            }
-            if bulbs {
-                for place in bulbPlaces {
-                    if place.id == id {
-                        place.title = title
-                        place.subtitle = type
-                        place.address = address
-                        place.hasImage = hasImage
-                        place.imageURLString = imageURL
-                        place.coordinate.latitude = latitude
-                        place.coordinate.longitude = longitude
-                        place.bottles = bottles
-                        place.batteries = batteries
-                        place.bulbs = bulbs
-                        place.other = other
-                        place.userId = userID
-                        place.address = address
-                    }
-                    self.countDistanes(list: bulbPlaces)
-                    bulbPlaces.sort(by: { $0.distance < $1.distance })
-                }
             }
             
             self.tableView.reloadData()
