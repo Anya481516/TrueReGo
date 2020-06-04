@@ -153,7 +153,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapPinIcon.isHidden = true
             sender.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         }
-        else if currentUser.name == "" {
+        else if !firebaseService.isUserLoggedIn() {
             showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.loginReminder, actionTitle: myKeys.alert.okButton)
         }
         else {
@@ -249,7 +249,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func retrieveUserInfo(){
-        firebaseService.retrieveUserInfo(id: currentUser.id) { (error) in
+        firebaseService.retrieveUserInfo(id: currentUser.id, success: {
+            
+        }) { (error) in
             self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
         }
     }

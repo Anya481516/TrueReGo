@@ -14,14 +14,15 @@ import CoreLocation
 
 class FirebaseService {
     
-    func login() {
+    func getRegisteredUserInfo() -> User {
+        let newUser = User()
         if let user = Auth.auth().currentUser {
-            currentUser.id = user.uid
-            retrieveUserInfo(id: currentUser.id) { (error) in
-                print(error)
-            }
+            newUser.id = user.uid
+            newUser.email = user.email!
         }
+        return newUser
     }
+    
     func logout(success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
         do {
             try Auth.auth().signOut()
@@ -40,18 +41,19 @@ class FirebaseService {
         return true
     }
     
-    func retrieveUserInfo(id: String, failure: @escaping (_ error: String) -> Void){
+    func retrieveUserInfo(id: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void){
         let userDB = Firebase.Database.database().reference().child("Users")
         currentUser.id = Auth.auth().currentUser!.uid
         currentUser.email = Auth.auth().currentUser!.email!
         
-        userDB.child(id).observeSingleEvent(of: .value, with: { (snapshot) in
+        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
             let snapshotValue = snapshot.value as! NSDictionary
             currentUser.name = snapshotValue["Name"] as! String
             currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
             currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
             currentUser.superUser = snapshotValue["SuperUser"] as! Bool
             currentUser.imageURL = snapshotValue["ImageURL"] as! String
+            success()
             return
         }) { (error) in
             failure(error.localizedDescription)
@@ -59,6 +61,61 @@ class FirebaseService {
         }
     }
     
+    func register(userEmail: String, userPassword: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
+            if let error = error {
+                print(error)
+                failure(error.localizedDescription)
+            }
+            else {
+                self.putNewUserToDB(user: currentUser, success: {
+                    success()
+                }) { (error) in
+                    failure(error)
+                }
+            }
+        }
+    }
+    
+    func putNewUserToDB(user: User, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        let userDB = Firebase.Database.database().reference().child("Users")
+        let userDictionary = ["Name" : user.name, "PlacesAdded" : user.placesAdded, "ProfilePicture" : false, "ImageURL" : user.imageURL, "SuperUser" : user.superUser] as [String : Any]
+            userDB.child(user.id).setValue(userDictionary) {
+                (error, reference) in
+                if let error = error {
+                    print(error)
+                    failure(error.localizedDescription)
+                }
+                else{
+                    print("User added to the DB")
+                    success()
+                }
+            }
+    }
+    
+    func login() {
+        if let user = Auth.auth().currentUser {
+            currentUser.id = user.uid
+            retrieveUserInfo(id: currentUser.id, success: {
+                print("retrieved user Info")
+            }) { (error) in
+                print(error)
+            }
+        }
+    }
+
+    func signin(email: String, password: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            if let error = error {
+                print(error)
+                failure(error.localizedDescription)
+            }
+            else {
+                print("Succesfully logged in")
+                success()
+            }
+        }
+    }
     
     func retrieveAnnotations(complition: @escaping () -> Void) {
         let messageDB = Firebase.Database.database().reference().child("Places")

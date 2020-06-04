@@ -7,10 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseAuth
-import FirebaseDatabase
-//import FirebaseStorage
 
 protocol LogInDelegate {
     func goToRegistration()
@@ -23,6 +19,7 @@ class LogInViewController : UIViewController {
     
     //MARK: variables:
     var delegate : LogInDelegate?
+    var firebaseService = FirebaseService()
     
     // MARK: IBOutlets:
     @IBOutlet var logInView: UIView!
@@ -65,24 +62,22 @@ class LogInViewController : UIViewController {
     @IBAction func logInButtonPressed(_ sender: UIButton) {
         if let userEmail = emailTextField.text {
             if let userPassword = passwordTextField.text {
-                Auth.auth().signIn(withEmail: userEmail, password: userPassword) { (user, error) in
-                    if let error = error {
-                        print(error)
-                        if userPassword.isEmpty{
-                            self.showAlert(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage, actionTitle: myKeys.alert.okButton)
-                        }
-                        else if userEmail.isEmpty {
-                            self.showAlert(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage, actionTitle: myKeys.alert.okButton)
-                        }
-                        else {
-                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton)
-                        }
+                if userEmail.isEmpty {
+                    self.showAlert(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage, actionTitle: myKeys.alert.okButton)
+                }
+                else {
+                    if userPassword.isEmpty {
+                        self.showAlert(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage, actionTitle: myKeys.alert.okButton)
                     }
                     else {
-                        print("Succesfully logged in")
-                        self.dismiss(animated: true)
-                        self.delegate?.showLoggedInView()
-                        self.retrieveUserInfo()
+                        //
+                        firebaseService.signin(email: userEmail, password: userPassword, success: {
+                            self.dismiss(animated: true)
+                            self.delegate?.showLoggedInView()
+                            self.retrieveUserInfo()
+                        }, failure: { (error) in
+                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
+                        })
                     }
                 }
             }
@@ -144,23 +139,10 @@ class LogInViewController : UIViewController {
     }
     
     func retrieveUserInfo(){
-        let userDB = Firebase.Database.database().reference().child("Users")
-        
-        currentUser.id = Auth.auth().currentUser!.uid
-        currentUser.email = Auth.auth().currentUser!.email!
-        
-        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
-            let snapshotValue = snapshot.value as! NSDictionary
-            currentUser.name = snapshotValue["Name"] as! String
-            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
-            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
-            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
-            currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            print("Info retrieved !!!")
+        firebaseService.retrieveUserInfo(id: currentUser.id, success: {
             self.delegate?.updateInterface()
-            return
         }) { (error) in
-            print(error.localizedDescription)
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
         }
     }
 }

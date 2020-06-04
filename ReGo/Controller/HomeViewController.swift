@@ -48,7 +48,6 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         else if firebaseService.isUserLoggedIn() {
             showLoggedInView()
             retrieveUserInfo()
-            updateInterface()
         }
         else {
             print("not logged in")
@@ -170,6 +169,20 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         updateLang()
+        
+        // when info retrieced already
+        if currentUser.name != "" {
+            updateInterface()
+        }
+        // when info not retrieved but user is logged in
+        else if firebaseService.isUserLoggedIn() {
+            showLoggedInView()
+            retrieveUserInfo()
+        }
+        else {
+            print("not logged in")
+            showNotLoggedInView()
+        }
     }
     
     //MARK: from delegate
@@ -195,7 +208,9 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     
     func retrieveUserInfo(){
-        firebaseService.retrieveUserInfo(id: currentUser.id) { (error) in
+        firebaseService.retrieveUserInfo(id: currentUser.id, success: {
+            self.updateInterface()
+        }) { (error) in
             self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
         }
     }
