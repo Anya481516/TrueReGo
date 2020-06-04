@@ -53,7 +53,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         firebaseService.login()
         
         currentImage.image = UIImage(named: "vk")!
-        retrieveAnnotations()
         
         if defaults.string(forKey: "Lang") == nil{
             setLanguage()
@@ -334,6 +333,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewWillAppear(_ animated: Bool) {
         updateaLang()
+        retrieveAnnotations()
         if wasSelectedFromList {
             wasSelectedFromList = false
             let region = MKCoordinateRegion(center: selectedCoordinatesFromList, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))

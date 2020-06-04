@@ -118,6 +118,11 @@ class FirebaseService {
     }
     
     func retrieveAnnotations(complition: @escaping () -> Void) {
+        places.removeAll()
+        bottlePlaces.removeAll()
+        bulbPlaces.removeAll()
+        batteryPlaces.removeAll()
+        
         let messageDB = Firebase.Database.database().reference().child("Places")
         messageDB.observe(.childAdded) { (snapshot) in
             let snapshotValue = snapshot.value as! Dictionary<String,Any>
@@ -258,5 +263,76 @@ class FirebaseService {
         }
     }
     
+    func addNewAnnotationToDB(user: User, place: Place, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        var userDB = DatabaseReference()
+        if currentUser.superUser {
+            userDB = Firebase.Database.database().reference().child("Places")
+        }
+        else {
+            userDB = Firebase.Database.database().reference().child("NewPlaces")
+        }
+        let randomID = userDB.childByAutoId()
+        place.id = randomID.key!
+        let placeDictionary = ["Title" : place.title!, "Address" : place.address, "HasImage" : place.hasImage, "ImageURL" : place.imageURLString, "Longitude" : place.coordinate.longitude, "Latitude" : place.coordinate.latitude, "Type" : place.subtitle!, "Bottles" : place.bottles, "Batteries" : place.batteries, "Bulbs" : place.bulbs, "Other" : place.other, "UserID" : currentUser.id, "ID" : place.id] as [String : Any]
+        userDB.child(place.id).setValue(placeDictionary)
+        print("saved a place to database")
+        success()
+    }
     
+    func editAnnotationInDB(user: User, newPlace: Place, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        var userDB = DatabaseReference()
+        if currentUser.superUser {
+            userDB = Firebase.Database.database().reference().child("Places")
+        }
+        else {
+            userDB = Firebase.Database.database().reference().child("NewPlaces")
+        }
+               
+        let placeDictionary = ["Title" : newPlace.title!, "Address" : newPlace.address, "HasImage" : newPlace.hasImage, "ImageURL" : newPlace.imageURLString, "Longitude" : newPlace.coordinate.longitude, "Latitude" : newPlace.coordinate.latitude, "Type" : newPlace.subtitle!, "Bottles" : newPlace.bottles, "Batteries" : newPlace.batteries, "Bulbs" : newPlace.bulbs, "Other" : newPlace.other, "UserID" : currentUser.id, "ID" : newPlace.id] as [String : Any]
+               
+        userDB.child(newPlace.id).updateChildValues(placeDictionary)
+        print("Changed !")
+        success()
+    }
+    
+    func editUserPlacesAmountInDB(user: User) {
+        let userDB = Firebase.Database.database().reference().child("Users")
+        userDB.child(user.id).updateChildValues(["PlacesAdded" : currentUser.placesAdded])
+    }
+    
+    func saveImageToDB(newPlace: Place, data: Data, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        let imageReference = Storage.storage().reference().child("PlaceImages").child(newPlace.id)
+        imageReference.putData(data, metadata: nil) { (metadata, error) in
+            if let error = error {
+                failure(error.localizedDescription)
+                //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton)
+                return
+            }
+            imageReference.downloadURL { (url, error) in
+                if let error = error {
+                    failure(error.localizedDescription)
+                    //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton)
+                    return
+                }
+                guard let url = url else {
+                    failure(myKeys.alert.somethingWendWrong)
+                    //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.somethingWendWrong, actionTitle: myKeys.alert.okButton)
+                    return
+                }
+                let urlString = url.absoluteString
+                newPlace.hasImage = true
+                newPlace.imageURLString = urlString
+                if currentUser.superUser {
+                    let userDB = Firebase.Database.database().reference().child("Places")
+                    userDB.child(newPlace.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
+                }
+                else {
+                    let userDB = Firebase.Database.database().reference().child("NewPlaces")
+                    userDB.child(newPlace.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
+                }
+                success()
+            }
+            return
+        }
+    }
 }
