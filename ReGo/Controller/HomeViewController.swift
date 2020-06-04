@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseAuth
-import FirebaseDatabase
 import FirebaseStorage
 import Kingfisher
 
 class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate, EditProfileDelegate {
+    
+    //MARK:- PROPERTIES:
+    let firebaseService = FirebaseService()
     
     //MARK: ---ABOutlets:---
     @IBOutlet weak var controllerTitleLabel: UILabel!
@@ -45,7 +45,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             updateInterface()
         }
         // when info not retrieved but user is logged in
-        else if Auth.auth().currentUser != nil{
+        else if firebaseService.isUserLoggedIn() {
             showLoggedInView()
             retrieveUserInfo()
             updateInterface()
@@ -84,14 +84,12 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     @IBAction func logOutButtonPressed(_ sender: Any) {
         showAlertYesNo(alertTitle: myKeys.alert.logoutTitle, alertMessage: myKeys.alert.logoutQuestion, okActions: {
-            do {
-                try Auth.auth().signOut()
-                self.showNotLoggedInView()
-                currentUser = User()
-                print("Logged Out")
-            }
-            catch {
-                print("error, there was a problem with signing out")
+            self.firebaseService.logout(success: {
+                self.showAlertWithAction(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.loggedoutMessage) {
+                    self.showNotLoggedInView()
+                }
+            }) { (error) in
+                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
             }
         }) { }
     }
@@ -142,7 +140,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         self.placesLabel.text = "\(myKeys.home.placesAddedLabel)\(currentUser.placesAdded)"
         self.emailLabel.text = currentUser.email
         
-        if Auth.auth().currentUser != nil {
+        if firebaseService.isUserLoggedIn() {
             showLoggedInView()
         }
         
@@ -197,23 +195,8 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     
     func retrieveUserInfo(){
-        let userDB = Firebase.Database.database().reference().child("Users")
-        
-        currentUser.id = Auth.auth().currentUser!.uid
-        currentUser.email = Auth.auth().currentUser!.email!
-        
-        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
-            let snapshotValue = snapshot.value as! NSDictionary
-            currentUser.name = snapshotValue["Name"] as! String
-            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
-            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
-            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
-            currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            print("Info retrieved !!!")
-            self.updateInterface()
-            return
-        }) { (error) in
-            print(error.localizedDescription)
+        firebaseService.retrieveUserInfo(id: currentUser.id) { (error) in
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
         }
     }
 }

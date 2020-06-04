@@ -32,6 +32,9 @@
 		5DCD3DEB246B288900DDE8B1 /* CustomMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD3DEA246B288900DDE8B1 /* CustomMessageCell.swift */; };
 		5DCD3DED246B299500DDE8B1 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DCD3DEC246B299500DDE8B1 /* MessageCell.xib */; };
 		5DD075D1245C969C00E39E36 /* MyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD075D0245C969C00E39E36 /* MyKeys.swift */; };
+		5DF204FE2489109C0083AA35 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF204FD2489109C0083AA35 /* UserService.swift */; };
+		5DF20500248912E80083AA35 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF204FF248912E80083AA35 /* FirebaseService.swift */; };
+		5DF20502248918FC0083AA35 /* KingfisherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF20501248918FC0083AA35 /* KingfisherService.swift */; };
 		5DF70001244DC00400224A6F /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF70000244DC00400224A6F /* AnnotationView.swift */; };
 		5DFF3DAB24695B8100A74044 /* ImageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFF3DAA24695B8100A74044 /* ImageController.swift */; };
 		94B94AE9A4E75B494CDA06C1 /* Pods_ReGo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB78AA652B23D1B98A3CF22F /* Pods_ReGo.framework */; };
@@ -66,6 +69,9 @@
 		5DCD3DEA246B288900DDE8B1 /* CustomMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessageCell.swift; sourceTree = "<group>"; };
 		5DCD3DEC246B299500DDE8B1 /* MessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageCell.xib; sourceTree = "<group>"; };
 		5DD075D0245C969C00E39E36 /* MyKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyKeys.swift; sourceTree = "<group>"; };
+		5DF204FD2489109C0083AA35 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		5DF204FF248912E80083AA35 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		5DF20501248918FC0083AA35 /* KingfisherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingfisherService.swift; sourceTree = "<group>"; };
 		5DF70000244DC00400224A6F /* AnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		5DFF3DAA24695B8100A74044 /* ImageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageController.swift; sourceTree = "<group>"; };
 		977B895A014BD228EFC7A8A1 /* Pods-ReGo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReGo.debug.xcconfig"; path = "Target Support Files/Pods-ReGo/Pods-ReGo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +129,7 @@
 		5DC3DBEF2431CD05000B3AF3 /* ReGo */ = {
 			isa = PBXGroup;
 			children = (
+				5DF204FC248910680083AA35 /* Service */,
 				5D44E97F2488CD650082962A /* Extension */,
 				5DC3DC092431CD3C000B3AF3 /* Controller */,
 				5DC3DC082431CD36000B3AF3 /* Model */,
@@ -185,6 +192,16 @@
 				AB78AA652B23D1B98A3CF22F /* Pods_ReGo.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5DF204FC248910680083AA35 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				5DF204FD2489109C0083AA35 /* UserService.swift */,
+				5DF204FF248912E80083AA35 /* FirebaseService.swift */,
+				5DF20501248918FC0083AA35 /* KingfisherService.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,11 +327,14 @@
 				5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */,
 				5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */,
 				5D44E9812488CD940082962A /* UIViewControllerExtension.swift in Sources */,
+				5DF204FE2489109C0083AA35 /* UserService.swift in Sources */,
 				5D18395F2445CEF8000E835B /* Place.swift in Sources */,
 				5DCD3DEB246B288900DDE8B1 /* CustomMessageCell.swift in Sources */,
 				5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */,
+				5DF20500248912E80083AA35 /* FirebaseService.swift in Sources */,
 				5DD075D1245C969C00E39E36 /* MyKeys.swift in Sources */,
 				5DF70001244DC00400224A6F /* AnnotationView.swift in Sources */,
+				5DF20502248918FC0083AA35 /* KingfisherService.swift in Sources */,
 				5D2EF09E2440917F008446F5 /* EditProfileController.swift in Sources */,
 				5D04A17E244F03F5009C81FB /* PlaceInfoController.swift in Sources */,
 				5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */,

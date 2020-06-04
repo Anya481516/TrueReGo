@@ -119,9 +119,8 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     func updateInterface() {
         if currentPlace.hasImage {
             waitingThing.isHidden = false
-            if currentUser.imageURL != "" {
+            if currentPlace.imageURLString != "" {
                 let url = URL(string: currentPlace.imageURLString)
-                //self.placeImage.sd_setImage(with: url) { (image, error, SDImageCacheType, URL) in }
                 let resource = ImageResource(downloadURL: url!)
                 self.placeImage.kf.setImage(with: resource) { (image, error, cacheType, url) in
                     if let error = error {

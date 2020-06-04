@@ -404,6 +404,7 @@ class Alert {
     var createNewPlaceMessage = String()
     var logoutTitle = String()
     var logoutQuestion = String()
+    var loggedoutMessage = String()
     var yesButton = String()
     var noButton = String()
     var noUsernameLabel = String()
@@ -455,6 +456,7 @@ class Alert {
         createNewPlaceMessage = "Choose the location for  new place"
         logoutTitle = "Log Out"
         logoutQuestion = "Are you sure you want to log out?"
+        loggedoutMessage = "You've logged out uccessfully"
         yesButton = "Yes"
         noButton = "No"
         noUsernameLabel = "No username is found"
@@ -504,6 +506,7 @@ class Alert {
         createNewPlaceMessage = "Выберите локацию нового места"
         logoutTitle = "Выйти"
         logoutQuestion = "Вы уверенны что хотите выйти?"
+        loggedoutMessage = "Вы успешно вышли из профиля"
         yesButton = "Да"
         noButton = "Нет"
         noUsernameLabel = "Не найдено имя пользователя"
