@@ -15,34 +15,15 @@ import FirebaseDatabase
 import Kingfisher
 
 class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, AddPlaceDelegate, PlaceInfoDelegate {
-    func getCurretLocation() -> CLLocation {
-        return locationManager.location!
-    }
-
-    //MARK:- From Delegates:
-    func getPlace() -> Place {
-        return currentPlace
-    }
     
-    func addNewAnnotation(ann: Place) {
-        mapView.addAnnotation(ann)
-    }
-    
-    func updateInterface() {
-        for place in places {
-            addNewAnnotation(ann: place)
-        }
-        print(places.count)
-    }
-    
-    // MARK: variables:
-    //var places = [Place]()
+    // MARK:- PROPERTIES:
     var currentImage = UIImageView()
     var currentPlace = Place()
     var currentAddress = String()
     var allAnnotations = [MKAnnotation]()
+    let locationManager = CLLocationManager()
     
-    // MARK: IBOutlets:
+    // MARK:- IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
     @IBOutlet weak var zoomInButton: UIButton!
     @IBOutlet weak var zoomOutButton: UIButton!
@@ -52,33 +33,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     @IBOutlet weak var mapPinIcon: UIImageView!
     @IBOutlet weak var layerButton: UIButton!
     @IBOutlet weak var backFromDirectionButton: UIButton!
-    
-    // MARK: LOCATION MAN
-    let locationManager = CLLocationManager()
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        backFromDirectionButton.isHidden = true
-        locationManager.stopUpdatingLocation()
-        locationManager.delegate = nil
-        
-        mapView.showsUserLocation = showLocation
-        showLocation = true
-        
-        mapView.userTrackingMode = .follow
-        
-        currentLocation = locationManager.location!
-        
-        // for address
-        CLGeocoder().reverseGeocodeLocation(locations.last!) { (placemarks, error) in
-            if let placemarks = placemarks {
-                let placemark = placemarks[0]
-                if let address = placemark.addressDictionary!["Street"] as? String {
-                    self.currentAddress = address
-                    print("Address is - \(self.currentAddress)")
-                }
-            }
-        }
-    }
     
     // MARK:- ViewDidLoad:
     override func viewDidLoad() {
@@ -97,15 +51,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.showsUserLocation = true
             mapView.userTrackingMode = .follow
         }
-        
-
     
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             retrieveUserInfo()
         }
         
         currentImage.image = UIImage(named: "vk")!
-        
         retrieveAnnotations()
         
         if defaults.string(forKey: "Lang") == nil{
@@ -124,7 +75,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         mapView.addAnnotations(allAnnotations)
         
-        var overlays = mapView.overlays
+        let overlays = mapView.overlays
         mapView.removeOverlays(overlays)
     }
     
@@ -143,7 +94,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     @IBAction func zoomInButtonPressed(_ sender: UIButton) {
-        
          mapView.userTrackingMode = .none
         
         if zoomOutButton.isEnabled == false {
@@ -167,8 +117,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.setRegion(region, animated: true)
             zoomInButton.isEnabled = false
         }
-        //print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
-        
     }
     
     @IBAction func zoomOutButtonPressed(_ sender: UIButton) {
@@ -195,7 +143,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.setRegion(region, animated: true)
             zoomOutButton.isEnabled = false
         }
-        //print("\(mapView.region.span.latitudeDelta) ; \(mapView.region.span.longitudeDelta)")
     }
     
     @IBAction func locationButtonPressed(_ sender: UIButton) {
@@ -211,44 +158,67 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             sender.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         }
         else if currentUser.name == "" {
-            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.loginReminder)
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.loginReminder, actionTitle: myKeys.alert.okButton)
         }
         else {
-            // here go to new view to create a pin
-            let alert = UIAlertController(title: myKeys.alert.createNewPlaceTitle, message: myKeys.alert.createNewPlaceMessage, preferredStyle: .alert)
-            let okAction = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
+            showAlertOkCancel(alertTitle: myKeys.alert.createNewPlaceTitle, alertMessage: myKeys.alert.createNewPlaceMessage, okActions: {
                 sender.setImage(UIImage.init(systemName: "mappin.slash"), for: [])
                 self.doneButton.isHidden = false
                 self.mapPinIcon.isHidden = false
                 sender.backgroundColor = UIColor(named: "RedTransparent")
-            }
-            let cancelAction = UIAlertAction(title: myKeys.alert.cancelButton, style: .cancel) { (UIAlertAction) in
+            }) {
                 
             }
-            alert.addAction(okAction)
-            alert.addAction(cancelAction)
-            self.present(alert, animated: true, completion: nil)
         }
     }
     
     // MARK:- METHODS:
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        backFromDirectionButton.isHidden = true
+        locationManager.stopUpdatingLocation()
+        locationManager.delegate = nil
+        mapView.showsUserLocation = showLocation
+        showLocation = true
+        mapView.userTrackingMode = .follow
+        currentLocation = locationManager.location!
+        
+        CLGeocoder().reverseGeocodeLocation(locations.last!) { (placemarks, error) in
+            if let placemarks = placemarks {
+                let placemark = placemarks[0]
+                if let address = placemark.addressDictionary!["Street"] as? String {
+                    self.currentAddress = address
+                    print("Address is - \(self.currentAddress)")
+                }
+            }
+        }
+    }
+    
+    func getCurretLocation() -> CLLocation {
+        return locationManager.location!
+    }
+
+    //MARK: From Delegates:
+    func getPlace() -> Place {
+        return currentPlace
+    }
+    
+    func addNewAnnotation(ann: Place) {
+        mapView.addAnnotation(ann)
+    }
+    
+    func updateInterface() {
+        for place in places {
+            addNewAnnotation(ann: place)
+        }
+        print(places.count)
+    }
     
     func updateaLang() {
         doneButton.setTitle(myKeys.map.doneButton, for: .normal)
         backFromDirectionButton.setTitle(myKeys.map.back, for: .normal)
     }
     
-    
-    func showAlert(alertTitle : String, alertMessage : String) {
-        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
-            
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    // prepare method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "fromMapToPlaceInfo" {
             let destinationVC = segue.destination as! PlaceInfoController
@@ -285,7 +255,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func retrieveUserInfo(){
         let userDB = Firebase.Database.database().reference().child("Users")
-        
         currentUser.id = Auth.auth().currentUser!.uid
         currentUser.email = Auth.auth().currentUser!.email!
         
@@ -296,8 +265,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
             currentUser.superUser = snapshotValue["SuperUser"] as! Bool
             currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            //print("Info retrieved !!!")
-            
             return
         }) { (error) in
             print(error.localizedDescription)
@@ -309,7 +276,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     func retrieveAnnotations() {
         let messageDB = Firebase.Database.database().reference().child("Places")
         
-        // when a child added
         messageDB.observe(.childAdded) { (snapshot) in
             let snapshotValue = snapshot.value as! Dictionary<String,Any>
         
@@ -326,8 +292,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let other = snapshotValue["Other"] as! String
             let userID = snapshotValue["UserID"] as! String
             let id = snapshotValue["ID"] as! String
-        
-            //print(title, address, hasImage, imageURL, latitude, longitude, bottles, batteries, bulbs, other, userID)
         
             let place = Place()
             place.title = title
@@ -358,7 +322,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.updateInterface()
         }
         
-        // a child has changed
         messageDB.observe(.childChanged) { (snapshot) in
             let snapshotValue = snapshot.value as! Dictionary<String,Any>
             
@@ -456,17 +419,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
-    // MARK:- Annotation extention
+    // MARK: Annotation extention
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        // находим именно то место
-//        var currentPlace = Place()
-//        for place in places {
-//        if (place.title == annotation.title) && (place.coordinate.latitude == annotation.coordinate.latitude) && (place.coordinate.longitude == annotation.coordinate.longitude) {
-//                currentPlace = place
-//            }
-//        }
         
         guard annotation as? MKUserLocation != mapView.userLocation else { return nil }
         
@@ -478,26 +433,17 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         if annotation.subtitle == "Bottles" {
             annotationView?.image = UIImage(named: "IconBottle")
-            //print("It's a bottle")
         } else if annotation.subtitle  == "Batteries" {
             annotationView?.image = UIImage(named: "IconBattery")
-            //print("It's a battery")
         } else if annotation.subtitle  == "Bulbs" {
             annotationView?.image = UIImage(named: "IconBulb")
-            //print("It's a bulb")
         } else if annotation.subtitle  == "BatteriesAndBulbs" {
             annotationView?.image = UIImage(named: "IconBatteryBulb")
-            //print("It's a battery bulb")
         } else if annotation.subtitle  == "Other" {
             annotationView?.image = UIImage(named: "IconOther")
-            //print("It's something else")
         }
         
-       
-        
-        // делаем вью
         let rect = CGRect(origin: .zero, size: CGSize(width: 200, height: 50))
-        
         
         let yForButton = rect.height / 2 - 20
         let button = UIButton(frame: CGRect(origin: .init(x: 0, y: yForButton), size: CGSize(width: 100, height: 40)))
@@ -506,7 +452,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         button.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         button.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)
         
-        // done
         annotationView?.leftCalloutAccessoryView = button
         annotationView?.sizeToFit()
         annotationView?.canShowCallout = true
@@ -518,13 +463,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         guard view.annotation as? MKUserLocation != mapView.userLocation else { return }
         
-        // находим именно то место
         for place in places {
             if (place.title == view.annotation?.title) && (place.coordinate.latitude == view.annotation?.coordinate.latitude) && (place.coordinate.longitude == view.annotation?.coordinate.longitude) {
                 currentPlace = place
             }
         }
-        
         
         let vkImage = UIImage(named: "vk")!
         currentImage.image = vkImage
@@ -532,20 +475,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             print("it has an image")
             let resource = ImageResource(downloadURL: url)
             currentImage.kf.setImage(with: resource) { (image, error, cachType, url) in
-                          if let error = error {
-                                   print(error)
-                               }
-                               else {
-                                   print("Success updated image in calout!")
-                               }
-                           }
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print("Success updated image in calout!")
+                }
+            }
         }
-       
-        //currentImage = imageFromDB(currentPlace: currentPlace)
-    
-        //print("The annotation was selected: \(String(describing: currentPlace.title))")
-        
-        //self.performSegue(withIdentifier: "fromMapToPlaceInfo", sender: self)
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -554,7 +491,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewWillAppear(_ animated: Bool) {
         updateaLang()
-        
         if wasSelectedFromList {
             wasSelectedFromList = false
             let region = MKCoordinateRegion(center: selectedCoordinatesFromList, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
@@ -571,7 +507,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
     }
     
-    // for direction
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let render = MKPolylineRenderer(overlay: overlay as! MKPolyline)
         render.strokeColor = UIColor(named: "DarkLightGreen")
@@ -579,15 +514,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func setLanguage() {
-        let alert = UIAlertController(title: myKeys.alert.setLangTitle, message: myKeys.alert.setLangRequest, preferredStyle: .alert)
-        let actionRus = UIAlertAction(title: myKeys.alert.rus, style: .default) { (UIAlertAction) in
+        showAlertCustomActions(alertTitle: myKeys.alert.setLangTitle, alertMessage: myKeys.alert.setLangRequest, action1Title: myKeys.alert.rus, action2Title: myKeys.alert.eng, action1: {
             myKeys.changeToRus()
-        }
-        let actionEng = UIAlertAction(title: myKeys.alert.eng, style: .default) { (UIAlertAction) in
+        }) {
             myKeys.changeToEng()
         }
-        alert.addAction(actionRus)
-        alert.addAction(actionEng)
-        self.present(alert, animated: true, completion: nil)
     }
 }

@@ -45,9 +45,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             updateInterface()
         }
         // when info not retrieved but user is logged in
-        else if let user = Auth.auth().currentUser{
-            print(user.email)
-            //retrieveUserInfo()
+        else if Auth.auth().currentUser != nil{
             showLoggedInView()
             retrieveUserInfo()
             updateInterface()
@@ -59,7 +57,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     
     // MARK: ---IBActions:---
-    //
+    
     // MARK: not loged in
     @IBAction func LoginButtonPressed(_ sender: ButtonWithImage) {
     }
@@ -69,13 +67,23 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     @IBAction func aboutButtonPressed(_ sender: UIButton) {
     }
     @IBAction func changeLanguageButtonPressed(_ sender: Any) {
-        showChangeLanguageAlert()
+        showAlertYesNo(alertTitle: myKeys.alert.changeLangTitle, alertMessage: myKeys.alert.changeLangQuestion, okActions: {
+            if language == "RUS" {
+                language = "ENG"
+                myKeys.changeToEng()
+            }
+            else {
+                language = "RUS"
+                myKeys.changeToRus()
+            }
+            UserDefaults.standard.set(language, forKey: "Lang")
+            self.updateLang()
+        }) { }
     }
     @IBAction func editProfileButtonPressed(_ sender: Any) {
     }
     @IBAction func logOutButtonPressed(_ sender: Any) {
-        let alert = UIAlertController(title: myKeys.alert.logoutTitle, message: myKeys.alert.logoutQuestion, preferredStyle: .alert)
-        let action1 = UIAlertAction(title: myKeys.alert.yesButton, style: .default) { (UIAlertAction) in
+        showAlertYesNo(alertTitle: myKeys.alert.logoutTitle, alertMessage: myKeys.alert.logoutQuestion, okActions: {
             do {
                 try Auth.auth().signOut()
                 self.showNotLoggedInView()
@@ -85,13 +93,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             catch {
                 print("error, there was a problem with signing out")
             }
-        }
-        let action2 = UIAlertAction(title: myKeys.alert.noButton, style: .cancel) { (UIAlertAction) in
-            
-        }
-        alert.addAction(action1)
-        alert.addAction(action2)
-        self.present(alert, animated: true, completion: nil)
+        }) { }
     }
     
     // MARK: METHODS:
@@ -109,7 +111,6 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         languageButton.setTitle(myKeys.home.changeLangButton, for: .normal)
         editButton.setTitle(myKeys.home.editPofileButton, for: .normal)
         langButton.setTitle(myKeys.home.changeLangButton, for: .normal)
-        
         updateInterface()
     }
     
@@ -120,36 +121,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         self.performSegue(withIdentifier: "fromHomeToRegistration", sender: self)
     }
     
-    func showChangeLanguageAlert(){
-        let alert = UIAlertController(title: myKeys.alert.changeLangTitle, message: myKeys.alert.changeLangQuestion, preferredStyle: .alert)
-        let action1 = UIAlertAction(title: myKeys.alert.yesButton, style: .default) { (UIAlertAction) in
-                if language == "RUS"
-                {
-                    language = "ENG"
-                    myKeys.changeToEng()
-                }
-                else {
-                    language = "RUS"
-                    
-                    myKeys.changeToRus()
-                }
-            UserDefaults.standard.set(language, forKey: "Lang")
-            self.updateLang()
-            
-            print("language is changed")
-            
-        }
-        let action2 = UIAlertAction(title: myKeys.alert.noButton, style: .cancel) { (UIAlertAction) in
-            
-        }
-        alert.addAction(action1)
-        alert.addAction(action2)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     func updateInterface() {
-        
-        // TODO: KINGFISHER TO DOWNLOAD THE IMAGE!!! ______________________________________________
         if currentUser.hasProfileImage {
             let url = URL(string: currentUser.imageURL)
             let resource = ImageResource(downloadURL: url!)
@@ -170,9 +142,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         self.placesLabel.text = "\(myKeys.home.placesAddedLabel)\(currentUser.placesAdded)"
         self.emailLabel.text = currentUser.email
         
-        //print("updating info")
-        //print("UPDATING Name:\(currentUser.name), Places Added:\(currentUser.placesAdded)")
-        if let user = Auth.auth().currentUser {
+        if Auth.auth().currentUser != nil {
             showLoggedInView()
         }
         
@@ -240,7 +210,6 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             currentUser.superUser = snapshotValue["SuperUser"] as! Bool
             currentUser.imageURL = snapshotValue["ImageURL"] as! String
             print("Info retrieved !!!")
-            // here
             self.updateInterface()
             return
         }) { (error) in

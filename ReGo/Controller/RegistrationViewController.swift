@@ -21,7 +21,7 @@ protocol RegistrationDelegate {
 
 class RegistrationViewController : UIViewController {
     
-    //Declare the delegate variable here:
+    //MARK:- PROPERTIES:
     var delegate : RegistrationDelegate?
     
     // MARK: IBOutlets:
@@ -35,19 +35,16 @@ class RegistrationViewController : UIViewController {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var logInButton: UIButton!
-    
     @IBOutlet var registrationView: UIView!
+    
     // MARK: DID_LOAD:
     override func viewDidLoad() {
         super.viewDidLoad()
         
         updateLang()
-        
         logInButton.setTitleColor(UIColor.init(named: "WhiteBlack"), for: .normal)
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
         registrationView.addGestureRecognizer(tapGesture)
-        
         self.emailTextField.keyboardType = UIKeyboardType.emailAddress
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -100,9 +97,6 @@ class RegistrationViewController : UIViewController {
                         }
                         else {
                             print("Succesfully registered")
-                            // в каретн юзера занеcли инфу
-                            //currentUser = User(id: Auth.auth().currentUser!.uid, name: userName, email: userEmail, password: userPassword)
-                            // сохранить инфу о юзере так же в базе данных йоууу
                             let userDB = Firebase.Database.database().reference().child("Users")
                                    
                             let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL, "SuperUser" : currentUser.superUser] as [String : Any]
@@ -117,8 +111,6 @@ class RegistrationViewController : UIViewController {
                                         self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.successfulRefistrataion, actionTitle: myKeys.alert.okButton)
                                        }
                                    }
-                            //SVProgressHUD.dismiss()
-                            // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                             self.dismiss(animated: true)
                             self.delegate?.showLoggedInView()
                             self.retrieveUserInfo()
@@ -130,11 +122,9 @@ class RegistrationViewController : UIViewController {
     }
     
     @IBAction func logInButtonPressed(_ sender: UIButton) {
-        // TODO: self.parent!.performSegue(withIdentifier: "fromHomeToLogin", sender: self.parent!)
         self.dismiss(animated: true) {
             self.delegate?.goToLogIn()
         }
-        
     }
     
     // MARK: METHODS:
@@ -159,17 +149,6 @@ class RegistrationViewController : UIViewController {
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
-    
-    func showAlert(alertTitle : String, alertMessage : String, actionTitle : String) {
-        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: actionTitle, style: .default) { (UIAlertAction) in
-            self.view.layoutIfNeeded()
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    // with the keyboard
     
     @objc func outOfKeyBoardTapped(){
         self.view.endEditing(true)
@@ -202,13 +181,10 @@ class RegistrationViewController : UIViewController {
             currentUser.superUser = snapshotValue["SuperUser"] as! Bool
             currentUser.imageURL = snapshotValue["ImageURL"] as! String
             print("Info retrieved !!!")
-            // here
             self.delegate?.updateInterface()
             return
         }) { (error) in
             print(error.localizedDescription)
         }
     }
-    
-    
 }

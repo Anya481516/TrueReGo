@@ -34,6 +34,8 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     var newPlace = Place()
     var oldPlace = Place()
     var editView = false
+    let locationManager = CLLocationManager()
+    var previousLocation : CLLocation?
     
     // MARK: IBOutlets:
     @IBOutlet weak var controllerTitleLabel: UILabel!
@@ -59,54 +61,17 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     @IBOutlet weak var waitingThing: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    // MARK:- LOCATION MAN
-    let locationManager = CLLocationManager()
-    var previousLocation : CLLocation?
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        locationManager.stopUpdatingLocation()
-        locationManager.delegate = nil
-        
-        if isUsingLocation{
-            mapView.showsUserLocation = true
-            mapView.userTrackingMode = .follow
-        }
-        
-        previousLocation = getCenterLocation(for: mapView)
-
-        if editView {
-            placeLocation = oldPlace.coordinate
-        }
-        
-        let region = MKCoordinateRegion(center: placeLocation, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
-        mapView.setRegion(region, animated: true)
-    }
-    
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        let center = getCenterLocation(for: mapView)
-        
-        // checking if the new location canges a lot
-        guard let previousLocation = self.previousLocation else {return}
-        guard center.distance(from: previousLocation) > 50 else { return }
-        self.previousLocation = center
-        
-        getAddress()
-    }
-    
     // MARK: ViewDidLoad:
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLang()
         waitingThing.isHidden = true
-        
         self.mapView.delegate = self
         locationManager.delegate = self
-
         locationManager.requestWhenInUseAuthorization()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
         locationManager.startUpdatingLocation()
-        //showPlaceAddress()
         getAddress()
         
         if editView {
@@ -148,7 +113,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             sender.setImage(UIImage(systemName: "lock.open.fill"), for: .normal)
             sender.backgroundColor = UIColor(named: "RedTransparent")
             sender.setTitle(myKeys.addAndEdit.disableMapButton, for: .normal)
-            //locationButton.isEnabled = true
             disableView.isHidden = true
         }
     }
@@ -162,7 +126,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         }
     }
     @IBAction func findMyLocationButtonPressed(_ sender: UIButton) {
-        //mapView.userTrackingMode = .follow
         let region = MKCoordinateRegion(center: placeLocation, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         mapView.setRegion(region, animated: true)
     }
@@ -230,9 +193,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     @IBAction func sendButtonPressed(_ sender: UIButton) {
         self.view.bringSubviewToFront(waitingThing)
         waitingThing.isHidden = false
-        
-        
-        // initialize (with coordinates and id yo)
         newPlace.coordinate = mapView.region.center
         
         if titleTextField.text == "" {
@@ -251,9 +211,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.writeOther)
             return
         }
-        // когда все необходимые поля заполнены то йоу идем дальше
         else {
-            // выбираем тип
             if bottlesChecked && !batteriesChecked && !bulbsChecked && !otherChecked {
                 newPlace.subtitle = "Bottles"
             }
@@ -274,7 +232,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
                 newPlace.other = whatCollectsTextField.text!
             }
             
-            // остальное заполняем
             if titleTextField.text != "" {
                 newPlace.title = titleTextField.text!
             }
@@ -288,10 +245,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             else {
                 addNewAnnotationToDatabase(place: newPlace)
             }
-            
-            
         }
-        
     }
     
     // MARK:- METHODS:
@@ -311,6 +265,33 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         addressLabel.text = myKeys.addAndEdit.addressLabel
         addressTextField.placeholder = myKeys.addAndEdit.addressTextField
         sendButton.setTitle(myKeys.addAndEdit.sendButton, for: .normal)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        locationManager.stopUpdatingLocation()
+        locationManager.delegate = nil
+        
+        if isUsingLocation{
+            mapView.showsUserLocation = true
+            mapView.userTrackingMode = .follow
+        }
+        
+        previousLocation = getCenterLocation(for: mapView)
+
+        if editView {
+            placeLocation = oldPlace.coordinate
+        }
+        
+        let region = MKCoordinateRegion(center: placeLocation, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+        mapView.setRegion(region, animated: true)
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let center = getCenterLocation(for: mapView)
+        guard let previousLocation = self.previousLocation else {return}
+        guard center.distance(from: previousLocation) > 30 else { return }
+        self.previousLocation = center
+        getAddress()
     }
     
     @objc func outOfKeyBoardTapped(){
@@ -341,7 +322,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         }
     }
     
-    // address
     func getCenterLocation(for mapView: MKMapView) -> CLLocation {
         let latitude = mapView.centerCoordinate.latitude
         let longitude = mapView.centerCoordinate.longitude
@@ -375,7 +355,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             userDB = Firebase.Database.database().reference().child("NewPlaces")
         }
         
-        // created an ID for DB
         let randomID = userDB.childByAutoId()
         newPlace.id = randomID.key!
         
@@ -387,15 +366,12 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         print("saved a place to database")
         
         if place.hasImage {
-            // добавить фотку в сторадж и в базу данных url
             saveImageToDatabase()
         }
         else {
             self.delegate?.retrieveAnnotations()
             self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeAdded)
         }
-        
-        
     }
     
     func editAnnotationInDatabase(newPlace: Place, oldPlace: Place) {
@@ -416,7 +392,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         userDB.child(newPlace.id).updateChildValues(placeDictionary)
         
         if newPlace.hasImage {
-            // добавить фотку в сторадж и в базу данных url
             saveImageToDatabase()
         }
         else {
@@ -434,7 +409,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         
         let imageReference = Storage.storage().reference().child("PlaceImages").child(newPlace.id)
         
-        // to the storage
         imageReference.putData(data, metadata: nil) { (metadata, error) in
             if let error = error {
                 self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
@@ -454,7 +428,6 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
                 self.newPlace.hasImage = true
                 self.newPlace.imageURLString = urlString
                 
-                // update the Place info in the database
                 if currentUser.superUser {
                     let userDB = Firebase.Database.database().reference().child("Places")
                     userDB.child(self.newPlace.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
@@ -470,12 +443,9 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
                 else {
                      self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeAdded)
                 }
-               
             }
             return
         }
-        
-       // self.dismiss(animated: true, completion: nil)
     }
     
     func addCountPlacesToUser() {

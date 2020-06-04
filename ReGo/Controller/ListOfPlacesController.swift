@@ -12,21 +12,18 @@ import Firebase
 
 class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, CLLocationManagerDelegate {
     
-    //MARK:_variables:
+    //MARK:- PROPERTIES:
+    let locationManager = CLLocationManager()
+    var type = "All"
+    var refreshControl = UIRefreshControl()
     
     // MARK:- IBOutlets:
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var bottlesButton: UIButton!
     @IBOutlet weak var allButton: UIButton!
     @IBOutlet weak var batteriesButton: UIButton!
     @IBOutlet weak var bulbsButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
-    
-    let locationManager = CLLocationManager()
-    var type = "All"
-    var refreshControl = UIRefreshControl()
-
     
     // MARK:- ViewDidLoad
     override func viewDidLoad() {
@@ -34,34 +31,28 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLDistanceFilterNone
-        
-        
         updateLang()
-        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UINib(nibName: "MessageCell", bundle: nil), forCellReuseIdentifier: "customMessageCell")
         self.configureTableView()
         //retrieveLists()
-        
         tableView.separatorStyle = .none
         allButton.backgroundColor = UIColor(named: "DarkLightGreenTransparent")
         allButton.setTitleColor(UIColor(named: "WhiteBlack"), for: .normal)
         
-        //refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.addSubview(refreshControl)
     }
     
     @objc func refresh(_ sender: AnyObject) {
         locationManager.startUpdatingLocation()
-        
-       retrieveLists()
+        retrieveLists()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         updateLang()
-        //retrieveLists()
+        retrieveLists()
     }
     
     //MARK:- IBActions:
@@ -102,7 +93,6 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
         bottlesButton.setTitle(myKeys.list.bottles, for: .normal)
         batteriesButton.setTitle(myKeys.list.batteries, for: .normal)
         bulbsButton.setTitle(myKeys.list.bulbs, for: .normal)
-        
     }
     
     // Location delegate
@@ -112,25 +102,25 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
         
         currentLocation = locationManager.location!
         
-//        if type == "Bottles"{
-//            countDistanes(list: bottlePlaces)
-//            bottlePlaces.sort(by: { $0.distance < $1.distance })
-//        }
-//        else if type == "Batteries"{
-//            countDistanes(list: batteryPlaces)
-//            batteryPlaces.sort(by: { $0.distance < $1.distance })
-//        }
-//        else if type == "Bulbs"{
-//            countDistanes(list: bulbPlaces)
-//            bulbPlaces.sort(by: { $0.distance < $1.distance })
-//        }
-//        else {
-//            countDistanes(list: places)
-//            places.sort(by: { $0.distance < $1.distance })
-//        }
-//
-//        self.configureTableView()
-//        self.tableView.reloadData()
+        if type == "Bottles"{
+            countDistanes(list: bottlePlaces)
+            bottlePlaces.sort(by: { $0.distance < $1.distance })
+        }
+        else if type == "Batteries"{
+            countDistanes(list: batteryPlaces)
+            batteryPlaces.sort(by: { $0.distance < $1.distance })
+        }
+        else if type == "Bulbs"{
+            countDistanes(list: bulbPlaces)
+            bulbPlaces.sort(by: { $0.distance < $1.distance })
+        }
+        else {
+            countDistanes(list: places)
+            places.sort(by: { $0.distance < $1.distance })
+        }
+
+        self.configureTableView()
+        self.tableView.reloadData()
     }
     
     // tableview delegate
@@ -229,10 +219,6 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
                zeros = "0"
            }
            cell.disanceLabel.text = String("\(km).\(zeros)\(meters) \(myKeys.list.km)")
-           
-           // картинки исправить йоу
-           
-           
            return cell
        }
     
@@ -276,7 +262,6 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
         batteriesButton.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)
         bulbsButton.backgroundColor = UIColor(named: "LightDarkGreen")
         bulbsButton.setTitleColor(UIColor(named: "BlackWhite"), for: .normal)
-        
         sender.backgroundColor = UIColor(named: "DarkLightGreenTransparent")
         sender.setTitleColor(UIColor(named: "WhiteBlack"), for: .normal)
     }
@@ -289,7 +274,6 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
         
         let messageDB = Firebase.Database.database().reference().child("Places")
         
-        // when a child added
         messageDB.observe(.childAdded) { (snapshot) in
             let snapshotValue = snapshot.value as! Dictionary<String,Any>
         
@@ -307,11 +291,9 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
             let userID = snapshotValue["UserID"] as! String
             let id = snapshotValue["ID"] as! String
         
-            //print(title, address, hasImage, imageURL, latitude, longitude, bottles, batteries, bulbs, other, userID)
-        
             let place = Place()
             place.title = title
-            place.subtitle = type // type
+            place.subtitle = type 
             place.hasImage = hasImage
             place.imageURLString = imageURL
             place.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)

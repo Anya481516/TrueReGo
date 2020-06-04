@@ -60,14 +60,10 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLang()
-        
-        
-        
         waitingThing.isHidden = true
         currentPlace = Place( place: delegate!.getPlace() )
         let currentLocation = delegate?.getCurretLocation()
         distanceM = Int(CLLocation(latitude: currentPlace.coordinate.latitude, longitude: currentPlace.coordinate.longitude).distance(from: currentLocation!))
-       
         distanceK = distanceM / 1000
         distanceM = distanceM - distanceK * 1000
         if (distanceM < 10){
@@ -173,7 +169,6 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         waitingThing.startAnimating()
         delegate?.locationManager.startUpdatingLocation()
         
-        // showRoute
         let sourcePlaceMark = MKPlacemark(coordinate: delegate?.locationManager.location?.coordinate as! CLLocationCoordinate2D)
         let destPlacemark = MKPlacemark(coordinate: currentPlace.coordinate)
         
@@ -198,16 +193,11 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
             self.delegate?.mapView.addOverlay(route.polyline)
             self.delegate?.mapView.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
         }
-        
-        // remove all the annotations
+
         delegate?.allAnnotations = self.delegate?.mapView.annotations as! [MKAnnotation]
         delegate?.mapView.removeAnnotations(delegate?.allAnnotations as! [MKAnnotation])
-        
         delegate?.addNewAnnotation(ann: currentPlace)
-        // get the back button visible
         delegate?.backFromDirectionButton.isHidden = false
-        // everything else is ...
-        
         waitingThing.stopAnimating()
         self.dismiss(animated: true, completion: nil)
     }

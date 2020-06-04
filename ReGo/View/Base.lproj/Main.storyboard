@@ -168,7 +168,7 @@
                                     <action selector="layerButtonPressed:" destination="Ldd-YR-Dj5" eventType="touchUpInside" id="T1O-L7-oJ6"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYh-Aa-Sos" userLabel="Back From Directions Button">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYh-Aa-Sos" userLabel="Back From Directions Button">
                                 <rect key="frame" x="16" y="74" width="100" height="50"/>
                                 <color key="backgroundColor" name="LightDarkGreenTransparent"/>
                                 <constraints>

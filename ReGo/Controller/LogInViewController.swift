@@ -41,19 +41,15 @@ class LogInViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateLang()
-        //signUpButton.currentTitleColor = UIColor.init(named: "BlackWhite")
-        //signUpButton.setTitleColor(UIColor.init(named: "BlackWhite"), for: .normal)
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
         logInView.addGestureRecognizer(tapGesture)
-        
         self.emailTextField.keyboardType = UIKeyboardType.emailAddress
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @IBAction func editingStarted(_ sender: UITextField) {
-        // тут надо поднять вьюху йоу и так же еще сделать так чтобы когда закончили, она назад опускалась ух
+       
     }
     
     @IBAction func forgotPasswordButtonPressed(_ sender: UIButton) {
@@ -72,20 +68,18 @@ class LogInViewController : UIViewController {
                 Auth.auth().signIn(withEmail: userEmail, password: userPassword) { (user, error) in
                     if let error = error {
                         print(error)
-                        // описать что делать при каждых ошибочках
                         if userPassword.isEmpty{
-                            self.showAlert(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage)
+                            self.showAlert(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage, actionTitle: myKeys.alert.okButton)
                         }
                         else if userEmail.isEmpty {
-                            self.showAlert(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage)
+                            self.showAlert(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage, actionTitle: myKeys.alert.okButton)
                         }
                         else {
-                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
+                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton)
                         }
                     }
                     else {
                         print("Succesfully logged in")
-                        // TODO: тут мы убрали вьюху с регой, и надо теперь поставить вьюху с уже не тем что было до реги, а с тем что после (Сначала надо создать ихихих c фоткой!)
                         self.dismiss(animated: true)
                         self.delegate?.showLoggedInView()
                         self.retrieveUserInfo()
@@ -142,20 +136,11 @@ class LogInViewController : UIViewController {
     func sendPasswordByEmail() {
         let result = currentUser.sendPasswordByEmail(email: currentUser.email)
         if result == "Success" {
-            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)")
+            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)", actionTitle: myKeys.alert.okButton)
         }
         else {
-            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: result)
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: result, actionTitle: myKeys.alert.okButton)
         }
-    }
-    
-    func showAlert(alertTitle : String, alertMessage : String) {
-        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
-        let action = UIAlertAction(title: myKeys.alert.okButton, style: .default) { (UIAlertAction) in
-            
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
     }
     
     func retrieveUserInfo(){
@@ -172,7 +157,6 @@ class LogInViewController : UIViewController {
             currentUser.superUser = snapshotValue["SuperUser"] as! Bool
             currentUser.imageURL = snapshotValue["ImageURL"] as! String
             print("Info retrieved !!!")
-            // here
             self.delegate?.updateInterface()
             return
         }) { (error) in

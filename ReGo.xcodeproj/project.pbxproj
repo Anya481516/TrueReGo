@@ -14,6 +14,7 @@
 		5D0BBB20243752CE00EDDECC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0BBB1F243752CE00EDDECC /* User.swift */; };
 		5D18395F2445CEF8000E835B /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D18395E2445CEF8000E835B /* Place.swift */; };
 		5D2EF09E2440917F008446F5 /* EditProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2EF09D2440917F008446F5 /* EditProfileController.swift */; };
+		5D44E9812488CD940082962A /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D44E9802488CD940082962A /* UIViewControllerExtension.swift */; };
 		5D9A90DD245625B400ED3717 /* ListOfPlacesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D9A90DC245625B400ED3717 /* ListOfPlacesController.swift */; };
 		5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */; };
 		5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */; };
@@ -45,6 +46,7 @@
 		5D0BBB1F243752CE00EDDECC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5D18395E2445CEF8000E835B /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		5D2EF09D2440917F008446F5 /* EditProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileController.swift; sourceTree = "<group>"; };
+		5D44E9802488CD940082962A /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		5D9A90DC245625B400ED3717 /* ListOfPlacesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfPlacesController.swift; sourceTree = "<group>"; };
 		5DB8DC882433587B00F0C0E8 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		5DB8DC8A2433588E00F0C0E8 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +94,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		5D44E97F2488CD650082962A /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				5D44E9802488CD940082962A /* UIViewControllerExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		5DC3DBE42431CD05000B3AF3 = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +123,7 @@
 		5DC3DBEF2431CD05000B3AF3 /* ReGo */ = {
 			isa = PBXGroup;
 			children = (
+				5D44E97F2488CD650082962A /* Extension */,
 				5DC3DC092431CD3C000B3AF3 /* Controller */,
 				5DC3DC082431CD36000B3AF3 /* Model */,
 				5DC3DC072431CD2E000B3AF3 /* View */,
@@ -298,6 +309,7 @@
 				5DC3DBF52431CD05000B3AF3 /* ViewController.swift in Sources */,
 				5DC3DC16243221CB000B3AF3 /* ButtonWithImage.swift in Sources */,
 				5DB8DC8B2433588E00F0C0E8 /* LogInViewController.swift in Sources */,
+				5D44E9812488CD940082962A /* UIViewControllerExtension.swift in Sources */,
 				5D18395F2445CEF8000E835B /* Place.swift in Sources */,
 				5DCD3DEB246B288900DDE8B1 /* CustomMessageCell.swift in Sources */,
 				5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */,

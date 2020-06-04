@@ -26,7 +26,6 @@ class Place : CustomPin {
     var userId : String = ""
     var address : String = ""
     var distance : Double = 0
-    // как то еще коменты вставить бы сюда
     
     init(pin: CustomPin) {
         super.init()

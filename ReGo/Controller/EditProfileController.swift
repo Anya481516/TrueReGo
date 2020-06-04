@@ -45,15 +45,11 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
         editProfileView.addGestureRecognizer(tapGesture)
-        
         self.emailTextField.keyboardType = UIKeyboardType.emailAddress
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
         updateUserInfo()
         updateLang()
     }
@@ -70,8 +66,6 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
                 if currentUser.email != newEmail {
                     Auth.auth().currentUser?.updateEmail(to: newEmail, completion: { (error) in
                         if error != nil {
-                            //self.showAlert(alertTitle: "Error!", alertMessage: error.localizedDescription)
-                            // need toreauthenticate
                             let alert = UIAlertController(title: myKeys.alert.passwordIsRequiredTitle, message: myKeys.alert.passwordIsRequiredMessage, preferredStyle: .alert)
                             alert.addTextField { (textField) in
                                 textField.isSecureTextEntry = true
@@ -88,7 +82,6 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
                                             self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
                                         }
                                         else {
-                                            // now you can change the email yo
                                             self.resetEmail(email: newEmail)
                                         }
                                     })
@@ -122,36 +115,26 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     @IBAction func changePasswordButtonPressed(_ sender: UIButton) {
         if oldPasswordTextField.text?.isEmpty == false {
-            // reauthenticate the user
             let eMail = EmailAuthProvider.credential(withEmail: currentUser.email, password: oldPasswordTextField.text!)
             Auth.auth().currentUser?.reauthenticate(with: eMail, completion: { (authDataResult, error) in
                 if let error = error {
                     self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
                 }
                 else {
-                    // now you can change the password yo
                     if self.newPasswordTextField.text!.count > 5 {
                         self.resetPassword(password: self.newPasswordTextField.text!)
                         self.oldPasswordTextField.text = ""
                         self.newPasswordTextField.text = ""
                     }
-                    
                 }
             })
-            
         }
         else {
             // show alert that the password is incorrect
-            let alert = UIAlertController(title: myKeys.alert.errTitle, message: myKeys.alert.passwordErrorMessage, preferredStyle: .alert)
-            let action1 = UIAlertAction(title: myKeys.alert.tryAgainButton, style: .default) { (UIAlertAction) in
-                
+            showAlertCustomActions(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.passwordErrorMessage, action1Title: myKeys.alert.tryAgainButton, action2Title: myKeys.alert.sendByEmailButton, action1: { })
+            {
+                 self.sendPasswordByEmail()
             }
-            let action2 = UIAlertAction(title: myKeys.alert.sendByEmailButton, style: .default) { (UIAlertAction) in
-                self.sendPasswordByEmail()
-            }
-            alert.addAction(action1)
-            alert.addAction(action2)
-            self.present(alert, animated: true, completion: nil)
         }
     }
     @IBAction func forgotPasswordButtonPressed(_ sender: UIButton) {
@@ -189,8 +172,6 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     
     // MARK: METHODS:
-    
-    // with the keyboard
     
     @objc func outOfKeyBoardTapped(){
         self.view.endEditing(true)
@@ -303,11 +284,8 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         if(UIImagePickerController .isSourceTypeAvailable(.camera)){
             imagePicker.delegate = self
             imagePicker.sourceType = .camera
-            //imageChanged = true
             imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
-            //updateInterface()
-            //retrieveUserInfo()
         } else {
             showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.cameraErrorMessage)
         }
@@ -317,7 +295,6 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         imagePicker.delegate = self
         imagePicker.sourceType = .savedPhotosAlbum
         imagePicker.allowsEditing = false
-
         present(imagePicker, animated: true, completion: nil)
     }
     
@@ -331,19 +308,15 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         imageChanged = true
     }
     
-    
-    
     func saveImageToDatabase() {
-        // save image to a variable
         guard let image = profileImageView.image,
             let data = image.jpegData(compressionQuality: 1.0) else {
                 showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.saveImageToDatabaseErrorMessage)
                 return
         }
-        // name the image as our user id
+        
         let imageName = currentUser.id
         
-        // saving the image to the storage
         let imageReference = Storage.storage().reference().child("ProfileImages").child(imageName)
         imageReference.putData(data, metadata: nil) { (metadata, error) in
             if let error = error {
@@ -359,12 +332,8 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
                     self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.somethingWendWrong)
                     return
                 }
-                //let dataReference = Firestore.firestore().collection("ProfileImages").document()
-                //let documentUid = dataReference.documentID
                 
                 let urlString = url.absoluteString
-                //let data = ["ImageUID" : documentUid, "ImageURL" : urlString]
-                
                 currentUser.imageURL = urlString
                 currentUser.hasProfileImage = true
                 // update the User info in the database
