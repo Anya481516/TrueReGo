@@ -47,7 +47,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         // when info not retrieved but user is logged in
         else if firebaseService.isUserLoggedIn() {
             showLoggedInView()
-            retrieveUserInfo()
+            //retrieveUserInfo()
         }
         else {
             print("not logged in")

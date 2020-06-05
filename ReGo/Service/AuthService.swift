@@ -10,6 +10,53 @@ import Foundation
 import FirebaseAuth
 
 class AuthService {
+    var firebaseService = FirebaseService()
+    
+    func register(userEmail: String, userPassword: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
+            if let error = error {
+                print(error)
+                failure(error.localizedDescription)
+            }
+            else {
+                print("Successfully regestered")
+                success()
+            }
+        }
+    }
+    
+    func login() {
+        if let user = Auth.auth().currentUser {
+            currentUser.id = user.uid
+            firebaseService.retrieveUserInfo(id: currentUser.id, success: {
+                print("retrieved user Info")
+            }) { (error) in
+                print(error)
+            }
+        }
+    }
+    
+    func signin(email: String, password: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            if let error = error {
+                print(error)
+                failure(error.localizedDescription)
+            }
+            else {
+                print("Succesfully logged in")
+                success()
+            }
+        }
+    }
+    
+    func getRegisteredUserInfo() -> User {
+        let newUser = User()
+        if let user = Auth.auth().currentUser {
+            newUser.id = user.uid
+            newUser.email = user.email!
+        }
+        return newUser
+    }
     
     func reauthenticateUser(email: String, password: String, success: @escaping () -> Void, failure: @escaping(_ error: String) -> Void) {
         let eMail = EmailAuthProvider.credential(withEmail: email, password: password)

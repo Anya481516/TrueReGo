@@ -7,10 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseAuth
-import FirebaseDatabase
-//import FirebaseStorage
 
 protocol RegistrationDelegate {
     func goToLogIn()
@@ -24,6 +20,7 @@ class RegistrationViewController : UIViewController {
     //MARK:- PROPERTIES:
     var delegate : RegistrationDelegate?
     var firebaseService = FirebaseService()
+    var authService = AuthService()
     
     // MARK: IBOutlets:
     @IBOutlet weak var titleLabel: UILabel!
@@ -82,39 +79,29 @@ class RegistrationViewController : UIViewController {
             }
             else if let userEmail = emailTextField.text {
                 if let userPassword = passwordTextField.text {
-                    Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
-                        if let error = error {
-                            print(error)
-                            // описать что делать при каждых ошибочках
-                            if userPassword.isEmpty {
-                                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
+                    if userPassword.isEmpty {
+                        self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noPasswordLabel, alertMessage: myKeys.alert.noPasswordMessage, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
+                    }
+                    else if userEmail.isEmpty {
+                        self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
+                    }
+                    else {
+                        authService.register(userEmail: userEmail, userPassword: userPassword, success: {
+                            currentUser = self.authService.getRegisteredUserInfo()
+                            currentUser.name = userName
+                            
+                            self.firebaseService.addNewUserToDB(user: currentUser, success: {
+                                //self.retrieveUserInfo()
+                                self.dismiss(animated: true)
+                                self.delegate?.updateInterface()
+                                self.delegate?.showLoggedInView()
+                                self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.successfulRefistrataion, actionTitle: myKeys.alert.okButton)
+                            }) { (error) in
+                                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
                             }
-                            else if userEmail.isEmpty {
-                                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.noEmailLabel, alertMessage: myKeys.alert.noEmailMessage, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
-                            }
-                            else {
-                                self.showAlertHighlitingTextfield(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton, textField: self.emailTextField)
-                            }
-                        }
-                        else {
-                            print("Succesfully registered")
-                            let userDB = Firebase.Database.database().reference().child("Users")
-                                   
-                            let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL, "SuperUser" : currentUser.superUser] as [String : Any]
-                                   userDB.child(currentUser.id).setValue(userDictionary) {
-                                       (error, reference) in
-                                       if let error = error {
-                                           print(error)
-                                        self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription, actionTitle: myKeys.alert.okButton)
-                                       }
-                                       else{
-                                           print("User added to the DB")
-                                        self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.successfulRefistrataion, actionTitle: myKeys.alert.okButton)
-                                       }
-                                   }
-                            self.dismiss(animated: true)
-                            self.delegate?.showLoggedInView()
-                            self.retrieveUserInfo()
+                            
+                        }) { (error) in
+                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
                         }
                     }
                 }

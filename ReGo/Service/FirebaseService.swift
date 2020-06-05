@@ -117,6 +117,22 @@ class FirebaseService {
         }
     }
     
+    func addNewUserToDB(user: User, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void){
+        let userDB = Firebase.Database.database().reference().child("Users")
+        let userDictionary = ["Name" : currentUser.name, "PlacesAdded" : currentUser.placesAdded, "ProfilePicture" : false, "ImageURL" : currentUser.imageURL, "SuperUser" : currentUser.superUser] as [String : Any]
+            userDB.child(currentUser.id).setValue(userDictionary) {
+                (error, reference) in
+                if let error = error {
+                    print(error)
+                    failure(error.localizedDescription)
+                }
+                else{
+                    print("User added to the DB")
+                    success()
+                }
+            }
+    }
+    
     func updateUserPicInDB(id: String, urlString: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
         let userDB = Firebase.Database.database().reference().child("Users")
         userDB.child(id).updateChildValues(["ImageURL" : urlString, "ProfilePicture" : true])
