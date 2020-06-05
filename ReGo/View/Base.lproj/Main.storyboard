@@ -1465,6 +1465,9 @@
                                     <constraint firstItem="p8X-ha-KAa" firstAttribute="leading" secondItem="oPa-XJ-B59" secondAttribute="leading" constant="16" id="ywH-Fb-d6a"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView hidden="YES" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="gwA-st-1ET">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -1476,7 +1479,11 @@
                             <constraint firstItem="auz-8c-TX4" firstAttribute="trailing" secondItem="iOl-4I-Mx4" secondAttribute="trailing" id="CLU-Pw-9Am"/>
                             <constraint firstItem="auz-8c-TX4" firstAttribute="top" secondItem="oPa-XJ-B59" secondAttribute="bottom" id="EMw-3J-dLE"/>
                             <constraint firstItem="auz-8c-TX4" firstAttribute="height" secondItem="ne5-nE-51C" secondAttribute="height" multiplier="16:7" id="JrJ-Ne-Y3n"/>
+                            <constraint firstItem="gwA-st-1ET" firstAttribute="trailing" secondItem="iOl-4I-Mx4" secondAttribute="trailing" id="MhO-Yt-Xwn"/>
                             <constraint firstItem="oPa-XJ-B59" firstAttribute="top" secondItem="ne5-nE-51C" secondAttribute="bottom" id="Msu-ff-YJ2"/>
+                            <constraint firstAttribute="bottom" secondItem="gwA-st-1ET" secondAttribute="bottom" id="Q5b-JS-WpW"/>
+                            <constraint firstItem="gwA-st-1ET" firstAttribute="top" secondItem="iOl-4I-Mx4" secondAttribute="top" id="VMN-eg-AXk"/>
+                            <constraint firstItem="gwA-st-1ET" firstAttribute="leading" secondItem="iOl-4I-Mx4" secondAttribute="leading" id="VsI-zY-uMJ"/>
                             <constraint firstItem="UN7-ke-uul" firstAttribute="top" secondItem="iOl-4I-Mx4" secondAttribute="top" id="Zdi-mM-PUK"/>
                             <constraint firstItem="oPa-XJ-B59" firstAttribute="leading" secondItem="iOl-4I-Mx4" secondAttribute="leading" id="aSv-RF-KrX"/>
                             <constraint firstItem="oPa-XJ-B59" firstAttribute="height" secondItem="ne5-nE-51C" secondAttribute="height" multiplier="16:7" id="afc-mj-t05"/>
@@ -1504,6 +1511,7 @@
                         <outlet property="saveChangesButton" destination="Wpv-yK-YJ8" id="ufi-vm-vcF"/>
                         <outlet property="userNameTextField" destination="qKM-6g-uVA" id="yB4-5W-Bbg"/>
                         <outlet property="usernameLabel" destination="p8X-ha-KAa" id="LUc-ql-56i"/>
+                        <outlet property="waitingThing" destination="gwA-st-1ET" id="NlJ-UZ-lHQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9et-6T-Gd7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2327,7 +2335,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="dDa-am-8ok"/>
+        <segue reference="87W-Uq-voh"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AddPlaceImage" width="750" height="1334"/>

@@ -7,9 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseAuth
-import FirebaseDatabase
 import FirebaseStorage
 import CoreLocation
 import Kingfisher
@@ -112,7 +109,6 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
         else if segue.identifier == "fromInfoToImage" {
             let destinationVC = segue.destination as! ImageController
             destinationVC.delegate = self
-            //destinationVC.imageView.image = placeImage.image
         }
     }
     

@@ -117,6 +117,19 @@ class FirebaseService {
         }
     }
     
+    func updateUserPicInDB(id: String, urlString: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        let userDB = Firebase.Database.database().reference().child("Users")
+        userDB.child(id).updateChildValues(["ImageURL" : urlString, "ProfilePicture" : true])
+        success()
+    }
+    
+    func changeUsername(id: String, newUsername: String, success: @escaping () -> Void) {
+        let userDB = Firebase.Database.database().reference().child("Users")
+        currentUser.name = newUsername
+        userDB.child(id).updateChildValues(["Name" : newUsername])
+        success()
+    }
+    
     func retrieveAnnotations(complition: @escaping () -> Void) {
         places.removeAll()
         bottlePlaces.removeAll()

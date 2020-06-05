@@ -23,6 +23,7 @@ class RegistrationViewController : UIViewController {
     
     //MARK:- PROPERTIES:
     var delegate : RegistrationDelegate?
+    var firebaseService = FirebaseService()
     
     // MARK: IBOutlets:
     @IBOutlet weak var titleLabel: UILabel!
@@ -168,23 +169,28 @@ class RegistrationViewController : UIViewController {
     }
     
     func retrieveUserInfo(){
-        let userDB = Firebase.Database.database().reference().child("Users")
-        
-        currentUser.id = Auth.auth().currentUser!.uid
-        currentUser.email = Auth.auth().currentUser!.email!
-        
-        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
-            let snapshotValue = snapshot.value as! NSDictionary
-            currentUser.name = snapshotValue["Name"] as! String
-            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
-            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
-            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
-            currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            print("Info retrieved !!!")
+        firebaseService.retrieveUserInfo(id: currentUser.id, success: {
             self.delegate?.updateInterface()
-            return
         }) { (error) in
-            print(error.localizedDescription)
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error, actionTitle: myKeys.alert.okButton)
         }
+//        let userDB = Firebase.Database.database().reference().child("Users")
+//
+//        currentUser.id = Auth.auth().currentUser!.uid
+//        currentUser.email = Auth.auth().currentUser!.email!
+//
+//        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
+//            let snapshotValue = snapshot.value as! NSDictionary
+//            currentUser.name = snapshotValue["Name"] as! String
+//            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
+//            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
+//            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
+//            currentUser.imageURL = snapshotValue["ImageURL"] as! String
+//            print("Info retrieved !!!")
+//            self.delegate?.updateInterface()
+//            return
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
     }
 }

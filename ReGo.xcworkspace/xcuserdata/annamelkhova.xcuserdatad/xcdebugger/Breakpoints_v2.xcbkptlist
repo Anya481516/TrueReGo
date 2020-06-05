@@ -46,8 +46,8 @@
             filePath = "ReGo/Controller/PlaceInfoController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
             landmarkName = "PlaceInfoController"
             landmarkType = "3">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "ReGo/Controller/PlaceInfoController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "updateInterface()"
             landmarkType = "7">
          </BreakpointContent>
@@ -104,7 +104,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0A9A43FF-110E-44EA-B5B6-B8418E428D94"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ReGo/Controller/HomeViewController.swift"
@@ -240,7 +240,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "180"
             endingLineNumber = "180"
-            landmarkName = "goToRegistration()"
+            landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -256,7 +256,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "142"
             endingLineNumber = "142"
-            landmarkName = "sendPasswordByEmail()"
+            landmarkName = "retrieveUserInfo()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -450,38 +450,6 @@
             endingLineNumber = "322"
             landmarkName = "mapView(_:didSelect:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9B7B899B-C34E-4A36-9A46-D2D885037098 - c8f1e47c770246fb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ReGo.MapViewController.viewWillAppear(Swift.Bool) -&gt; ()"
-                  moduleName = "ReGo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/MapViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "359"
-                  endingLineNumber = "359"
-                  offsetFromSymbolStart = "144">
-               </Location>
-               <Location
-                  uuid = "9B7B899B-C34E-4A36-9A46-D2D885037098 - 5b865b801aceccf"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in ReGo.MapViewController.viewWillAppear(Swift.Bool) -&gt; ()"
-                  moduleName = "ReGo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/MapViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "360"
-                  endingLineNumber = "360"
-                  offsetFromSymbolStart = "148">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -498,6 +466,262 @@
             endingLineNumber = "323"
             landmarkName = "mapView(_:didSelect:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "28FDDCEC-5879-44AE-A33B-23982F255341"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "311"
+            endingLineNumber = "311"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "28FDDCEC-5879-44AE-A33B-23982F255341 - c7ba5deba2263cf3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.String) -&gt; () in ReGo.EditProfileController.saveImageToDatabase() -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "327"
+                  endingLineNumber = "327"
+                  offsetFromSymbolStart = "352">
+               </Location>
+               <Location
+                  uuid = "28FDDCEC-5879-44AE-A33B-23982F255341 - 9f7ae93e6684ae33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.String) -&gt; () in ReGo.EditProfileController.saveImageToDatabase() -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "328"
+                  endingLineNumber = "328"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1AA8843A-120A-4B48-BA89-85CD00A75D81"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1AA8843A-120A-4B48-BA89-85CD00A75D81 - 9f7ae93e6684ae33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.String) -&gt; () in ReGo.EditProfileController.saveImageToDatabase() -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "333"
+                  endingLineNumber = "333"
+                  offsetFromSymbolStart = "868">
+               </Location>
+               <Location
+                  uuid = "1AA8843A-120A-4B48-BA89-85CD00A75D81 - d13d4530ac658e8c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.String) -&gt; () in closure #1 (Swift.String) -&gt; () in ReGo.EditProfileController.saveImageToDatabase() -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "334"
+                  endingLineNumber = "334"
+                  offsetFromSymbolStart = "124">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "38413D77-A710-489B-BED5-D74613A6B759"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "318"
+            endingLineNumber = "318"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A28924F3-DBC0-4CCD-B1CF-27F1BCDF8FF5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A28924F3-DBC0-4CCD-B1CF-27F1BCDF8FF5 - c7ba5deba2263cf3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.String) -&gt; () in ReGo.EditProfileController.saveImageToDatabase() -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "337"
+                  endingLineNumber = "337"
+                  offsetFromSymbolStart = "676">
+               </Location>
+               <Location
+                  uuid = "A28924F3-DBC0-4CCD-B1CF-27F1BCDF8FF5 - 53d738ccaf29cdf4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.String) -&gt; () in ReGo.EditProfileController.saveImageToDatabase() -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "338"
+                  endingLineNumber = "338"
+                  offsetFromSymbolStart = "124">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "29D4B7ED-73C3-4D78-82CC-ADD9BFAC2C97"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "314"
+            endingLineNumber = "314"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5D0B9BF6-EE80-4C67-84A3-2498B18BA4E6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "315"
+            endingLineNumber = "315"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FF76430A-1CA2-44D5-9390-E0CD94F382B4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
+            landmarkName = "saveImageToDatabase()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7D5DE1CD-7E14-408A-8AA5-CE052B012EFC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
+            landmarkName = "changePasswordButtonPressed(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "7D5DE1CD-7E14-408A-8AA5-CE052B012EFC - 99b9ac85497b2127"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ReGo.EditProfileController.changePasswordButtonPressed(__C.UIButton) -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
+                  offsetFromSymbolStart = "596">
+               </Location>
+               <Location
+                  uuid = "7D5DE1CD-7E14-408A-8AA5-CE052B012EFC - 86f386dcefd19ae3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in ReGo.EditProfileController.changePasswordButtonPressed(__C.UIButton) -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/EditProfileController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -7,10 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseAuth
-import FirebaseDatabase
-import FirebaseStorage
 import Kingfisher
 
 protocol EditProfileDelegate {
@@ -23,6 +19,9 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     var delegate : EditProfileDelegate?
     var imagePicker = UIImagePickerController()
     var imageChanged = false
+    var firebaseService = FirebaseService()
+    var storageService = StorageService()
+    var authService = AuthService()
     
     // MARK: IBOutlets:
     
@@ -41,6 +40,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var newPasswordTextField: UITextField!
     @IBOutlet weak var editImageView: UIImageView!
     @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var waitingThing: UIActivityIndicatorView!
     
     // MARK: viewDidLoad
     override func viewDidLoad() {
@@ -64,46 +64,22 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         if let newUserName = userNameTextField.text {
             if let newEmail = emailTextField.text {
                 if currentUser.email != newEmail {
-                    Auth.auth().currentUser?.updateEmail(to: newEmail, completion: { (error) in
-                        if error != nil {
-                            let alert = UIAlertController(title: myKeys.alert.passwordIsRequiredTitle, message: myKeys.alert.passwordIsRequiredMessage, preferredStyle: .alert)
-                            alert.addTextField { (textField) in
-                                textField.isSecureTextEntry = true
-                            }
-                            let action1 = UIAlertAction(title: myKeys.alert.cancelButton, style: .cancel) { (UIAlertAction) in
-                                
-                            }
-                            let action2 = UIAlertAction(title: myKeys.alert.doneButton, style: .default) { (UIAlertAction) in
-                                let textField = alert.textFields![0]
-                                if let password = textField.text {
-                                    let eMail = EmailAuthProvider.credential(withEmail: currentUser.email, password: password)
-                                    Auth.auth().currentUser?.reauthenticate(with: eMail, completion: { (authDataResult, error) in
-                                        if let error = error {
-                                            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-                                        }
-                                        else {
-                                            self.resetEmail(email: newEmail)
-                                        }
-                                    })
-                                }
-                            }
-                            alert.addAction(action1)
-                            alert.addAction(action2)
-                            self.present(alert, animated: true, completion: nil)
+                    authService.updateEmail(newEmail: newEmail, success: {
+                        currentUser.email = newEmail
+                        self.delegate?.updateInterface()
+                        self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.valuesChanged)
+                        isChanged = true
+                    }) { (error) in
+                        self.showAlertWithPassword(newEmail: newEmail) {
+                            self.resetEmail(email: newEmail)
                         }
-                        else {
-                            currentUser.email = newEmail
-                            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.valuesChanged)
-                            isChanged = true
-                        }
-                    })
+                    }
                 }
                 if currentUser.name != newUserName {
-                    let userDB = Firebase.Database.database().reference().child("Users")
-                    currentUser.name = newUserName
-                    userDB.child(currentUser.id).updateChildValues(["Name" : newUserName])
-                    showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.valuesChanged)
-                    isChanged = true
+                    firebaseService.changeUsername(id: currentUser.id, newUsername: newUserName) {
+                        self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.valuesChanged)
+                        isChanged = true
+                    }
                 }
             }
         }
@@ -115,19 +91,15 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     
     @IBAction func changePasswordButtonPressed(_ sender: UIButton) {
         if oldPasswordTextField.text?.isEmpty == false {
-            let eMail = EmailAuthProvider.credential(withEmail: currentUser.email, password: oldPasswordTextField.text!)
-            Auth.auth().currentUser?.reauthenticate(with: eMail, completion: { (authDataResult, error) in
-                if let error = error {
-                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
+            authService.reauthenticateUser(email: currentUser.email, password: oldPasswordTextField.text!, success: {
+                if self.newPasswordTextField.text!.count > 5 {
+                    self.resetPassword(password: self.newPasswordTextField.text!)
+                    self.oldPasswordTextField.text = ""
+                    self.newPasswordTextField.text = ""
                 }
-                else {
-                    if self.newPasswordTextField.text!.count > 5 {
-                        self.resetPassword(password: self.newPasswordTextField.text!)
-                        self.oldPasswordTextField.text = ""
-                        self.newPasswordTextField.text = ""
-                    }
-                }
-            })
+            }) { (error) in
+                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
+            }
         }
         else {
             // show alert that the password is incorrect
@@ -171,7 +143,30 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     }
     
     
-    // MARK: METHODS:
+    // MARK:- METHODS:
+    
+    func showAlertWithPassword(newEmail: String, success: @escaping () -> Void) {
+        let alert = UIAlertController(title: myKeys.alert.passwordIsRequiredTitle, message: myKeys.alert.passwordIsRequiredMessage, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+            textField.isSecureTextEntry = true
+        }
+        let action1 = UIAlertAction(title: myKeys.alert.cancelButton, style: .cancel) { (UIAlertAction) in
+            
+        }
+        let action2 = UIAlertAction(title: myKeys.alert.doneButton, style: .default) { (UIAlertAction) in
+            let textField = alert.textFields![0]
+            if let password = textField.text {
+                self.authService.reauthenticateUser(email: currentUser.email, password: password, success: {
+                    success()
+                }) { (error) in
+                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
+                }
+            }
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true, completion: nil)
+    }
     
     @objc func outOfKeyBoardTapped(){
         self.view.endEditing(true)
@@ -221,13 +216,10 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     }
     
     func sendPasswordByEmail() {
-        Auth.auth().sendPasswordReset(withEmail: currentUser.email) { error in
-            if let error = error {
-                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-            }
-            else {
-                self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)")
-            }
+        authService.sendLimkByEmail(email: currentUser.email, success: {
+            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)")
+        }) { (error) in
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
         }
     }
     func showAlert(alertTitle : String, alertMessage : String) {
@@ -240,26 +232,21 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     }
     
     func resetPassword(password : String) {
-        Auth.auth().currentUser?.updatePassword(to: password, completion: { (error) in
-            if let error = error {
-                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-            }
-            else {
-                self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.passwordChanged)
-            }
-        })
+        authService.resetPassword(password: password, success: {
+            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.passwordChanged)
+        }) { (error) in
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
+        }
     }
     func resetEmail(email : String) {
-        Auth.auth().currentUser?.updateEmail(to: email, completion: { (error) in
-            if let error = error {
-                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-            }
-            else {
-                self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.valuesChanged)
-            }
-        })
+        authService.updateEmail(newEmail: email, success: {
+            currentUser.email = email
+            self.delegate?.updateInterface()
+            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.valuesChanged)
+        }) { (error) in
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
+        }
     }
-    
     
     func showImageChooseAlert() {
         let alert = UIAlertController(title: myKeys.alert.chooseNewProfileImageTitle, message: nil, preferredStyle: .alert)
@@ -309,6 +296,7 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
     }
     
     func saveImageToDatabase() {
+        waitingThing.isHidden = false
         guard let image = profileImageView.image,
             let data = image.jpegData(compressionQuality: 1.0) else {
                 showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.saveImageToDatabaseErrorMessage)
@@ -317,54 +305,30 @@ class EditProfileController : UIViewController, UIImagePickerControllerDelegate,
         
         let imageName = currentUser.id
         
-        let imageReference = Storage.storage().reference().child("ProfileImages").child(imageName)
-        imageReference.putData(data, metadata: nil) { (metadata, error) in
-            if let error = error {
-                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-                return
-            }
-            imageReference.downloadURL { (url, error) in
-                if let error = error {
-                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-                    return
-                }
-                guard let url = url else {
-                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.somethingWendWrong)
-                    return
-                }
-                
-                let urlString = url.absoluteString
-                currentUser.imageURL = urlString
-                currentUser.hasProfileImage = true
-                // update the User info in the database
-                let userDB = Firebase.Database.database().reference().child("Users")
-                userDB.child(currentUser.id).updateChildValues(["ImageURL" : urlString, "ProfilePicture" : true])
-                self.delegate?.updateInterface()
+        storageService.saveUserPicToStorage(imageName: imageName, data: data, success: { (url) in
+            currentUser.imageURL = url
+            currentUser.hasProfileImage = true
+            self.firebaseService.updateUserPicInDB(id: currentUser.id, urlString: url, success: {
+                self.imageChanged = false
+                self.waitingThing.isHidden = true
                 self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.imageSaved)
-                self.dismiss(animated: true, completion: nil)
+                self.delegate?.updateInterface()
+                //self.dismiss(animated: true, completion: nil)
+            }) { (error) in
+                self.waitingThing.isHidden = true
+                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
             }
+        }) { (error) in
+            self.waitingThing.isHidden = true
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
         }
     }
     
     func retrieveUserInfo(){
-        let userDB = Firebase.Database.database().reference().child("Users")
-        
-        currentUser.id = Auth.auth().currentUser!.uid
-        currentUser.email = Auth.auth().currentUser!.email!
-        
-        userDB.child(currentUser.id).observeSingleEvent(of: .value, with: { (snapshot) in
-            let snapshotValue = snapshot.value as! NSDictionary
-            currentUser.name = snapshotValue["Name"] as! String
-            currentUser.placesAdded = snapshotValue["PlacesAdded"] as! Int
-            currentUser.hasProfileImage = snapshotValue["ProfilePicture"] as! Bool
-            currentUser.superUser = snapshotValue["SuperUser"] as! Bool
-            currentUser.imageURL = snapshotValue["ImageURL"] as! String
-            print("Info retrieved !!!")
-            // here
+        firebaseService.retrieveUserInfo(id: currentUser.id, success: {
             self.delegate?.updateInterface()
-            return
         }) { (error) in
-            print(error.localizedDescription)
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
         }
     }
 

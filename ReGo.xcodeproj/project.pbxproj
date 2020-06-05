@@ -32,6 +32,8 @@
 		5DCD3DEB246B288900DDE8B1 /* CustomMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCD3DEA246B288900DDE8B1 /* CustomMessageCell.swift */; };
 		5DCD3DED246B299500DDE8B1 /* MessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DCD3DEC246B299500DDE8B1 /* MessageCell.xib */; };
 		5DD075D1245C969C00E39E36 /* MyKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD075D0245C969C00E39E36 /* MyKeys.swift */; };
+		5DF0B17B248ACF9D001CFB8D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0B17A248ACF9D001CFB8D /* StorageService.swift */; };
+		5DF0B17D248ADB61001CFB8D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF0B17C248ADB61001CFB8D /* AuthService.swift */; };
 		5DF204FE2489109C0083AA35 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF204FD2489109C0083AA35 /* UserService.swift */; };
 		5DF20500248912E80083AA35 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF204FF248912E80083AA35 /* FirebaseService.swift */; };
 		5DF20502248918FC0083AA35 /* KingfisherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF20501248918FC0083AA35 /* KingfisherService.swift */; };
@@ -69,6 +71,8 @@
 		5DCD3DEA246B288900DDE8B1 /* CustomMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMessageCell.swift; sourceTree = "<group>"; };
 		5DCD3DEC246B299500DDE8B1 /* MessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageCell.xib; sourceTree = "<group>"; };
 		5DD075D0245C969C00E39E36 /* MyKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyKeys.swift; sourceTree = "<group>"; };
+		5DF0B17A248ACF9D001CFB8D /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
+		5DF0B17C248ADB61001CFB8D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		5DF204FD2489109C0083AA35 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		5DF204FF248912E80083AA35 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		5DF20501248918FC0083AA35 /* KingfisherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KingfisherService.swift; sourceTree = "<group>"; };
@@ -200,6 +204,8 @@
 				5DF204FD2489109C0083AA35 /* UserService.swift */,
 				5DF204FF248912E80083AA35 /* FirebaseService.swift */,
 				5DF20501248918FC0083AA35 /* KingfisherService.swift */,
+				5DF0B17A248ACF9D001CFB8D /* StorageService.swift */,
+				5DF0B17C248ADB61001CFB8D /* AuthService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -331,6 +337,7 @@
 				5D18395F2445CEF8000E835B /* Place.swift in Sources */,
 				5DCD3DEB246B288900DDE8B1 /* CustomMessageCell.swift in Sources */,
 				5DB8DC892433587B00F0C0E8 /* RegistrationViewController.swift in Sources */,
+				5DF0B17B248ACF9D001CFB8D /* StorageService.swift in Sources */,
 				5DF20500248912E80083AA35 /* FirebaseService.swift in Sources */,
 				5DD075D1245C969C00E39E36 /* MyKeys.swift in Sources */,
 				5DF70001244DC00400224A6F /* AnnotationView.swift in Sources */,
@@ -339,6 +346,7 @@
 				5D04A17E244F03F5009C81FB /* PlaceInfoController.swift in Sources */,
 				5DC3DBF12431CD05000B3AF3 /* AppDelegate.swift in Sources */,
 				5DFF3DAB24695B8100A74044 /* ImageController.swift in Sources */,
+				5DF0B17D248ADB61001CFB8D /* AuthService.swift in Sources */,
 				5DC3DBFB2431CD05000B3AF3 /* ReGo.xcdatamodeld in Sources */,
 				5DC3DC0B2431D132000B3AF3 /* MapViewController.swift in Sources */,
 				5DC3DBF32431CD05000B3AF3 /* SceneDelegate.swift in Sources */,
