@@ -20,6 +20,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var allAnnotations = [MKAnnotation]()
     let locationManager = CLLocationManager()
     let firebaseService = FirebaseService()
+    let authService = AuthService()
     
     // MARK:- IBOutlets:
     @IBOutlet weak var addNewPlaceButton: UIButton!
@@ -50,7 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapView.userTrackingMode = .follow
         }
     
-        firebaseService.login()
+       authService.login()
         
         currentImage.image = UIImage(named: "vk")!
         retrieveAnnotations()
@@ -153,7 +154,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             mapPinIcon.isHidden = true
             sender.backgroundColor = UIColor(named: "LightDarkGreenTransparent")
         }
-        else if !firebaseService.isUserLoggedIn() {
+        else if !authService.isUserLoggedIn() {
             showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.loginReminder, actionTitle: myKeys.alert.okButton)
         }
         else {

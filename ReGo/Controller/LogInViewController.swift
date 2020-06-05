@@ -19,7 +19,8 @@ class LogInViewController : UIViewController {
     
     //MARK: variables:
     var delegate : LogInDelegate?
-    var firebaseService = FirebaseService()
+    let firebaseService = FirebaseService()
+    let authService = AuthService()
     
     // MARK: IBOutlets:
     @IBOutlet var logInView: UIView!
@@ -71,7 +72,7 @@ class LogInViewController : UIViewController {
                     }
                     else {
                         //
-                        firebaseService.signin(email: userEmail, password: userPassword, success: {
+                        authService.signin(email: userEmail, password: userPassword, success: {
                             self.dismiss(animated: true)
                             self.delegate?.showLoggedInView()
                             self.retrieveUserInfo()

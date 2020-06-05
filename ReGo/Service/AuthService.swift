@@ -12,6 +12,15 @@ import FirebaseAuth
 class AuthService {
     var firebaseService = FirebaseService()
     
+    func getRegisteredUserInfo() -> User {
+        let newUser = User()
+        if let user = Auth.auth().currentUser {
+            newUser.id = user.uid
+            newUser.email = user.email!
+        }
+        return newUser
+    }
+    
     func register(userEmail: String, userPassword: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
         Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
             if let error = error {
@@ -47,15 +56,6 @@ class AuthService {
                 success()
             }
         }
-    }
-    
-    func getRegisteredUserInfo() -> User {
-        let newUser = User()
-        if let user = Auth.auth().currentUser {
-            newUser.id = user.uid
-            newUser.email = user.email!
-        }
-        return newUser
     }
     
     func reauthenticateUser(email: String, password: String, success: @escaping () -> Void, failure: @escaping(_ error: String) -> Void) {
@@ -98,12 +98,28 @@ class AuthService {
         Auth.auth().sendPasswordReset(withEmail: email) { error in
             if let error = error {
                 failure(error.localizedDescription)
-                //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
             }
             else {
                 success()
-                //self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)")
             }
         }
+    }
+    
+    func logout(success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        do {
+            try Auth.auth().signOut()
+            currentUser = User()
+            success()
+        }
+        catch {
+            failure("error, there was a problem with signing out")
+        }
+    }
+    
+    func isUserLoggedIn() -> Bool{
+        if Auth.auth().currentUser == nil {
+            return false
+        }
+        return true
     }
 }

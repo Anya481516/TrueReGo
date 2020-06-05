@@ -9,9 +9,6 @@
 import UIKit
 import CoreLocation
 import MapKit
-import Firebase
-import FirebaseAuth
-import FirebaseDatabase
 import Kingfisher
 
 protocol AddPlaceDelegate {
@@ -30,12 +27,16 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     var bulbsChecked = false
     var otherChecked = false
     var photoAdded = false
+    var photoChanged = false
     var placeLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var newPlace = Place()
     var oldPlace = Place()
     var editView = false
     let locationManager = CLLocationManager()
     var previousLocation : CLLocation?
+    let firebaseService = FirebaseService()
+    let authService = AuthService()
+    let storageService = StorageService()
     
     // MARK: IBOutlets:
     @IBOutlet weak var controllerTitleLabel: UILabel!
@@ -131,7 +132,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     }
     
     @IBAction func addPhotoButtonPressed(_ sender: Any) {
-            showImageChooseAlert()
+        showImageChooseAlert()
     }
     
     @IBAction func deletePhotoButtonPressed(_ sender: UIButton) {
@@ -343,60 +344,34 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
     }
     
     func addNewAnnotationToDatabase(place : Place) {
-        var userDB = DatabaseReference()
-        
-        if currentUser.superUser {
-            addCountPlacesToUser()
-            userDB = Firebase.Database.database().reference().child("Places")
-            self.delegate?.addNewAnnotation(ann: newPlace)
-            places.append(newPlace)
-        }
-        else {
-            userDB = Firebase.Database.database().reference().child("NewPlaces")
-        }
-        
-        let randomID = userDB.childByAutoId()
-        newPlace.id = randomID.key!
-        
-        let placeDictionary = ["Title" : place.title!, "Address" : place.address, "HasImage" : place.hasImage, "ImageURL" : place.imageURLString, "Longitude" : place.coordinate.longitude, "Latitude" : place.coordinate.latitude, "Type" : place.subtitle!, "Bottles" : place.bottles, "Batteries" : place.batteries, "Bulbs" : place.bulbs, "Other" : place.other, "UserID" : currentUser.id, "ID" : newPlace.id] as [String : Any]
-        print("yo bitch \(newPlace.id)")
-        
-        userDB.child(newPlace.id).setValue(placeDictionary)
-    
-        print("saved a place to database")
-        
-        if place.hasImage {
-            saveImageToDatabase()
-        }
-        else {
-            self.delegate?.retrieveAnnotations()
-            self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeAdded)
+        firebaseService.addNewAnnotationToDatabase(place: place, user: currentUser) { (savedPlace) in
+            if currentUser.superUser {
+                self.addCountPlacesToUser()
+                self.delegate?.addNewAnnotation(ann: savedPlace)
+                places.append(savedPlace)
+            }
+            if self.newPlace.hasImage {
+                self.saveImageToDatabase()
+            }
+            else {
+                self.delegate?.retrieveAnnotations()
+                self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeEdited)
+            }
         }
     }
     
     func editAnnotationInDatabase(newPlace: Place, oldPlace: Place) {
-        var userDB = DatabaseReference()
-        
-        if currentUser.superUser {
-            userDB = Firebase.Database.database().reference().child("Places")
-            self.delegate?.addNewAnnotation(ann: newPlace)
-            places.append(newPlace)
-        }
-        else {
-            userDB = Firebase.Database.database().reference().child("NewPlaces")
-        }
-        
-        let placeDictionary = ["Title" : newPlace.title!, "Address" : newPlace.address, "HasImage" : newPlace.hasImage, "ImageURL" : newPlace.imageURLString, "Longitude" : newPlace.coordinate.longitude, "Latitude" : newPlace.coordinate.latitude, "Type" : newPlace.subtitle!, "Bottles" : newPlace.bottles, "Batteries" : newPlace.batteries, "Bulbs" : newPlace.bulbs, "Other" : newPlace.other, "UserID" : currentUser.id, "ID" : newPlace.id] as [String : Any]
-        print("yo bitch \(newPlace.id)")
-        
-        userDB.child(newPlace.id).updateChildValues(placeDictionary)
-        
-        if newPlace.hasImage {
-            saveImageToDatabase()
-        }
-        else {
-            self.delegate?.retrieveAnnotations()
-            self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeEdited)
+        firebaseService.editAnnotationInDatabase(newPlace: newPlace, success: {
+            if newPlace.hasImage && self.photoChanged {
+                self.photoChanged = false
+                self.saveImageToDatabase()
+            }
+            else {
+                self.delegate?.retrieveAnnotations()
+                self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeEdited)
+            }
+        }) { (error) in
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
         }
     }
     
@@ -407,51 +382,30 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
             return
         }
         
-        let imageReference = Storage.storage().reference().child("PlaceImages").child(newPlace.id)
-        
-        imageReference.putData(data, metadata: nil) { (metadata, error) in
-            if let error = error {
-                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-                return
-            }
-            imageReference.downloadURL { (url, error) in
-                if let error = error {
-                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
-                    return
-                }
-                guard let url = url else {
-                    self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.somethingWendWrong)
-                    return
-                }
-                
-                let urlString = url.absoluteString
-                self.newPlace.hasImage = true
-                self.newPlace.imageURLString = urlString
-                
-                if currentUser.superUser {
-                    let userDB = Firebase.Database.database().reference().child("Places")
-                    userDB.child(self.newPlace.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
-                }
-                else {
-                    let userDB = Firebase.Database.database().reference().child("NewPlaces")
-                    userDB.child(self.newPlace.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
-                }
+        storageService.savePlacePicToStorage(place: newPlace, data: data, success: { (url) in
+            self.newPlace.hasImage = true
+            self.newPlace.imageURLString = url
+            
+            self.firebaseService.updatePlacePicInDB(place: self.newPlace, urlString: url, success: {
                 self.delegate?.retrieveAnnotations()
+                self.delegate?.updateInterface()
                 if self.editView {
                      self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeEdited)
                 }
                 else {
                      self.showAlertWithClosingView(alertTitle: myKeys.alert.thankYou, alertMessage: myKeys.alert.placeAdded)
                 }
+            }) { (error) in
+                self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
             }
-            return
+        }) { (error) in
+            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error)
         }
     }
     
     func addCountPlacesToUser() {
         currentUser.placesAdded = currentUser.placesAdded + 1
-        let userDB = Firebase.Database.database().reference().child("Users")
-        userDB.child(currentUser.id).updateChildValues(["PlacesAdded" : currentUser.placesAdded])
+        firebaseService.addCountPlacesToUser(user: currentUser)
     }
     
     func showAlert(alertTitle : String, alertMessage : String) {
@@ -554,6 +508,7 @@ class AddAndEditPlaceController : UIViewController,  MKMapViewDelegate, CLLocati
         photoAdded = true
         deletePhotoButton.isHidden = false
         newPlace.hasImage = true
+        photoChanged = true
     }
     
 }

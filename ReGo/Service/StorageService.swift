@@ -18,24 +18,40 @@ class StorageService {
         imageReference.putData(data, metadata: nil) { (metadata, error) in
             if let error = error {
                 failure(error.localizedDescription)
-                //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
             }
             imageReference.downloadURL { (url, error) in
                 if let error = error {
                     failure(error.localizedDescription)
-                    //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: error.localizedDescription)
                 }
                 guard let url = url else {
                     failure(myKeys.alert.somethingWendWrong)
-                    //self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.alert.somethingWendWrong)
                     return
                 }
-                
                 let urlString = url.absoluteString
-                //currentUser.imageURL = urlString
-                //currentUser.hasProfileImage = true
                 success(urlString)
             }
+        }
+    }
+    
+    func savePlacePicToStorage(place: Place, data: Data, success: @escaping (_ urlString: String) -> Void, failure: @escaping (_ error: String) -> Void) {
+        let imageReference = Storage.storage().reference().child("PlaceImages").child(place.id)
+        
+        imageReference.putData(data, metadata: nil) { (metadata, error) in
+            if let error = error {
+                failure(error.localizedDescription)
+            }
+            imageReference.downloadURL { (url, error) in
+                if let error = error {
+                    failure(error.localizedDescription)
+                }
+                guard let url = url else {
+                    failure(myKeys.alert.somethingWendWrong)
+                    return
+                }
+                let urlString = url.absoluteString
+                success(urlString)
+            }
+            return
         }
     }
 }

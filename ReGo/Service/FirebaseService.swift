@@ -14,33 +14,6 @@ import CoreLocation
 
 class FirebaseService {
     
-    func getRegisteredUserInfo() -> User {
-        let newUser = User()
-        if let user = Auth.auth().currentUser {
-            newUser.id = user.uid
-            newUser.email = user.email!
-        }
-        return newUser
-    }
-    
-    func logout(success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
-        do {
-            try Auth.auth().signOut()
-            currentUser = User()
-            success()
-        }
-        catch {
-            failure("error, there was a problem with signing out")
-        }
-    }
-    
-    func isUserLoggedIn() -> Bool{
-        if Auth.auth().currentUser == nil {
-            return false
-        }
-        return true
-    }
-    
     func retrieveUserInfo(id: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void){
         let userDB = Firebase.Database.database().reference().child("Users")
         currentUser.id = Auth.auth().currentUser!.uid
@@ -61,22 +34,6 @@ class FirebaseService {
         }
     }
     
-    func register(userEmail: String, userPassword: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
-        Auth.auth().createUser(withEmail: userEmail, password: userPassword) { (user, error) in
-            if let error = error {
-                print(error)
-                failure(error.localizedDescription)
-            }
-            else {
-                self.putNewUserToDB(user: currentUser, success: {
-                    success()
-                }) { (error) in
-                    failure(error)
-                }
-            }
-        }
-    }
-    
     func putNewUserToDB(user: User, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
         let userDB = Firebase.Database.database().reference().child("Users")
         let userDictionary = ["Name" : user.name, "PlacesAdded" : user.placesAdded, "ProfilePicture" : false, "ImageURL" : user.imageURL, "SuperUser" : user.superUser] as [String : Any]
@@ -93,29 +50,10 @@ class FirebaseService {
             }
     }
     
-    func login() {
-        if let user = Auth.auth().currentUser {
-            currentUser.id = user.uid
-            retrieveUserInfo(id: currentUser.id, success: {
-                print("retrieved user Info")
-            }) { (error) in
-                print(error)
-            }
-        }
-    }
-
-    func signin(email: String, password: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
-        Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-            if let error = error {
-                print(error)
-                failure(error.localizedDescription)
-            }
-            else {
-                print("Succesfully logged in")
-                success()
-            }
-        }
-    }
+    func addCountPlacesToUser(user: User) {
+           let userDB = Firebase.Database.database().reference().child("Users")
+           userDB.child(user.id).updateChildValues(["PlacesAdded" : currentUser.placesAdded])
+       }
     
     func addNewUserToDB(user: User, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void){
         let userDB = Firebase.Database.database().reference().child("Users")
@@ -136,6 +74,19 @@ class FirebaseService {
     func updateUserPicInDB(id: String, urlString: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
         let userDB = Firebase.Database.database().reference().child("Users")
         userDB.child(id).updateChildValues(["ImageURL" : urlString, "ProfilePicture" : true])
+        success()
+    }
+    
+    func updatePlacePicInDB(place: Place, urlString: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        
+        if currentUser.superUser {
+            let userDB = Firebase.Database.database().reference().child("Places")
+            userDB.child(place.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
+        }
+        else {
+            let userDB = Firebase.Database.database().reference().child("NewPlaces")
+            userDB.child(place.id).updateChildValues(["ImageURL" : urlString, "HasImage" : true])
+        }
         success()
     }
     
@@ -292,5 +243,43 @@ class FirebaseService {
         }
     }
     
+    func editAnnotationInDatabase(newPlace: Place, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        var userDB = DatabaseReference()
+        
+        if currentUser.superUser {
+            userDB = Firebase.Database.database().reference().child("Places")
+            places.append(newPlace)
+        }
+        else {
+            userDB = Firebase.Database.database().reference().child("NewPlaces")
+        }
+        
+        let placeDictionary = ["Title" : newPlace.title!, "Address" : newPlace.address, "HasImage" : newPlace.hasImage, "ImageURL" : newPlace.imageURLString, "Longitude" : newPlace.coordinate.longitude, "Latitude" : newPlace.coordinate.latitude, "Type" : newPlace.subtitle!, "Bottles" : newPlace.bottles, "Batteries" : newPlace.batteries, "Bulbs" : newPlace.bulbs, "Other" : newPlace.other, "UserID" : currentUser.id, "ID" : newPlace.id] as [String : Any]
+        
+        userDB.child(newPlace.id).updateChildValues(placeDictionary)
+        
+        success()
+    }
     
+    func addNewAnnotationToDatabase(place : Place, user: User, success: @escaping (_ savedPlace: Place) -> Void) {
+        var userDB = DatabaseReference()
+        
+        if currentUser.superUser {
+            userDB = Firebase.Database.database().reference().child("Places")
+            places.append(place)
+        }
+        else {
+            userDB = Firebase.Database.database().reference().child("NewPlaces")
+        }
+        
+        let randomID = userDB.childByAutoId()
+        place.id = randomID.key!
+        
+        let placeDictionary = ["Title" : place.title!, "Address" : place.address, "HasImage" : place.hasImage, "ImageURL" : place.imageURLString, "Longitude" : place.coordinate.longitude, "Latitude" : place.coordinate.latitude, "Type" : place.subtitle!, "Bottles" : place.bottles, "Batteries" : place.batteries, "Bulbs" : place.bulbs, "Other" : place.other, "UserID" : currentUser.id, "ID" : place.id] as [String : Any]
+        print("yo bitch \(place.id)")
+        
+        userDB.child(place.id).setValue(placeDictionary)
+        
+        success(place)
+    }
 }

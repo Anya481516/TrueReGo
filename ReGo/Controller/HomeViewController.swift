@@ -14,6 +14,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     
     //MARK:- PROPERTIES:
     let firebaseService = FirebaseService()
+    let authService = AuthService()
     
     //MARK: ---ABOutlets:---
     @IBOutlet weak var controllerTitleLabel: UILabel!
@@ -45,7 +46,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             updateInterface()
         }
         // when info not retrieved but user is logged in
-        else if firebaseService.isUserLoggedIn() {
+        else if authService.isUserLoggedIn() {
             showLoggedInView()
             //retrieveUserInfo()
         }
@@ -83,7 +84,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     @IBAction func logOutButtonPressed(_ sender: Any) {
         showAlertYesNo(alertTitle: myKeys.alert.logoutTitle, alertMessage: myKeys.alert.logoutQuestion, okActions: {
-            self.firebaseService.logout(success: {
+            self.authService.logout(success: {
                 self.showAlertWithAction(alertTitle: myKeys.alert.successTitle, alertMessage: myKeys.alert.loggedoutMessage) {
                     self.showNotLoggedInView()
                 }
@@ -139,7 +140,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         self.placesLabel.text = "\(myKeys.home.placesAddedLabel)\(currentUser.placesAdded)"
         self.emailLabel.text = currentUser.email
         
-        if firebaseService.isUserLoggedIn() {
+        if authService.isUserLoggedIn() {
             showLoggedInView()
         }
         
@@ -175,7 +176,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
             updateInterface()
         }
         // when info not retrieved but user is logged in
-        else if firebaseService.isUserLoggedIn() {
+        else if authService.isUserLoggedIn() {
             showLoggedInView()
             retrieveUserInfo()
         }

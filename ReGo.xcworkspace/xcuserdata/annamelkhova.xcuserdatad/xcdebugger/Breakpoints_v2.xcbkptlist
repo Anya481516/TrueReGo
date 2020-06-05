@@ -30,8 +30,8 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
             landmarkName = "MapViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -48,8 +48,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "113"
             endingLineNumber = "113"
-            landmarkName = "prepare(for:sender:)"
-            landmarkType = "7">
+            landmarkName = "PlaceInfoController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -78,8 +78,8 @@
             filePath = "ReGo/Service/FirebaseService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "retrieveUserInfo(id:success:failure:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "ReGo/Service/FirebaseService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
             landmarkName = "retrieveUserInfo(id:success:failure:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,25 +110,9 @@
             filePath = "ReGo/Controller/HomeViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "updateInterface()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3A244C23-9C99-4794-8D99-DEB40B1CA8B3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReGo/Service/FirebaseService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "isUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -142,90 +126,10 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FB3EDFFF-B7B9-4561-A0F6-5AC8D91EB574"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReGo/Service/FirebaseService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "register(userEmail:userPassword:success:failure:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "70C79119-C63D-41AB-9C45-2BEB39BE1E76"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReGo/Service/FirebaseService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "getRegisteredUserInfo()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FC82666A-B888-4ABA-9BB6-CC9E9793A000"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReGo/Service/FirebaseService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "register(userEmail:userPassword:success:failure:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "FC82666A-B888-4ABA-9BB6-CC9E9793A000 - 9cefe9f0a251a207"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ReGo.FirebaseService.register(userEmail: Swift.String, userPassword: Swift.String, success: () -&gt; (), failure: (Swift.String) -&gt; ()) -&gt; ()"
-                  moduleName = "ReGo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Service/FirebaseService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "276">
-               </Location>
-               <Location
-                  uuid = "FC82666A-B888-4ABA-9BB6-CC9E9793A000 - edefaa3c1ac79608"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in ReGo.FirebaseService.register(userEmail: Swift.String, userPassword: Swift.String, success: () -&gt; (), failure: (Swift.String) -&gt; ()) -&gt; ()"
-                  moduleName = "ReGo"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Service/FirebaseService.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "268">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -238,8 +142,8 @@
             filePath = "ReGo/Controller/HomeViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -254,8 +158,8 @@
             filePath = "ReGo/Controller/LogInViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "retrieveUserInfo()"
             landmarkType = "7">
             <Locations>
@@ -270,9 +174,9 @@
                   urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/LogInViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "142"
-                  endingLineNumber = "142"
-                  offsetFromSymbolStart = "64">
+                  startingLineNumber = "143"
+                  endingLineNumber = "143"
+                  offsetFromSymbolStart = "68">
                </Location>
                <Location
                   uuid = "4BCA5B16-2500-4C5A-82A5-C32D0D72FC03 - c55c8f13e7bec459"
@@ -285,8 +189,8 @@
                   urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/LogInViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
                   offsetFromSymbolStart = "64">
                </Location>
             </Locations>
@@ -302,8 +206,8 @@
             filePath = "ReGo/Controller/LogInViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "logInButtonPressed(_:)"
             landmarkType = "7">
             <Locations>
@@ -318,9 +222,9 @@
                   urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/LogInViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "74"
-                  endingLineNumber = "74"
-                  offsetFromSymbolStart = "1988">
+                  startingLineNumber = "75"
+                  endingLineNumber = "75"
+                  offsetFromSymbolStart = "1984">
                </Location>
                <Location
                   uuid = "EE672B04-03A1-4BB7-AEC3-B59C786A7F46 - 3814449df87632a8"
@@ -333,27 +237,11 @@
                   urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/LogInViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "75"
-                  endingLineNumber = "75"
+                  startingLineNumber = "76"
+                  endingLineNumber = "76"
                   offsetFromSymbolStart = "68">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F69FE7E8-A9BF-460B-951E-A804F91EB376"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReGo/Service/FirebaseService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "signin(email:password:success:failure:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -366,8 +254,8 @@
             filePath = "ReGo/Controller/LogInViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "logInButtonPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -382,8 +270,8 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
             landmarkName = "getPlace()"
             landmarkType = "7">
          </BreakpointContent>
@@ -398,25 +286,9 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
             landmarkName = "mapView(_:didSelect:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1B4D5646-0E1E-4EC1-9D64-C807E731A709"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReGo/Service/FirebaseService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "isUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -430,8 +302,8 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
+            startingLineNumber = "208"
+            endingLineNumber = "208"
             landmarkName = "updateInterface()"
             landmarkType = "7">
          </BreakpointContent>
@@ -446,8 +318,8 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "322"
-            endingLineNumber = "322"
+            startingLineNumber = "323"
+            endingLineNumber = "323"
             landmarkName = "mapView(_:didSelect:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -462,8 +334,8 @@
             filePath = "ReGo/Controller/MapViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
             landmarkName = "mapView(_:didSelect:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -734,10 +606,122 @@
             filePath = "ReGo/Service/FirebaseService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
             landmarkName = "addNewUserToDB(user:success:failure:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D30FBADE-A562-4061-ABF5-926724E34651"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/AddAndEditPlaceController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "364"
+            endingLineNumber = "364"
+            landmarkName = "editAnnotationInDatabase(newPlace:oldPlace:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "D30FBADE-A562-4061-ABF5-926724E34651 - f26d40549083e5d4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ReGo.AddAndEditPlaceController.editAnnotationInDatabase(newPlace: ReGo.Place, oldPlace: ReGo.Place) -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/AddAndEditPlaceController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "364"
+                  endingLineNumber = "364"
+                  offsetFromSymbolStart = "156">
+               </Location>
+               <Location
+                  uuid = "D30FBADE-A562-4061-ABF5-926724E34651 - e843148c2876e4fe"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in ReGo.AddAndEditPlaceController.editAnnotationInDatabase(newPlace: ReGo.Place, oldPlace: ReGo.Place) -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/AddAndEditPlaceController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "365"
+                  endingLineNumber = "365"
+                  offsetFromSymbolStart = "116">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5ABFF8BB-61A1-4C69-A87B-9462C0ECCEC0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/EditProfileController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "saveChangesButtonPressed(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "979A245E-5A82-495B-A2AB-C1C67B15A113"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReGo/Controller/AddAndEditPlaceController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "347"
+            endingLineNumber = "347"
+            landmarkName = "addNewAnnotationToDatabase(place:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "979A245E-5A82-495B-A2AB-C1C67B15A113 - 4fcb5773c38e2d04"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ReGo.AddAndEditPlaceController.addNewAnnotationToDatabase(place: ReGo.Place) -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/AddAndEditPlaceController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "347"
+                  endingLineNumber = "347"
+                  offsetFromSymbolStart = "116">
+               </Location>
+               <Location
+                  uuid = "979A245E-5A82-495B-A2AB-C1C67B15A113 - 3b1aca90fa517839"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (ReGo.Place) -&gt; () in ReGo.AddAndEditPlaceController.addNewAnnotationToDatabase(place: ReGo.Place) -&gt; ()"
+                  moduleName = "ReGo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/annamelkhova/Desktop/ReGo/ReGo/Controller/AddAndEditPlaceController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "348"
+                  endingLineNumber = "348"
+                  offsetFromSymbolStart = "104">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
