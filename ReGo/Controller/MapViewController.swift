@@ -58,6 +58,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             setLanguage()
         }
         
+        retrieveAnnotations()
         updateaLang()
     }
     
@@ -302,26 +303,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        
         guard view.annotation as? MKUserLocation != mapView.userLocation else { return }
-        
-        for place in places {
-            if (place.title == view.annotation?.title) && (place.coordinate.latitude == view.annotation?.coordinate.latitude) && (place.coordinate.longitude == view.annotation?.coordinate.longitude) {
-                currentPlace = place
-            }
-        }
-        
-        let vkImage = UIImage(named: "vk")!
-        currentImage.image = vkImage
-        if let url = URL(string: currentPlace.imageURLString) {
-            print("it has an image")
-            let resource = ImageResource(downloadURL: url)
-            currentImage.kf.setImage(with: resource) { (image, error, cachType, url) in
-                if let error = error {
-                    print(error)
-                }
-                else {
-                    print("Success updated image in calout!")
+        firebaseService.retrieveAnnotations {
+            for place in places {
+                if (place.title == view.annotation?.title) && (place.coordinate.latitude == view.annotation?.coordinate.latitude) && (place.coordinate.longitude == view.annotation?.coordinate.longitude) {
+                    self.currentPlace = place
                 }
             }
         }
@@ -333,12 +319,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewWillAppear(_ animated: Bool) {
         updateaLang()
-        retrieveAnnotations()
-        if wasSelectedFromList {
-            wasSelectedFromList = false
-            let region = MKCoordinateRegion(center: selectedCoordinatesFromList, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
-            mapView.setRegion(region, animated: true)
-            selectAnnotation()
+        firebaseService.retrieveAnnotations {
+            self.updateInterface()
+            if wasSelectedFromList {
+                wasSelectedFromList = false
+                let region = MKCoordinateRegion(center: selectedCoordinatesFromList, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+                self.mapView.setRegion(region, animated: true)
+                for place in places {
+                    if (place.coordinate.latitude == selectedCoordinatesFromList.latitude) && (place.coordinate.longitude == selectedCoordinatesFromList.longitude) {
+                        self.currentPlace = place
+                    }
+                }
+                self.selectAnnotation()
+            }
         }
     }
     

@@ -236,7 +236,6 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
         else {
             coordinates = places[indexPath.row].coordinate
         }
-        
         selectedCoordinatesFromList = coordinates
         wasSelectedFromList = true
         tabBarController?.selectedIndex = 0;
@@ -267,11 +266,10 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func retrieveLists() {
-        
         firebaseService.retrieveAnnotations {
             self.countDistanes(list: places)
             places.sort(by: { $0.distance < $1.distance })
-            
+
             if self.bottlesButton.isSelected {
                 self.countDistanes(list: bottlePlaces)
                 bottlePlaces.sort(by: { $0.distance < $1.distance })
@@ -284,7 +282,7 @@ class ListOfPlacesController: UIViewController, UITableViewDelegate, UITableView
                 self.countDistanes(list: bulbPlaces)
                 bulbPlaces.sort(by: { $0.distance < $1.distance })
             }
-            
+
             self.tableView.reloadData()
             self.refreshControl.endRefreshing()
         }
