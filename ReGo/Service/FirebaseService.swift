@@ -118,6 +118,11 @@ class FirebaseService {
     }
     
     func retrieveAnnotations(complition: @escaping () -> Void) {
+        places.removeAll()
+        bottlePlaces.removeAll()
+        batteryPlaces.removeAll()
+        bulbPlaces.removeAll()
+        
         let messageDB = Firebase.Database.database().reference().child("Places")
         messageDB.observe(.childAdded) { (snapshot) in
             let snapshotValue = snapshot.value as! Dictionary<String,Any>

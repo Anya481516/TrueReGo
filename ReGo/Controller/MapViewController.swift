@@ -333,6 +333,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //retrieveAnnotations()
         updateaLang()
         if wasSelectedFromList {
             wasSelectedFromList = false
