@@ -23,6 +23,7 @@ class MyKeys {
     var placeInfo = PlaceInfoViewControllerLabels()
     var list = ListOfPlacesViewControllerLabels()
     var image = ImageControllerLabels()
+    var about = About()
     
     func changeToEng() {
         alert.changeToEng()
@@ -34,6 +35,7 @@ class MyKeys {
         placeInfo.changeToEng()
         list.changeToEng()
         image.changeToEng()
+        about.changeToEng()
         language = "ENG"
         UserDefaults.standard.set(language, forKey: "Lang")
         
@@ -48,6 +50,7 @@ class MyKeys {
         placeInfo.changeToRus()
         list.changeToRus()
         image.changeToRus()
+        about.changeToRus()
         language = "RUS"
         UserDefaults.standard.set(language, forKey: "Lang")
     }
@@ -364,6 +367,44 @@ class ImageControllerLabels {
     func changeToRus() {
         back = " Назад"
     }
+}
+
+//MARK:- About
+class About {
+    init() {
+        changeToEng()
+    }
+    
+    var title = String()
+    var sendReviewButton = String()
+    var superUserButton = String()
+    var userIsSuperMessage = String()
+    var requestForReason = String()
+    var requestForReasonTitle = String()
+    var infoText = String()
+    var superuserRequestSent = String()
+    
+    func changeToEng() {
+        title = "About"
+        sendReviewButton = " Send review"
+        superUserButton = " Apply for Superuser"
+        userIsSuperMessage = "You are already superuser"
+        requestForReason = "Tell us your reason"
+        requestForReason = "Why do you want to become a Superuser?"
+        superuserRequestSent = "Your request has been successfully sent"
+        infoText = "felwahfulwef"
+    }
+    func changeToRus() {
+        title = "О приложении"
+        sendReviewButton = " Отправить отзыв"
+        superUserButton = " Стать суперпользователем"
+        userIsSuperMessage = "Вы уже суперпользователь"
+        requestForReason = "Какова ваша причина?"
+        requestForReason = "Почему вы хотите стать суперпользователем?"
+         superuserRequestSent = "Ваша заявка была успешно отправлена"
+        infoText = "атуцлдатлдшк"
+    }
+    
 }
 
 //MARK:- Alert

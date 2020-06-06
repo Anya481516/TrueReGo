@@ -282,4 +282,27 @@ class FirebaseService {
         
         success(place)
     }
+    
+    
+    func saveRequestForSuperUserToDB(user: User, reason: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void){
+        let date = Date()
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let formattedDate = format.string(from: date)
+        print(formattedDate)
+        
+        let userDB = Firebase.Database.database().reference().child("RequestsForSuperuser")
+        let userDictionary = ["Time": formattedDate, "Username" : user.name, "UserEmail": user.email, "Reason": reason] as [String : Any]
+            userDB.child(currentUser.id).setValue(userDictionary) {
+                (error, reference) in
+                if let error = error {
+                    print(error)
+                    failure(error.localizedDescription)
+                }
+                else{
+                    print("Request has been added to the DB")
+                    success()
+                }
+            }
+    }
 }

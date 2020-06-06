@@ -624,8 +624,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "364"
             endingLineNumber = "364"
-            landmarkName = "editAnnotationInDatabase(newPlace:oldPlace:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
             <Locations>
                <Location
                   uuid = "D30FBADE-A562-4061-ABF5-926724E34651 - f26d40549083e5d4"
@@ -688,8 +688,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "347"
             endingLineNumber = "347"
-            landmarkName = "addNewAnnotationToDatabase(place:)"
-            landmarkType = "7">
+            landmarkName = "unknown"
+            landmarkType = "0">
             <Locations>
                <Location
                   uuid = "979A245E-5A82-495B-A2AB-C1C67B15A113 - 4fcb5773c38e2d04"
