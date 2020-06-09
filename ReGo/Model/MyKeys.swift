@@ -196,6 +196,7 @@ class AddAndEditPlaceViewControllerLabels {
     var sendButton = String()
     var sendChangesButton = String()
     
+    
     func changeToEng(){
         addNewPlaceTitleLabel = "Add New Place"
         editPlaceTitleLabel = "Edit Place"
@@ -215,6 +216,7 @@ class AddAndEditPlaceViewControllerLabels {
         addressTextField = "Гагарина 57/2"
         sendButton = "Send"
         sendChangesButton = "Send Changes"
+        
     }
     func changeToRus() {
         addNewPlaceTitleLabel = "Добавить Место"
@@ -235,6 +237,7 @@ class AddAndEditPlaceViewControllerLabels {
         addressTextField = "Гагарина 57/2"
         sendButton = "Отправить"
         sendChangesButton = "Отправить изменения"
+        
     }
 }
 //MARK:PlaceInfo:
@@ -253,6 +256,7 @@ class PlaceInfoViewControllerLabels {
     var whatItCollectsLabel = String()
     var otherTextField = String()
     var editButton = String()
+    var regRequestForEditing = String()
     
     func changeToEng(){
         infoTitleLabel = "Information"
@@ -265,6 +269,7 @@ class PlaceInfoViewControllerLabels {
         whatItCollectsLabel = "What it collects:"
         otherTextField = "It does not collect any specific things"
         editButton = "Edit"
+        regRequestForEditing = "You need to log in to edit the information about places"
     }
     func changeToRus() {
         infoTitleLabel = "Информация"
@@ -277,6 +282,7 @@ class PlaceInfoViewControllerLabels {
         whatItCollectsLabel = "Что можно приносить:"
         otherTextField = "Нельзя приносить какие-либо другие вещи кроме перечисленных"
         editButton = "Изменить"
+        regRequestForEditing = "Вам нужно зарегистрироваться в приложении чтобы вносить изменения о местах"
     }
 }
 //MARK:ListOfPlaces:
@@ -383,6 +389,12 @@ class About {
     var requestForReasonTitle = String()
     var infoText = String()
     var superuserRequestSent = String()
+    var requestExists = String()
+    var thanksForRating = String()
+    var stars = String()
+    var commentRequest = String()
+    var stillRate1 = String()
+    var stillRate2 = String()
     
     func changeToEng() {
         title = "About"
@@ -392,7 +404,13 @@ class About {
         requestForReason = "Tell us your reason"
         requestForReason = "Why do you want to become a Superuser?"
         superuserRequestSent = "Your request has been successfully sent"
-        infoText = "felwahfulwef"
+        requestExists = "You've already sent a request. Please wait for the answer by email"
+        thanksForRating = "Thank you for your rating!"
+        stars = "stars"
+        commentRequest = "Please insert your comment for the rating:"
+        stillRate1 = "You have already rated the app with"
+        stillRate2 = "stars. Do you want to change it?"
+        infoText = "This app is developed to make the recycling system in Ufa easier and more available.\nYou can see places with containers where you can bring plastic, batteries, glass etc. on the map. You can get the route to those places and recycle your garbage to make our city healthier =)\nWe want to contribute to it together, that is why if you register in our app you can send us information about new places for recycling and send us the changes in the existing ones if you see some mistakes.\nAlso there is an opportunity to become a superuser to be able to make the changes directly on the map. To do so you just need to send us the request and we will email you about the following steps =)\n\nAnd of course you can send us a review about the app, which can help up improve, just press a button below.\n\nFor now the app rating is:"
     }
     func changeToRus() {
         title = "О приложении"
@@ -401,8 +419,14 @@ class About {
         userIsSuperMessage = "Вы уже суперпользователь"
         requestForReason = "Какова ваша причина?"
         requestForReason = "Почему вы хотите стать суперпользователем?"
-         superuserRequestSent = "Ваша заявка была успешно отправлена"
-        infoText = "атуцлдатлдшк"
+        superuserRequestSent = "Ваша заявка была успешно отправлена"
+        requestExists = "Вы уже отправили запрос. Пожалуста подождите ответа по электронной почту"
+        thanksForRating = "Cпасибо за вашу оценку!"
+        stars = "звезд"
+        commentRequest = "Пожалуйста, добавьте комментарий к вашей оценке:"
+        stillRate1 = "Вы уже оценили наше приложение поставив"
+        stillRate2 = "звезд. Вы хотите изменить оценку?"
+        infoText = "Это приложение разработано чтобы переработка отходов стала легче и доступнее для жителей Уфы.\nНа карте можно видеть места с контейнерами для сдачи пластика, батареек, стекла и т.д. проложить к ним дорогу и сдать сырье на переработку чтобы наш город стал суть экологичнее =)\nМы хотим влиять на это вместе, поэтому зарегистрировавшись в приложении Вы можете отправлять нам данные о новых контейнерах, месторасположения которых Вы знаете, либо отправлять изменение в данных о уже существующих местах, если видите ошибку.\nТак же есть возможность стать суперпользователем, чтобы получить доступ к изменениям карты напрямую. Для этого Вы можете послать нам запрос на становление суперпользователем, нажав кнопку ниже, и мы свяжемся с Вами по электронной почте =)\n\nНу и конечно Вы можете отправить отзыв о приложении, нажав кнопку внизу, что поможет нам становиться лучше.\n\nНа данный момент рейтинг приложения:"
     }
     
 }
@@ -462,6 +486,7 @@ class Alert {
     var setLangRequest = String()
     var rus = "Русский"
     var eng = "English"
+    var attention = String()
     
     func changeToEng() {
         errTitle = "Error"
@@ -512,6 +537,7 @@ class Alert {
         changeLangQuestion = "Do you want to change the language of the app to Russian?"
         setLangTitle = "Language Settings"
         setLangRequest = "What language do you want to use in the app?"
+        attention = "Attention"
     }
     func changeToRus(){
         errTitle = "Ошибка"
@@ -534,7 +560,7 @@ class Alert {
         chooseNewProfileImageTitle = "Выбрать новую фотографию профиля"
         saveImageToDatabaseErrorMessage = "Что-то пошло не атк с сохранением вашей фотографии в памяти. Пожалуйста, попробуйте еще раз."
         somethingWendWrong = "Что-то пошло не так..."
-        imageSaved = "Фотография быоа сохранена"
+        imageSaved = "Фотография была сохранена"
         enterTitle = "Введите название места"
         enterAddress = "Укажите адрес места"
         whatRecycle = "Укажите материалы, которые можно приносить сюда"
@@ -562,5 +588,6 @@ class Alert {
         changeLangQuestion = "Вы точно хотите изменить язык приложения на английский?"
         setLangTitle = "Настройки языка"
         setLangRequest = "Какой язык Вы хотите использовать в приложении?"
+        attention = "Внимание"
     }
 }

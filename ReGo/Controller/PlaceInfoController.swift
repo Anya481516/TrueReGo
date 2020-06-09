@@ -74,7 +74,12 @@ class PlaceInfoController : UIViewController, AddPlaceDelegate {
     
     // MARK:- IBActions:
     @IBAction func editButtonPressed(_ sender: UIButton) {
-        
+        if currentUser.id != "" {
+            self.performSegue(withIdentifier: "fromInfoToEditPlace", sender: self)
+        }
+        else {
+            showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: myKeys.placeInfo.regRequestForEditing, actionTitle: myKeys.alert.okButton)
+        }
     }
     
     @IBAction func goButtonPressed(_ sender: UIButton) {

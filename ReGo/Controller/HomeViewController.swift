@@ -32,8 +32,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     @IBOutlet weak var logInButton: ButtonWithImage!
     @IBOutlet weak var signUpButton: ButtonWithImage!
     @IBOutlet weak var langButton: ButtonWithImage!
-    
-
+    @IBOutlet weak var superUserImage: UIImageView!
     
     // MARK: didLoad
     override func viewDidLoad() {
@@ -41,7 +40,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         clearLoggedInView()
         updateLang()
         
-        // when info retrieced already
+        // when info retrieved already
         if currentUser.name != "" {
             updateInterface()
         }
@@ -65,6 +64,7 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
     }
     // MARK: loged in
     @IBAction func aboutButtonPressed(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "fromHomeToAbout", sender: self)
     }
     @IBAction func changeLanguageButtonPressed(_ sender: Any) {
         showAlertYesNo(alertTitle: myKeys.alert.changeLangTitle, alertMessage: myKeys.alert.changeLangQuestion, okActions: {
@@ -143,7 +143,12 @@ class HomeViewController : UIViewController, RegistrationDelegate, LogInDelegate
         if authService.isUserLoggedIn() {
             showLoggedInView()
         }
-        
+        if currentUser.superUser {
+            superUserImage.isHidden = false
+        }
+        else {
+            superUserImage.isHidden = true
+        }
     }
     
     func clearLoggedInView() {

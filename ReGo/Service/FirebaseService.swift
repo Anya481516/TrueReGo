@@ -248,15 +248,20 @@ class FirebaseService {
         
         if currentUser.superUser {
             userDB = Firebase.Database.database().reference().child("Places")
-            places.append(newPlace)
+            //places.append(newPlace)
         }
         else {
-            userDB = Firebase.Database.database().reference().child("NewPlaces")
+            userDB = Firebase.Database.database().reference().child("EditedPlaces")
         }
         
         let placeDictionary = ["Title" : newPlace.title!, "Address" : newPlace.address, "HasImage" : newPlace.hasImage, "ImageURL" : newPlace.imageURLString, "Longitude" : newPlace.coordinate.longitude, "Latitude" : newPlace.coordinate.latitude, "Type" : newPlace.subtitle!, "Bottles" : newPlace.bottles, "Batteries" : newPlace.batteries, "Bulbs" : newPlace.bulbs, "Other" : newPlace.other, "UserID" : currentUser.id, "ID" : newPlace.id] as [String : Any]
         
-        userDB.child(newPlace.id).updateChildValues(placeDictionary)
+        if currentUser.superUser {
+            userDB.child(newPlace.id).updateChildValues(placeDictionary)
+        }
+        else {
+            userDB.child(newPlace.id).setValue(placeDictionary)
+        }
         
         success()
     }
@@ -291,18 +296,83 @@ class FirebaseService {
         let formattedDate = format.string(from: date)
         print(formattedDate)
         
-        let userDB = Firebase.Database.database().reference().child("RequestsForSuperuser")
-        let userDictionary = ["Time": formattedDate, "Username" : user.name, "UserEmail": user.email, "Reason": reason] as [String : Any]
-            userDB.child(currentUser.id).setValue(userDictionary) {
-                (error, reference) in
-                if let error = error {
-                    print(error)
-                    failure(error.localizedDescription)
-                }
-                else{
-                    print("Request has been added to the DB")
-                    success()
-                }
+        let requestsDB = Firebase.Database.database().reference().child("RequestsForSuperuser")
+        let requestDictionary = ["Time": formattedDate, "Username" : user.name, "UserEmail": user.email, "Reason": reason] as [String : Any]
+        requestsDB.child(user.id).setValue(requestDictionary) {
+            (error, reference) in
+            if let error = error {
+                print(error)
+                failure(error.localizedDescription)
             }
+            else{
+                print("Request has been added to the DB")
+                success()
+            }
+        }
+    }
+    
+    func requestExists(id: String, result: @escaping (_ result: Bool) -> Void) {
+        let requestsDB = Firebase.Database.database().reference().child("RequestsForSuperuser")
+        requestsDB.observe(.value) { (snapshot) in
+            if snapshot.hasChild(id) {
+                result(true)
+            }
+            else {
+                result(false)
+            }
+        }
+    }
+    
+    func ratingIsSent(id: String, result: @escaping (_ result: Double) -> Void){
+        let requestsDB = Firebase.Database.database().reference().child("Ratings")
+        requestsDB.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.hasChild(id) {
+                let snapshotValue = snapshot.value as! Dictionary<String,Any>
+                let snapshotValue1 = snapshotValue[id] as! Dictionary<String,Any>
+                let rating = snapshotValue1["Rating"] as! Double
+                result(rating)
+            }
+            else {
+                result(-1)
+            }
+        }
+    }
+    
+    func sendRatingToDB(user: User, rating: Double, comment: String, success: @escaping () -> Void, failure: @escaping (_ error: String) -> Void) {
+        let date = Date()
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let formattedDate = format.string(from: date)
+        print(formattedDate)
+        
+        let raitingDB = Firebase.Database.database().reference().child("Ratings")
+        let raitingDictionary = ["Time": formattedDate, "Username" : user.name, "UserEmail": user.email, "Rating": rating, "Comment" : comment] as [String : Any]
+        raitingDB.child(user.id).setValue(raitingDictionary) {
+            (error, reference) in
+            if let error = error {
+                print(error)
+                failure(error.localizedDescription)
+            }
+            else{
+                print("Raiting has been sent")
+                success()
+            }
+        }
+    }
+    
+    func countRating(result: @escaping (_ totalRating: Double, _ count: Double) -> Void){
+        var totalRating: Double = 0
+        var count: Double = 0
+        
+        let requestsDB = Firebase.Database.database().reference().child("Ratings")
+        requestsDB.observe(.childAdded) { (snapshot) in
+            let snapshotValue = snapshot.value as! Dictionary<String,Any>
+            let rating = snapshotValue["Rating"] as! Double
+            totalRating = totalRating + rating
+            count = count + 1
+            result(totalRating, count)
+        }
+        
+        
     }
 }
