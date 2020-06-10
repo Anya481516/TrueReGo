@@ -372,7 +372,16 @@ class FirebaseService {
             count = count + 1
             result(totalRating, count)
         }
-        
-        
+    }
+    
+    func sendPasswordByEmail(email : String, result: @escaping (_ result: String) -> Void){
+        Auth.auth().sendPasswordReset(withEmail: email) { error in
+            if let error = error {
+                result(error.localizedDescription)
+            }
+            else {
+                result(myKeys.loginRegistration.passwordSentToEmail)
+            }
+        }
     }
 }

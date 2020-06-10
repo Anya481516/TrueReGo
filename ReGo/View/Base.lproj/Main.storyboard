@@ -1181,7 +1181,6 @@
                         <outlet property="emailLabel" destination="62v-Oo-MFQ" id="Qa7-US-cCQ"/>
                         <outlet property="emailTextField" destination="FpB-GD-04K" id="tak-ya-LAk"/>
                         <outlet property="logInButton" destination="kFM-H2-zMY" id="dXW-bA-Loe"/>
-                        <outlet property="loginButton" destination="kFM-H2-zMY" id="Jvz-iQ-qBE"/>
                         <outlet property="passwordLabel" destination="nme-1s-Fbd" id="GBl-QI-2wQ"/>
                         <outlet property="passwordTextField" destination="jj8-As-DBH" id="cY8-Qh-gyS"/>
                         <outlet property="registrationView" destination="wpp-IU-rvt" id="iuL-qV-JP5"/>
@@ -1271,7 +1270,6 @@
                                         </state>
                                         <connections>
                                             <action selector="forgotPasswordButtonPressed:" destination="yun-6A-zEr" eventType="touchUpInside" id="4gK-6C-dx2"/>
-                                            <action selector="signUpButtonPressed:" destination="yun-6A-zEr" eventType="touchUpInside" id="h3f-cP-8tB"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -1393,7 +1391,6 @@
                         <outlet property="passwordLabel" destination="vOF-9B-us7" id="XAq-Zf-X0h"/>
                         <outlet property="passwordTextField" destination="xla-r5-8CN" id="pSP-Fv-mNU"/>
                         <outlet property="signUpButton" destination="FsO-WW-cgn" id="hY0-s5-fJo"/>
-                        <outlet property="signupButton" destination="FsO-WW-cgn" id="ZzS-f2-H9g"/>
                         <outlet property="titleLabel" destination="tHk-PJ-1nS" id="52t-Ja-y9g"/>
                     </connections>
                 </viewController>

@@ -28,7 +28,6 @@ class LogInViewController : UIViewController {
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!
     @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var forgotPasswordButton: UIButton!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -130,13 +129,24 @@ class LogInViewController : UIViewController {
     }
     
     func sendPasswordByEmail() {
-        let result = currentUser.sendPasswordByEmail(email: currentUser.email)
-        if result == "Success" {
-            self.showAlert(alertTitle: myKeys.alert.successTitle, alertMessage: "\(myKeys.alert.linkSentTo)\(currentUser.email)\(myKeys.alert.checkEmail)", actionTitle: myKeys.alert.okButton)
+        let alert = UIAlertController(title: myKeys.alert.attention, message: myKeys.loginRegistration.enterTheEmail, preferredStyle: .alert)
+        alert.addTextField { (textField) in
+
         }
-        else {
-            self.showAlert(alertTitle: myKeys.alert.errTitle, alertMessage: result, actionTitle: myKeys.alert.okButton)
+        let action1 = UIAlertAction(title: myKeys.alert.cancelButton, style: .cancel) { (UIAlertAction) in
+            
         }
+        let action2 = UIAlertAction(title: myKeys.alert.doneButton, style: .default) { (UIAlertAction) in
+            let textField = alert.textFields![0]
+            if let email = textField.text {
+                self.firebaseService.sendPasswordByEmail(email: email) { (result) in
+                   self.showAlert(alertTitle: myKeys.alert.attention, alertMessage: result, actionTitle: myKeys.alert.okButton)
+               }
+            }
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func retrieveUserInfo(){

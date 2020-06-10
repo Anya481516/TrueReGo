@@ -145,6 +145,8 @@ class LogInRegistrationViewControllerLabels {
     var signUpButton = String()
     var logInButton = String()
     var forgotPasswordButton = String()
+    var passwordSentToEmail = String()
+    var enterTheEmail = String()
     
     func changeToEng(){
         logInTitleLabel = "Log In"
@@ -157,6 +159,8 @@ class LogInRegistrationViewControllerLabels {
         signUpButton = "Sign Up"
         logInButton = "Log In"
         forgotPasswordButton = "Forgot Password?"
+        passwordSentToEmail = "The link to change your password was sent to your email"
+        enterTheEmail = "Please, enter your email:"
     }
     func changeToRus() {
         logInTitleLabel = "Вход"
@@ -169,6 +173,8 @@ class LogInRegistrationViewControllerLabels {
         signUpButton = "Регистрация"
         logInButton = "Войти"
         forgotPasswordButton = "Забыли пароль?"
+        passwordSentToEmail = "Ссылка на смену пароля была отправлена Вам на электронную почту"
+        enterTheEmail = "Пожалуйста, введите свою почту:"
     }
 }
 //MARK:AddAndEditPlace:

@@ -28,7 +28,6 @@ class RegistrationViewController : UIViewController {
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!
     @IBOutlet weak var signupButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -40,7 +39,6 @@ class RegistrationViewController : UIViewController {
         super.viewDidLoad()
         
         updateLang()
-        logInButton.setTitleColor(UIColor.init(named: "WhiteBlack"), for: .normal)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(outOfKeyBoardTapped))
         registrationView.addGestureRecognizer(tapGesture)
         self.emailTextField.keyboardType = UIKeyboardType.emailAddress
